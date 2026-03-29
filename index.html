@@ -8,262 +8,270 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-
 <style>
+/* ============================================ RESET & VARS ============================================ */
 :root {
-  --bg-deep: #0c0c18;
-  --bg-surface: #12121f;
-  --bg-card: #181828;
-  --border: rgba(255,255,255,0.06);
-  --border-hover: rgba(249, 167, 67, 0.3);
-  --orange: #f9a743;
-  --orange-dim: rgba(249, 167, 67, 0.15);
-  --pink: #ec4899;
-  --green: #34d399;
-  --text-primary: #f0eff4;
-  --text-secondary: #8b8a97;
-  --text-muted: #5a596a;
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  --font-display: 'Outfit', sans-serif;
-  --font-mono: 'Space Mono', monospace;
-  --shadow-glow-orange: 0 0 60px rgba(249, 167, 67, 0.08);
+  --bg-deep: #0c0c18; --bg-surface: #12121f; --bg-card: #181828;
+  --border: rgba(255,255,255,0.06); --border-hover: rgba(249,167,67,0.3);
+  --orange: #f9a743; --orange-dim: rgba(249,167,67,0.15);
+  --pink: #ec4899; --green: #34d399; --red: #ef4444;
+  --text-primary: #f0eff4; --text-secondary: #8b8a97; --text-muted: #5a596a;
+  --radius-sm: 8px; --radius-md: 14px; --radius-lg: 20px; --radius-xl: 28px;
+  --font-display: 'Outfit', sans-serif; --font-mono: 'Space Mono', monospace;
   --shadow-card: 0 4px 24px rgba(0,0,0,0.3);
   --shadow-card-hover: 0 12px 48px rgba(0,0,0,0.5);
+  --shadow-glow: 0 0 60px rgba(249,167,67,0.08);
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-display);background:var(--bg-deep);color:var(--text-primary);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+.page-wrapper{position:relative;z-index:1}
+.container{max-width:1200px;margin:0 auto;padding:0 20px}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+/* ============================================ HEADER ============================================ */
+.site-header{position:sticky;top:0;z-index:100;background:rgba(12,12,24,0.85);backdrop-filter:blur(20px) saturate(1.2);border-bottom:1px solid var(--border);padding:0 20px}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text-primary);flex-shrink:0}
+.logo-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--orange),var(--pink));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#0c0c18;letter-spacing:-1px;flex-shrink:0}
+.logo-text{font-size:17px;font-weight:700;letter-spacing:-0.3px;white-space:nowrap}
+.logo-text span{color:var(--orange)}
+.header-links{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.header-links a{color:var(--text-secondary);text-decoration:none;font-size:13px;font-weight:500;padding:6px 12px;border-radius:var(--radius-sm);transition:all 0.2s;white-space:nowrap}
+.header-links a:hover{color:var(--text-primary);background:rgba(255,255,255,0.05)}
+.header-links .cta-link{color:var(--orange);border:1px solid rgba(249,167,67,0.25)}
+.header-links .cta-link:hover{background:var(--orange-dim);border-color:var(--orange)}
 
-body {
-  font-family: var(--font-display);
-  background: var(--bg-deep);
-  color: var(--text-primary);
-  line-height: 1.6;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-}
+/* Cart button */
+.cart-btn{position:relative;width:40px;height:40px;border:1px solid var(--border);background:transparent;border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);transition:all 0.2s;flex-shrink:0}
+.cart-btn:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-dim)}
+.cart-btn svg{width:18px;height:18px}
+.cart-badge{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;background:var(--orange);color:#0c0c18;font-size:11px;font-weight:700;font-family:var(--font-mono);border-radius:100px;display:none;align-items:center;justify-content:center;line-height:1}
+.cart-badge.visible{display:flex}
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-}
-
-.page-wrapper { position: relative; z-index: 1; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-
-/* Header */
-.site-header {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(12, 12, 24, 0.85);
-  backdrop-filter: blur(20px) saturate(1.2);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-}
-.header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
-.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text-primary); }
-.logo-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--orange), var(--pink)); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: #0c0c18; letter-spacing: -1px; flex-shrink: 0; }
-.logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
-.logo-text span { color: var(--orange); }
-.header-links { display: flex; align-items: center; gap: 8px; }
-.header-links a { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; padding: 6px 14px; border-radius: var(--radius-sm); transition: all 0.2s; }
-.header-links a:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
-.header-links .cta-link { color: var(--orange); border: 1px solid rgba(249, 167, 67, 0.25); }
-.header-links .cta-link:hover { background: var(--orange-dim); border-color: var(--orange); }
-
-/* Hero */
-.hero { padding: 64px 0 48px; text-align: center; }
-.hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: var(--orange-dim); border: 1px solid rgba(249, 167, 67, 0.2); border-radius: 100px; font-size: 13px; font-weight: 600; color: var(--orange); margin-bottom: 20px; font-family: var(--font-mono); letter-spacing: 0.5px; }
-.hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--orange); border-radius: 50%; animation: pulse-dot 2s infinite; }
-@keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
-.hero h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 800; letter-spacing: -2px; line-height: 1.05; margin-bottom: 16px; background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.hero h1 em { font-style: normal; background: linear-gradient(135deg, var(--orange), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.hero-sub { font-size: 18px; color: var(--text-secondary); max-width: 520px; margin: 0 auto 40px; font-weight: 400; }
+/* ============================================ HERO ============================================ */
+.hero{padding:48px 0 40px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:var(--orange-dim);border:1px solid rgba(249,167,67,0.2);border-radius:100px;font-size:12px;font-weight:600;color:var(--orange);margin-bottom:18px;font-family:var(--font-mono);letter-spacing:0.5px}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--orange);border-radius:50%;animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hero h1{font-size:clamp(28px,5.5vw,60px);font-weight:800;letter-spacing:-1.5px;line-height:1.08;margin-bottom:14px;background:linear-gradient(135deg,var(--text-primary),var(--text-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--orange),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:16px;color:var(--text-secondary);max-width:480px;margin:0 auto 32px;font-weight:400}
 
 /* Featured card */
-.featured-card { max-width: 720px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: var(--shadow-card); }
-.featured-card:hover { border-color: var(--border-hover); box-shadow: var(--shadow-card-hover), var(--shadow-glow-orange); transform: translateY(-2px); }
-.featured-image { width: 100%; aspect-ratio: 16/10; background: linear-gradient(135deg, #1a1a30, #0f0f20); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-.featured-image img { max-width: 85%; max-height: 85%; object-fit: contain; border-radius: var(--radius-md); filter: drop-shadow(0 16px 40px rgba(0,0,0,0.5)); transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
-.featured-card:hover .featured-image img { transform: scale(1.03); }
-.featured-image .featured-tag { position: absolute; top: 20px; left: 20px; padding: 6px 14px; background: linear-gradient(135deg, var(--orange), #e09530); color: #0c0c18; font-size: 12px; font-weight: 700; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.8px; }
-.featured-body { padding: 28px 32px 32px; }
-.featured-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
-.featured-meta .meta-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-secondary); font-family: var(--font-mono); }
-.meta-chip .dot { width: 4px; height: 4px; background: var(--text-muted); border-radius: 50%; }
-.featured-name { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
-.featured-desc { color: var(--text-secondary); font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
-.featured-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.featured-price { font-size: 32px; font-weight: 800; color: var(--orange); letter-spacing: -1px; font-family: var(--font-mono); }
-.featured-price .currency { font-size: 18px; font-weight: 400; color: var(--text-muted); margin-right: 2px; }
-.featured-actions { display: flex; gap: 10px; }
+.featured-card{max-width:680px;margin:0 auto;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;transition:all 0.4s cubic-bezier(.23,1,.32,1);box-shadow:var(--shadow-card)}
+.featured-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-card-hover),var(--shadow-glow);transform:translateY(-2px)}
+.featured-image{width:100%;aspect-ratio:16/10;background:linear-gradient(135deg,#1a1a30,#0f0f20);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.featured-image img{max-width:85%;max-height:85%;object-fit:contain;border-radius:var(--radius-md);filter:drop-shadow(0 16px 40px rgba(0,0,0,.5));transition:transform .6s cubic-bezier(.23,1,.32,1)}
+.featured-card:hover .featured-image img{transform:scale(1.03)}
+.featured-tag{position:absolute;top:16px;left:16px;padding:5px 12px;background:linear-gradient(135deg,var(--orange),#e09530);color:#0c0c18;font-size:11px;font-weight:700;border-radius:100px;text-transform:uppercase;letter-spacing:.8px}
+.featured-body{padding:24px 24px 28px}
+.featured-meta{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.meta-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-secondary);font-family:var(--font-mono)}
+.meta-chip .dot{width:4px;height:4px;background:var(--text-muted);border-radius:50%}
+.featured-name{font-size:22px;font-weight:700;letter-spacing:-.4px;margin-bottom:8px}
+.featured-desc{color:var(--text-secondary);font-size:14px;margin-bottom:20px;line-height:1.6}
+.featured-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.featured-price{font-size:28px;font-weight:800;color:var(--orange);letter-spacing:-1px;font-family:var(--font-mono)}
+.featured-price .currency{font-size:16px;font-weight:400;color:var(--text-muted);margin-right:2px}
+.featured-actions{display:flex;gap:8px;flex-wrap:wrap}
 
-/* Buttons */
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border: none; border-radius: var(--radius-md); font-family: var(--font-display); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1); text-decoration: none; white-space: nowrap; }
-.btn-buy { background: linear-gradient(135deg, var(--orange), #e09530); color: #0c0c18; box-shadow: 0 4px 16px rgba(249, 167, 67, 0.25); }
-.btn-buy:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(249, 167, 67, 0.35); }
-.btn-play { background: rgba(255,255,255,0.06); color: var(--text-primary); border: 1px solid var(--border); }
-.btn-play:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
-.btn-sm { padding: 8px 16px; font-size: 13px; border-radius: var(--radius-sm); }
+/* ============================================ BUTTONS ============================================ */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:var(--radius-md);font-family:var(--font-display);font-size:13px;font-weight:600;cursor:pointer;transition:all .25s cubic-bezier(.23,1,.32,1);text-decoration:none;white-space:nowrap}
+.btn-buy{background:linear-gradient(135deg,var(--orange),#e09530);color:#0c0c18;box-shadow:0 4px 16px rgba(249,167,67,.25)}
+.btn-buy:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(249,167,67,.35)}
+.btn-play{background:rgba(255,255,255,.06);color:var(--text-primary);border:1px solid var(--border)}
+.btn-play:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15)}
+.btn-sm{padding:8px 14px;font-size:12px;border-radius:var(--radius-sm)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-secondary)}
+.btn-outline:hover{border-color:var(--text-secondary);color:var(--text-primary)}
 
-/* Album sections */
-.album-section { padding: 0 0 60px; }
-.album-header {
-  display: flex; align-items: baseline; justify-content: space-between;
-  margin-bottom: 28px; padding-bottom: 14px;
-  border-bottom: 1px solid var(--border);
-}
-.album-title { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; }
-.album-title .album-label { color: var(--text-muted); font-weight: 400; font-size: 14px; margin-left: 10px; font-family: var(--font-mono); }
-.album-count { font-size: 14px; color: var(--text-muted); font-family: var(--font-mono); }
-
-.puzzles-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-}
+/* ============================================ ALBUM / GRID ============================================ */
+.album-section{padding:0 0 48px}
+.album-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border);gap:12px}
+.album-title{font-size:20px;font-weight:700;letter-spacing:-.4px}
+.album-label{color:var(--text-muted);font-weight:400;font-size:13px;margin-left:8px;font-family:var(--font-mono)}
+.album-count{font-size:13px;color:var(--text-muted);font-family:var(--font-mono);white-space:nowrap}
+.puzzles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
 
 /* Puzzle card */
-.puzzle-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1); }
-.puzzle-card:hover { border-color: var(--border-hover); box-shadow: var(--shadow-card-hover), var(--shadow-glow-orange); transform: translateY(-4px); }
-.puzzle-card .card-image { width: 100%; aspect-ratio: 4/3; background: linear-gradient(135deg, #16162a, #0e0e1c); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-.puzzle-card .card-image img { max-width: 80%; max-height: 80%; object-fit: contain; border-radius: var(--radius-sm); filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4)); transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
-.puzzle-card:hover .card-image img { transform: scale(1.06) rotate(1deg); }
-.card-layers-badge { position: absolute; top: 10px; right: 10px; padding: 3px 10px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); border-radius: 100px; font-size: 11px; font-weight: 600; font-family: var(--font-mono); color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.08); }
-.card-body { padding: 16px 18px 18px; }
-.card-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.card-detail { font-size: 12px; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 14px; }
-.card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.card-price { font-size: 20px; font-weight: 700; color: var(--orange); letter-spacing: -0.5px; font-family: var(--font-mono); }
-.card-price .currency { font-size: 13px; color: var(--text-muted); font-weight: 400; }
-.card-actions { display: flex; gap: 6px; }
-.img-fallback { width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; font-size: 28px; opacity: 0.3; }
+.puzzle-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:all .35s cubic-bezier(.23,1,.32,1)}
+.puzzle-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-card-hover),var(--shadow-glow);transform:translateY(-4px)}
+.card-image{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#16162a,#0e0e1c);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.card-image img{max-width:80%;max-height:80%;object-fit:contain;border-radius:var(--radius-sm);filter:drop-shadow(0 8px 20px rgba(0,0,0,.4));transition:transform .5s cubic-bezier(.23,1,.32,1)}
+.puzzle-card:hover .card-image img{transform:scale(1.06) rotate(1deg)}
+.card-layers-badge{position:absolute;top:8px;right:8px;padding:3px 8px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border-radius:100px;font-size:10px;font-weight:600;font-family:var(--font-mono);color:var(--text-secondary);border:1px solid rgba(255,255,255,.08)}
+.card-body{padding:14px 16px 16px}
+.card-name{font-size:14px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-detail{font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:12px}
+.card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card-price{font-size:18px;font-weight:700;color:var(--orange);letter-spacing:-.5px;font-family:var(--font-mono)}
+.card-price .currency{font-size:12px;color:var(--text-muted);font-weight:400}
+.card-actions{display:flex;gap:6px}
+.img-fallback{width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:24px;opacity:.3}
 
-/* Loading & skeleton */
-.loading-state { text-align: center; padding: 80px 0; }
-.loader { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--orange); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { color: var(--text-muted); font-size: 14px; }
-.empty-state { text-align: center; padding: 80px 0; color: var(--text-muted); }
-.error-banner { max-width: 600px; margin: 40px auto; padding: 20px 24px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--radius-md); color: #f87171; text-align: center; font-size: 14px; }
+/* ============================================ SKELETON ============================================ */
+.skeleton-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.skeleton-image{width:100%;aspect-ratio:4/3;background:linear-gradient(90deg,#16162a 0%,#1c1c34 50%,#16162a 100%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite}
+.skeleton-body{padding:14px 16px 16px}
+.skeleton-line{height:14px;border-radius:6px;background:linear-gradient(90deg,rgba(255,255,255,.04) 0%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.04) 100%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;margin-bottom:10px}
+.skeleton-line:last-child{width:60%;margin-bottom:0}.skeleton-line.short{width:40%}.skeleton-line.price{width:30%;height:22px;margin-top:8px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.loading-state{text-align:center;padding:60px 0}
+.loader{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{color:var(--text-muted);font-size:13px}
+.error-banner{max-width:600px;margin:40px auto;padding:20px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius-md);color:#f87171;text-align:center;font-size:14px}
 
-.skeleton-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
-.skeleton-image { width: 100%; aspect-ratio: 4/3; background: linear-gradient(90deg, #16162a 0%, #1c1c34 50%, #16162a 100%); background-size: 200% 100%; animation: shimmer 1.5s ease-in-out infinite; }
-.skeleton-body { padding: 16px 18px 18px; }
-.skeleton-line { height: 14px; border-radius: 6px; background: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 100%); background-size: 200% 100%; animation: shimmer 1.5s ease-in-out infinite; margin-bottom: 10px; }
-.skeleton-line:last-child { width: 60%; margin-bottom: 0; }
-.skeleton-line.short { width: 40%; }
-.skeleton-line.price { width: 30%; height: 22px; margin-top: 8px; }
-@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+/* ============================================ PAGE VIEWS ============================================ */
+.page-view{display:none}.page-view.active{display:block}
 
-/* Modal */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(12px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
-.modal-overlay.active { opacity: 1; visibility: visible; }
-.modal-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-xl); max-width: 440px; width: 100%; padding: 36px; position: relative; transform: scale(0.95) translateY(10px); transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1); }
-.modal-overlay.active .modal-card { transform: scale(1) translateY(0); }
-.modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border: none; background: rgba(255,255,255,0.06); color: var(--text-secondary); border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-.modal-close:hover { background: rgba(255,255,255,0.12); color: var(--text-primary); }
-.modal-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
-.modal-subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 28px; }
-.modal-puzzle-preview { display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--bg-card); border-radius: var(--radius-md); margin-bottom: 24px; border: 1px solid var(--border); }
-.modal-puzzle-preview img { width: 64px; height: 64px; border-radius: var(--radius-sm); object-fit: cover; }
-.mpz-name { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
-.mpz-meta { font-size: 12px; color: var(--text-muted); font-family: var(--font-mono); }
-.mpz-price { font-size: 18px; font-weight: 700; color: var(--orange); font-family: var(--font-mono); }
-.form-field { margin-bottom: 18px; }
-.form-field label { display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }
-.form-field input { width: 100%; padding: 12px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-family: var(--font-display); font-size: 14px; transition: border-color 0.2s; outline: none; }
-.form-field input:focus { border-color: var(--orange); }
-.form-field input::placeholder { color: var(--text-muted); }
-.form-field .field-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-.checkout-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--orange), #e09530); color: #0c0c18; border: none; border-radius: var(--radius-md); font-family: var(--font-display); font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.25s; margin-top: 8px; }
-.checkout-btn:hover { box-shadow: 0 6px 24px rgba(249, 167, 67, 0.35); transform: translateY(-1px); }
-.checkout-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-.checkout-note { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 14px; line-height: 1.5; }
+/* ============================================ CART PAGE ============================================ */
+.cart-page{padding:40px 0 80px}
+.cart-page h2{font-size:24px;font-weight:700;letter-spacing:-.5px;margin-bottom:24px}
+.cart-empty{text-align:center;padding:60px 20px;color:var(--text-muted)}
+.cart-empty p{margin-bottom:16px;font-size:15px}
+.cart-layout{display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
+.cart-items{display:flex;flex-direction:column;gap:12px}
+.cart-item{display:flex;gap:16px;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)}
+.cart-item-img{width:72px;height:72px;border-radius:var(--radius-sm);overflow:hidden;background:linear-gradient(135deg,#16162a,#0e0e1c);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.cart-item-img img{width:100%;height:100%;object-fit:cover}
+.cart-item-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.cart-item-name{font-size:14px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-meta{font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:6px}
+.cart-item-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cart-item-price{font-size:16px;font-weight:700;color:var(--orange);font-family:var(--font-mono)}
+.cart-item-qty{display:flex;align-items:center;gap:0}
+.cart-item-qty button{width:28px;height:28px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.cart-item-qty button:first-child{border-radius:var(--radius-sm) 0 0 var(--radius-sm)}
+.cart-item-qty button:last-child{border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+.cart-item-qty button:hover{background:rgba(255,255,255,.06);color:var(--text-primary)}
+.cart-item-qty span{width:32px;height:28px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;font-family:var(--font-mono)}
+.cart-item-remove{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;padding:4px;transition:color .15s}
+.cart-item-remove:hover{color:var(--red)}
 
-/* Footer */
-.site-footer { border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; }
-.footer-inner { max-width: 1200px; margin: 0 auto; }
-.footer-brand { font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
-.footer-brand a { color: var(--text-secondary); text-decoration: none; }
-.footer-brand a:hover { color: var(--orange); }
-.footer-links-row { display: flex; justify-content: center; gap: 24px; }
-.footer-links-row a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-.footer-links-row a:hover { color: var(--text-secondary); }
+/* Sidebar */
+.cart-sidebar{position:sticky;top:80px}
+.sidebar-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:16px}
+.sidebar-card h3{font-size:16px;font-weight:700;margin-bottom:16px;letter-spacing:-.3px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-field{margin-bottom:14px}
+.form-field label{display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:5px}
+.form-field input,.form-field select{width:100%;padding:10px 12px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-display);font-size:13px;transition:border-color .2s;outline:none}
+.form-field input:focus,.form-field select:focus{border-color:var(--orange)}
+.form-field input::placeholder{color:var(--text-muted)}
+.form-field select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235a596a' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.form-field .field-error{font-size:11px;color:var(--red);margin-top:3px}
+.field-hint{font-size:10px;color:var(--text-muted);margin-top:3px}
+.saved-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--green);font-weight:500;margin-left:8px}
+
+/* Summary */
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px;color:var(--text-secondary)}
+.summary-row.total{font-size:16px;font-weight:700;color:var(--text-primary);padding-top:12px;margin-top:4px;border-top:1px solid var(--border)}
+.summary-row.total .summary-val{color:var(--orange);font-family:var(--font-mono)}
+.checkout-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--orange),#e09530);color:#0c0c18;border:none;border-radius:var(--radius-md);font-family:var(--font-display);font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;margin-top:16px}
+.checkout-btn:hover{box-shadow:0 6px 24px rgba(249,167,67,.35);transform:translateY(-1px)}
+.checkout-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.checkout-note{text-align:center;font-size:10px;color:var(--text-muted);margin-top:10px;line-height:1.5}
+.clear-cart-link{display:block;text-align:center;font-size:11px;color:var(--text-muted);margin-top:12px;cursor:pointer;border:none;background:none;font-family:var(--font-display);transition:color .15s}
+.clear-cart-link:hover{color:var(--red)}
+
+/* ============================================ FOOTER ============================================ */
+.site-footer{border-top:1px solid var(--border);padding:32px 20px;text-align:center}
+.footer-brand{font-size:13px;color:var(--text-muted);margin-bottom:8px}
+.footer-brand a{color:var(--text-secondary);text-decoration:none}
+.footer-brand a:hover{color:var(--orange)}
+.footer-links-row{display:flex;justify-content:center;gap:20px}
+.footer-links-row a{color:var(--text-muted);text-decoration:none;font-size:12px;transition:color .2s}
+.footer-links-row a:hover{color:var(--text-secondary)}
 
 /* Toast */
-.toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px); padding: 14px 28px; background: var(--bg-card); border: 1px solid var(--green); border-radius: var(--radius-md); color: var(--green); font-weight: 600; font-size: 14px; z-index: 300; box-shadow: 0 12px 40px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); white-space: nowrap; }
-.toast.show { transform: translateX(-50%) translateY(0); }
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;background:var(--bg-card);border:1px solid var(--green);border-radius:var(--radius-md);color:var(--green);font-weight:600;font-size:13px;z-index:300;box-shadow:0 12px 40px rgba(0,0,0,.5);transition:transform .4s cubic-bezier(.23,1,.32,1);white-space:nowrap;max-width:calc(100vw - 40px);text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
 
-/* Responsive */
-@media (max-width: 768px) {
-  .hero { padding: 40px 0 32px; }
-  .hero-sub { font-size: 16px; }
-  .featured-body { padding: 20px 20px 24px; }
-  .featured-name { font-size: 20px; }
-  .featured-footer { flex-direction: column; align-items: flex-start; gap: 14px; }
-  .featured-actions { width: 100%; }
-  .featured-actions .btn { flex: 1; justify-content: center; }
-  .puzzles-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
-  .card-footer { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .card-actions { width: 100%; }
-  .card-actions .btn { flex: 1; justify-content: center; }
-  .header-links a.hide-mobile { display: none; }
+/* ============================================ RESPONSIVE ============================================ */
+@media(max-width:900px){
+  .cart-layout{grid-template-columns:1fr}
+  .cart-sidebar{position:static}
 }
-@media (max-width: 480px) {
-  .puzzles-grid { grid-template-columns: 1fr; }
-  .featured-card { border-radius: var(--radius-lg); }
+@media(max-width:640px){
+  .header-inner{height:56px}
+  .header-links a.hide-mobile{display:none}
+  .hero{padding:32px 0 28px}
+  .hero-sub{font-size:14px;margin-bottom:24px}
+  .featured-body{padding:18px 18px 22px}
+  .featured-name{font-size:18px}
+  .featured-price{font-size:24px}
+  .featured-footer{flex-direction:column;align-items:flex-start;gap:12px}
+  .featured-actions{width:100%}
+  .featured-actions .btn{flex:1;justify-content:center;padding:10px 12px}
+  .puzzles-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+  .card-body{padding:10px 12px 14px}
+  .card-name{font-size:13px}
+  .card-footer{flex-direction:column;align-items:stretch;gap:8px}
+  .card-actions{width:100%}
+  .card-actions .btn{flex:1;justify-content:center}
+  .album-header{flex-direction:column;gap:4px}
+  .form-row{grid-template-columns:1fr}
+  .cart-item{flex-direction:column;gap:10px}
+  .cart-item-img{width:100%;height:140px}
+  .cart-item-bottom{flex-wrap:wrap}
+}
+@media(max-width:380px){
+  .puzzles-grid{grid-template-columns:1fr}
+  .featured-card{border-radius:var(--radius-lg)}
 }
 </style>
 </head>
 <body>
 
 <div class="page-wrapper" id="app">
+
+  <!-- Header -->
   <header class="site-header">
     <div class="header-inner">
-      <a href="/" class="logo">
+      <a href="#" class="logo" onclick="showView('shop');return false">
         <div class="logo-icon">CP</div>
         <div class="logo-text">Clock <span>Puzzles</span></div>
       </a>
       <div class="header-links">
-        <a href="https://studio.stakcos.com" class="hide-mobile">Create Your Own</a>
-        <a href="#collections">Browse All</a>
-        <a href="https://play.stakcos.com" class="cta-link">Play Free</a>
+        <a href="https://studio.stakcos.com" class="hide-mobile">Create</a>
+        <a href="#collections" class="hide-mobile" onclick="showView('shop')">Browse</a>
+        <a href="https://play.stakcos.com" class="cta-link hide-mobile">Play Free</a>
+        <button class="cart-btn" onclick="showView('cart')" title="Cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cart-badge" id="cart-badge">0</span>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Hero + Featured -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-badge">New puzzles every week</div>
-      <h1>Rotating Puzzles<br>You Can <em>Play & Own</em></h1>
-      <p class="hero-sub">Multi-layer puzzles that twist and align to reveal beautiful artwork. Play online for free, or get a printed copy shipped to you.</p>
-      <div id="featured-puzzle">
-        <div class="featured-card">
-          <div class="featured-image">
-            <div class="loading-state"><div class="loader"></div><div class="loading-text">Loading puzzles...</div></div>
-          </div>
-          <div class="featured-body">
-            <div class="skeleton-line" style="width:120px;height:12px;"></div>
-            <div class="skeleton-line" style="width:260px;height:22px;margin:10px 0;"></div>
-            <div class="skeleton-line" style="width:100%;"></div>
-            <div class="skeleton-line price"></div>
-          </div>
+  <!-- ========== SHOP VIEW ========== -->
+  <div class="page-view active" id="view-shop">
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">New puzzles every week</div>
+        <h1>Rotating Puzzles<br>You Can <em>Play & Own</em></h1>
+        <p class="hero-sub">Multi-layer puzzles that twist and align to reveal beautiful artwork. Play online for free, or get a printed copy shipped to you.</p>
+        <div id="featured-puzzle">
+          <div class="featured-card"><div class="featured-image"><div class="loading-state"><div class="loader"></div><div class="loading-text">Loading puzzles...</div></div></div><div class="featured-body"><div class="skeleton-line" style="width:120px;height:12px"></div><div class="skeleton-line" style="width:260px;height:22px;margin:10px 0"></div><div class="skeleton-line" style="width:100%"></div><div class="skeleton-line price"></div></div></div>
         </div>
       </div>
+    </section>
+    <div id="collections"></div>
+  </div>
+
+  <!-- ========== CART VIEW ========== -->
+  <div class="page-view" id="view-cart">
+    <div class="cart-page">
+      <div class="container">
+        <h2>Your Cart</h2>
+        <div id="cart-content"></div>
+      </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Album sections rendered here by JS -->
-  <div id="collections"></div>
-
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-brand">Clock Puzzles — a product by <a href="https://stakcos.com">Stakco</a></div>
@@ -276,328 +284,299 @@ body::before {
   </footer>
 </div>
 
-<!-- Checkout Modal -->
-<div class="modal-overlay" id="checkout-modal">
-  <div class="modal-card">
-    <button class="modal-close" onclick="closeCheckout()">&times;</button>
-    <div class="modal-title">Buy This Puzzle</div>
-    <div class="modal-subtitle">Printed on premium card stock and shipped worldwide.</div>
-    <div class="modal-puzzle-preview" id="modal-preview"></div>
-    <div class="form-field">
-      <label for="buyer-email">Email address</label>
-      <input type="email" id="buyer-email" placeholder="you@example.com" autocomplete="email">
-      <div class="field-hint">We'll send your order confirmation here.</div>
-    </div>
-    <button class="checkout-btn" id="checkout-btn" onclick="handleCheckout()">Pay with Stripe →</button>
-    <div class="checkout-note">Secure checkout powered by Stripe.<br>You'll be redirected to complete payment.</div>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script>
-// ============================================
-// Configuration
-// ============================================
-const GCS      = 'https://storage.googleapis.com/stakco-images';
-const PLAY_URL = 'https://play.stakcos.com';
-const USER_ID  = '109208089060140847827';
-const PRICE    = 24.99; // SGD default
+// ============================================ CONFIG ============================================
+const GCS='https://storage.googleapis.com/stakco-images',PLAY='https://play.stakcos.com',UID='109208089060140847827',PRICE=24.99;
+const STRIPE_EP='https://api.stakcos.com/api/shop/checkout/create-session';
+const SHIPPING=5.00,FREE_SHIP_THRESHOLD=80.00,TAX_RATE=0.09;
 
-const STRIPE_ENDPOINT = 'https://api.stakcos.com/api/shop/checkout/create-session';
+// ============================================ GCS HELPERS ============================================
+function getLayers(id){const m=id.match(/_(\d+)$/);if(m){const n=+m[1];if(n>=2&&n<=6)return n}return 2}
+function imgBase(id){return id.replace(/_\d+$/,'')}
+function layerUrl(uid,id){return`${GCS}/${uid}/${id}/${imgBase(id)}_0.png`}
+function thumbUrl(uid,id){return`${GCS}/${uid}/${id}/${imgBase(id)}_0_thumb.png`}
+function playUrl(uid,id){return`${PLAY}?username=${uid}&puzzle=${id}`}
+function fmtName(id,title){if(title&&title.trim())return title.trim();let r=id.replace(/_\d+$/,''),p=r.replace(/_/g,' ').split(' ').filter(w=>!/^\d{4}-\d{2}-\d{2}$/.test(w)&&!/^\d{9,}$/.test(w));return p.length?p.map(w=>w[0].toUpperCase()+w.slice(1).toLowerCase()).join(' '):'Puzzle'}
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
-// ============================================
-// GCS naming convention helpers
-// ============================================
-
-// Last _N = layer count (2–6)
-function getLayers(puzzleId) {
-  const m = puzzleId.match(/_(\d+)$/);
-  if (m) { const n = +m[1]; if (n >= 2 && n <= 6) return n; }
-  return 2;
+// ============================================ DATA ============================================
+let allPuzzles=[],puzzleMap={};
+async function fetchJson(u){const r=await fetch(u);if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json()}
+async function loadAlbums(){
+  const uc=await fetchJson(`${GCS}/${UID}/user.config`);
+  const ids=uc.Albums||[];if(!ids.length)return[];
+  return(await Promise.all(ids.map(async aid=>{
+    try{const a=await fetchJson(`${GCS}/${UID}/${aid}.album.json`);
+      return{id:a.Id,name:a.Name||a.Id,puzzles:(a.Puzzles||[]).sort((x,y)=>x.Index-y.Index).map(p=>({puzzleId:p.PuzzleId,name:fmtName(p.PuzzleId,p.Title),layers:getLayers(p.PuzzleId),price:PRICE,thumbnail:layerUrl(UID,p.PuzzleId),thumbSmall:thumbUrl(UID,p.PuzzleId),playUrl:playUrl(UID,p.PuzzleId),albumName:a.Name||a.Id}))};
+    }catch(e){console.warn(`Album ${aid}:`,e);return null}
+  }))).filter(Boolean);
 }
 
-// Strip layer suffix → imageBase
-// "639033000008658370_3" → "639033000008658370"
-// "2026-02-17_639062871440896545_3" → "2026-02-17_639062871440896545"
-function imageBase(puzzleId) {
-  return puzzleId.replace(/_\d+$/, '');
+// ============================================ CART (localStorage) ============================================
+const CART_KEY='cp_cart',CUSTOMER_KEY='cp_customer';
+function loadCart(){try{return JSON.parse(localStorage.getItem(CART_KEY))||[]}catch{return[]}}
+function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c));updateBadge()}
+function getCart(){return loadCart()}
+function addToCart(puzzle){
+  const c=loadCart();const idx=c.findIndex(i=>i.puzzleId===puzzle.puzzleId);
+  if(idx>=0){c[idx].qty++}else{c.push({puzzleId:puzzle.puzzleId,name:puzzle.name,layers:puzzle.layers,price:puzzle.price,thumbSmall:puzzle.thumbSmall,albumName:puzzle.albumName,qty:1})}
+  saveCart(c);showToast(`${puzzle.name} added to cart`);
+}
+function updateQty(puzzleId,delta){
+  const c=loadCart();const idx=c.findIndex(i=>i.puzzleId===puzzleId);
+  if(idx<0)return;c[idx].qty+=delta;if(c[idx].qty<=0)c.splice(idx,1);saveCart(c);renderCart();
+}
+function removeFromCart(puzzleId){const c=loadCart().filter(i=>i.puzzleId!==puzzleId);saveCart(c);renderCart()}
+function clearCartAll(){saveCart([]);renderCart()}
+function cartCount(){return loadCart().reduce((s,i)=>s+i.qty,0)}
+function cartSubtotal(){return loadCart().reduce((s,i)=>s+i.price*i.qty,0)}
+function updateBadge(){const b=document.getElementById('cart-badge'),n=cartCount();b.textContent=n;b.classList.toggle('visible',n>0)}
+
+// Customer info
+function loadCustomer(){try{return JSON.parse(localStorage.getItem(CUSTOMER_KEY))||{}}catch{return{}}}
+function saveCustomer(d){localStorage.setItem(CUSTOMER_KEY,JSON.stringify(d))}
+
+// ============================================ VIEWS ============================================
+function showView(name){
+  document.querySelectorAll('.page-view').forEach(v=>v.classList.remove('active'));
+  const el=document.getElementById('view-'+name);if(el)el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='cart')renderCart();
 }
 
-// Full layer-0 image
-function layerUrl(userId, puzzleId) {
-  return `${GCS}/${userId}/${puzzleId}/${imageBase(puzzleId)}_0.png`;
-}
-
-// Thumbnail
-function thumbUrl(userId, puzzleId) {
-  return `${GCS}/${userId}/${puzzleId}/${imageBase(puzzleId)}_0_thumb.png`;
-}
-
-// Play link
-function playUrl(userId, puzzleId) {
-  return `${PLAY_URL}?username=${userId}&puzzle=${puzzleId}`;
-}
-
-// Readable name from puzzleId or title
-function formatName(puzzleId, title) {
-  if (title && title.trim()) return title.trim();
-  let raw = puzzleId.replace(/_\d+$/, '');
-  let parts = raw.replace(/_/g, ' ').split(' ');
-  parts = parts.filter(p => !/^\d{4}-\d{2}-\d{2}$/.test(p) && !/^\d{9,}$/.test(p));
-  if (!parts.length) return 'Puzzle';
-  return parts.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-}
-
-// ============================================
-// Data loading chain:
-//   1. GET /{userId}/user.config → { Albums: ["sri-lanka", ...] }
-//   2. For each album: GET /{userId}/{albumId}.album.json
-//      → { Id, Name, Puzzles: [{ PuzzleId, Title, ... }] }
-// ============================================
-
-async function fetchJson(url) {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`HTTP ${r.status} for ${url}`);
-  return r.json();
-}
-
-async function loadAlbums(userId) {
-  // Step 1: user.config
-  const userConfig = await fetchJson(`${GCS}/${userId}/user.config`);
-  const albumIds = userConfig.Albums || [];
-  if (!albumIds.length) return [];
-
-  // Step 2: fetch each album in parallel
-  const albums = await Promise.all(
-    albumIds.map(async (albumId) => {
-      try {
-        const album = await fetchJson(`${GCS}/${userId}/${albumId}.album.json`);
-        return {
-          id: album.Id,
-          name: album.Name || album.Id,
-          description: album.Description || '',
-          puzzles: (album.Puzzles || [])
-            .sort((a, b) => a.Index - b.Index)
-            .map(p => ({
-              puzzleId:  p.PuzzleId,
-              title:     p.Title,
-              name:      formatName(p.PuzzleId, p.Title),
-              layers:    getLayers(p.PuzzleId),
-              price:     PRICE,
-              thumbnail: layerUrl(userId, p.PuzzleId),
-              thumbSmall: thumbUrl(userId, p.PuzzleId),
-              playUrl:   playUrl(userId, p.PuzzleId),
-              albumName: album.Name || album.Id,
-            })),
-        };
-      } catch (err) {
-        console.warn(`Failed to load album ${albumId}:`, err);
-        return null;
-      }
-    })
-  );
-
-  return albums.filter(Boolean);
-}
-
-// ============================================
-// State
-// ============================================
-let allPuzzles = []; // flat list for lookup
-let selectedPuzzle = null;
-
-// ============================================
-// Render
-// ============================================
-function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
-
-function renderFeatured(p) {
-  const el = document.getElementById('featured-puzzle');
-  el.innerHTML = `
-    <div class="featured-card">
-      <div class="featured-image">
-        <img src="${p.thumbnail}" alt="${esc(p.name)}" onerror="this.onerror=null;this.src='${p.thumbSmall}';">
-        <span class="featured-tag">★ Featured</span>
+// ============================================ RENDER SHOP ============================================
+function renderFeatured(p){
+  document.getElementById('featured-puzzle').innerHTML=`
+  <div class="featured-card">
+    <div class="featured-image">
+      <img src="${p.thumbnail}" alt="${esc(p.name)}" onerror="this.onerror=null;this.src='${p.thumbSmall}'">
+      <span class="featured-tag">★ Featured</span>
+    </div>
+    <div class="featured-body">
+      <div class="featured-meta">
+        <span class="meta-chip">${p.layers} layers</span>
+        <span class="meta-chip"><span class="dot"></span></span>
+        <span class="meta-chip">${esc(p.albumName)}</span>
       </div>
-      <div class="featured-body">
-        <div class="featured-meta">
-          <span class="meta-chip">${p.layers} layers</span>
-          <span class="meta-chip"><span class="dot"></span></span>
-          <span class="meta-chip">${esc(p.albumName)}</span>
+      <div class="featured-name">${esc(p.name)}</div>
+      <div class="featured-desc">A beautifully crafted ${p.layers}-layer rotating puzzle. Twist each ring to align the artwork. Perfect for display or gifting.</div>
+      <div class="featured-footer">
+        <div class="featured-price"><span class="currency">S$</span>${p.price.toFixed(2)}</div>
+        <div class="featured-actions">
+          <button class="btn btn-buy" onclick="addToCart(puzzleMap['${p.puzzleId}'])">Add to Cart</button>
+          <a class="btn btn-play" href="${p.playUrl}" target="_blank" rel="noopener">▶ Play Free</a>
         </div>
-        <div class="featured-name">${esc(p.name)}</div>
-        <div class="featured-desc">A beautifully crafted ${p.layers}-layer rotating puzzle. Twist each ring to align the artwork and complete the image. Perfect for display or gifting.</div>
-        <div class="featured-footer">
-          <div class="featured-price"><span class="currency">S$</span>${p.price.toFixed(2)}</div>
-          <div class="featured-actions">
-            <button class="btn btn-buy" id="featured-buy">Buy Printed</button>
-            <a class="btn btn-play" href="${p.playUrl}" target="_blank" rel="noopener">▶ Play Free</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderAlbum(album,skipId){
+  const pzs=album.puzzles.filter(p=>p.puzzleId!==skipId);if(!pzs.length)return'';
+  return`<section class="album-section"><div class="container">
+    <div class="album-header"><h2 class="album-title">${esc(album.name)}<span class="album-label">collection</span></h2><span class="album-count">${pzs.length} puzzle${pzs.length!==1?'s':''}</span></div>
+    <div class="puzzles-grid">${pzs.map(p=>`
+      <div class="puzzle-card">
+        <div class="card-image">
+          <img src="${p.thumbSmall}" alt="${esc(p.name)}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=img-fallback>🧩</div>'">
+          <span class="card-layers-badge">${p.layers}L</span>
+        </div>
+        <div class="card-body">
+          <div class="card-name">${esc(p.name)}</div>
+          <div class="card-detail">${p.layers} layers · Printed puzzle</div>
+          <div class="card-footer">
+            <div class="card-price"><span class="currency">S$</span>${p.price.toFixed(2)}</div>
+            <div class="card-actions">
+              <button class="btn btn-buy btn-sm" onclick="addToCart(puzzleMap['${p.puzzleId}'])">Add to Cart</button>
+              <a class="btn btn-play btn-sm" href="${p.playUrl}" target="_blank" rel="noopener">▶ Play</a>
+            </div>
           </div>
         </div>
-      </div>
-    </div>`;
-  document.getElementById('featured-buy').addEventListener('click', () => openCheckout(p));
+      </div>`).join('')}</div>
+  </div></section>`;
 }
 
-function renderAlbumSection(album, skipPuzzleId) {
-  const puzzles = album.puzzles.filter(p => p.puzzleId !== skipPuzzleId);
-  if (!puzzles.length) return '';
-
-  const cards = puzzles.map(p => `
-    <div class="puzzle-card" data-id="${esc(p.puzzleId)}">
-      <div class="card-image">
-        <img src="${p.thumbSmall}" alt="${esc(p.name)}" loading="lazy"
-             onerror="this.onerror=null;this.parentElement.innerHTML='<div class=img-fallback>🧩</div>';">
-        <span class="card-layers-badge">${p.layers}L</span>
-      </div>
-      <div class="card-body">
-        <div class="card-name">${esc(p.name)}</div>
-        <div class="card-detail">${p.layers} layers · Printed puzzle</div>
-        <div class="card-footer">
-          <div class="card-price"><span class="currency">S$</span>${p.price.toFixed(2)}</div>
-          <div class="card-actions">
-            <button class="btn btn-buy btn-sm">Buy</button>
-            <a class="btn btn-play btn-sm" href="${p.playUrl}" target="_blank" rel="noopener">▶ Play</a>
-          </div>
-        </div>
-      </div>
-    </div>`).join('');
-
-  return `
-    <section class="album-section">
-      <div class="container">
-        <div class="album-header">
-          <h2 class="album-title">${esc(album.name)}<span class="album-label">collection</span></h2>
-          <span class="album-count">${puzzles.length} puzzle${puzzles.length !== 1 ? 's' : ''}</span>
-        </div>
-        <div class="puzzles-grid">${cards}</div>
-      </div>
-    </section>`;
-}
-
-// ============================================
-// Checkout
-// ============================================
-function openCheckout(p) {
-  selectedPuzzle = p;
-  document.getElementById('modal-preview').innerHTML = `
-    <img src="${p.thumbSmall}" alt="${esc(p.name)}" onerror="this.style.display='none'">
-    <div class="modal-puzzle-info">
-      <div class="mpz-name">${esc(p.name)}</div>
-      <div class="mpz-meta">${p.layers} layers · ${esc(p.albumName)}</div>
-      <div class="mpz-price">S$${p.price.toFixed(2)}</div>
-    </div>`;
-  document.getElementById('buyer-email').value = '';
-  document.getElementById('buyer-email').style.borderColor = '';
-  document.getElementById('checkout-btn').disabled = false;
-  document.getElementById('checkout-btn').textContent = 'Pay with Stripe →';
-  document.getElementById('checkout-modal').classList.add('active');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => document.getElementById('buyer-email').focus(), 350);
-}
-
-function closeCheckout() {
-  document.getElementById('checkout-modal').classList.remove('active');
-  document.body.style.overflow = '';
-  selectedPuzzle = null;
-}
-
-document.getElementById('checkout-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeCheckout(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCheckout(); });
-
-async function handleCheckout() {
-  const email = document.getElementById('buyer-email').value.trim();
-  const btn = document.getElementById('checkout-btn');
-
-  if (!email || !email.includes('@')) {
-    document.getElementById('buyer-email').style.borderColor = '#ef4444';
-    document.getElementById('buyer-email').focus();
-    return;
+// ============================================ RENDER CART ============================================
+function renderCart(){
+  const items=loadCart(),el=document.getElementById('cart-content');
+  if(!items.length){
+    el.innerHTML=`<div class="cart-empty"><p>Your cart is empty</p><button class="btn btn-buy" onclick="showView('shop')">Browse Puzzles</button></div>`;return;
   }
-  document.getElementById('buyer-email').style.borderColor = '';
-  if (!selectedPuzzle) return;
+  const sub=cartSubtotal(),ship=sub>=FREE_SHIP_THRESHOLD?0:SHIPPING,tax=+(sub*TAX_RATE).toFixed(2),total=+(sub+ship+tax).toFixed(2);
+  const cust=loadCustomer();
 
-  btn.disabled = true;
-  btn.textContent = 'Creating checkout...';
+  el.innerHTML=`<div class="cart-layout">
+    <!-- Items -->
+    <div class="cart-items">
+      ${items.map(i=>`<div class="cart-item">
+        <div class="cart-item-img"><img src="${i.thumbSmall}" alt="" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=img-fallback>🧩</div>'"></div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${esc(i.name)}</div>
+          <div class="cart-item-meta">${i.layers} layers · ${esc(i.albumName)}</div>
+          <div class="cart-item-bottom">
+            <div class="cart-item-price">S$${(i.price*i.qty).toFixed(2)}</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="cart-item-qty">
+                <button onclick="updateQty('${i.puzzleId}',-1)">−</button>
+                <span>${i.qty}</span>
+                <button onclick="updateQty('${i.puzzleId}',1)">+</button>
+              </div>
+              <button class="cart-item-remove" onclick="removeFromCart('${i.puzzleId}')" title="Remove">×</button>
+            </div>
+          </div>
+        </div>
+      </div>`).join('')}
+    </div>
 
-  try {
-    const res = await fetch(STRIPE_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        puzzleId: selectedPuzzle.puzzleId,
-        puzzleName: selectedPuzzle.name,
-        price: selectedPuzzle.price,
-        thumbnail: selectedPuzzle.thumbnail,
-      }),
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const session = await res.json();
-    const url = session.data?.url || session.url;
-    if (url) { window.location.href = url; return; }
+    <!-- Sidebar -->
+    <div class="cart-sidebar">
+      <!-- Customer Details -->
+      <div class="sidebar-card">
+        <h3>Contact Details ${cust.email?'<span class="saved-tag">✓ saved</span>':''}</h3>
+        <div class="form-field">
+          <label for="c-email">Email *</label>
+          <input type="email" id="c-email" placeholder="you@example.com" value="${esc(cust.email||'')}" autocomplete="email">
+        </div>
+        <div class="form-field">
+          <label for="c-name">Full Name *</label>
+          <input type="text" id="c-name" placeholder="Your full name" value="${esc(cust.name||'')}" autocomplete="name">
+        </div>
+        <div class="form-field">
+          <label for="c-phone">Phone *</label>
+          <input type="tel" id="c-phone" placeholder="+65 9123 4567" value="${esc(cust.phone||'')}" autocomplete="tel">
+        </div>
+      </div>
+
+      <!-- Shipping Address -->
+      <div class="sidebar-card">
+        <h3>Shipping Address ${cust.address1?'<span class="saved-tag">✓ saved</span>':''}</h3>
+        <div class="form-field">
+          <label for="c-addr1">Address Line 1 *</label>
+          <input type="text" id="c-addr1" placeholder="Block, street, unit" value="${esc(cust.address1||'')}" autocomplete="address-line1">
+        </div>
+        <div class="form-field">
+          <label for="c-addr2">Address Line 2</label>
+          <input type="text" id="c-addr2" placeholder="Apartment, floor (optional)" value="${esc(cust.address2||'')}" autocomplete="address-line2">
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="c-city">City *</label>
+            <input type="text" id="c-city" placeholder="Singapore" value="${esc(cust.city||'')}" autocomplete="address-level2">
+          </div>
+          <div class="form-field">
+            <label for="c-postal">Postal Code *</label>
+            <input type="text" id="c-postal" placeholder="123456" value="${esc(cust.postal||'')}" autocomplete="postal-code">
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="c-country">Country *</label>
+          <select id="c-country" autocomplete="country">
+            <option value="">Select country</option>
+            <option value="SG" ${cust.country==='SG'?'selected':''}>Singapore</option>
+            <option value="MY" ${cust.country==='MY'?'selected':''}>Malaysia</option>
+            <option value="ID" ${cust.country==='ID'?'selected':''}>Indonesia</option>
+            <option value="TH" ${cust.country==='TH'?'selected':''}>Thailand</option>
+            <option value="PH" ${cust.country==='PH'?'selected':''}>Philippines</option>
+            <option value="VN" ${cust.country==='VN'?'selected':''}>Vietnam</option>
+            <option value="IN" ${cust.country==='IN'?'selected':''}>India</option>
+            <option value="LK" ${cust.country==='LK'?'selected':''}>Sri Lanka</option>
+            <option value="AU" ${cust.country==='AU'?'selected':''}>Australia</option>
+            <option value="NZ" ${cust.country==='NZ'?'selected':''}>New Zealand</option>
+            <option value="JP" ${cust.country==='JP'?'selected':''}>Japan</option>
+            <option value="KR" ${cust.country==='KR'?'selected':''}>South Korea</option>
+            <option value="US" ${cust.country==='US'?'selected':''}>United States</option>
+            <option value="GB" ${cust.country==='GB'?'selected':''}>United Kingdom</option>
+            <option value="CA" ${cust.country==='CA'?'selected':''}>Canada</option>
+            <option value="DE" ${cust.country==='DE'?'selected':''}>Germany</option>
+            <option value="FR" ${cust.country==='FR'?'selected':''}>France</option>
+            <option value="OTHER" ${cust.country==='OTHER'?'selected':''}>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="sidebar-card">
+        <h3>Order Summary</h3>
+        <div class="summary-row"><span>Subtotal (${items.reduce((s,i)=>s+i.qty,0)} items)</span><span>S$${sub.toFixed(2)}</span></div>
+        <div class="summary-row"><span>Shipping</span><span>${ship===0?'<span style="color:var(--green)">Free</span>':'S$'+ship.toFixed(2)}</span></div>
+        ${sub<FREE_SHIP_THRESHOLD?`<div style="font-size:10px;color:var(--text-muted);text-align:right;margin-top:-4px">Free shipping over S$${FREE_SHIP_THRESHOLD.toFixed(0)}</div>`:''}
+        <div class="summary-row"><span>GST (${(TAX_RATE*100).toFixed(0)}%)</span><span>S$${tax.toFixed(2)}</span></div>
+        <div class="summary-row total"><span>Total</span><span class="summary-val">S$${total.toFixed(2)}</span></div>
+        <button class="checkout-btn" id="checkout-btn" onclick="handleCheckout()">Checkout — S$${total.toFixed(2)}</button>
+        <div class="checkout-note">Secure checkout powered by Stripe. You'll be redirected to complete payment.</div>
+        <button class="clear-cart-link" onclick="if(confirm('Clear all items?'))clearCartAll()">Clear cart</button>
+      </div>
+    </div>
+  </div>`;
+
+  // Auto-save customer fields on blur
+  document.querySelectorAll('[id^="c-"]').forEach(inp=>{
+    inp.addEventListener('blur',saveCustomerFields);
+    inp.addEventListener('change',saveCustomerFields);
+  });
+}
+
+function saveCustomerFields(){
+  const get=id=>(document.getElementById(id)?.value||'').trim();
+  saveCustomer({email:get('c-email'),name:get('c-name'),phone:get('c-phone'),address1:get('c-addr1'),address2:get('c-addr2'),city:get('c-city'),postal:get('c-postal'),country:get('c-country')});
+}
+
+function validateCustomer(){
+  const c=loadCustomer();const missing=[];
+  if(!c.email||!c.email.includes('@'))missing.push('email');
+  if(!c.name)missing.push('full name');
+  if(!c.phone)missing.push('phone');
+  if(!c.address1)missing.push('address');
+  if(!c.city)missing.push('city');
+  if(!c.postal)missing.push('postal code');
+  if(!c.country)missing.push('country');
+  return missing;
+}
+
+async function handleCheckout(){
+  // Save fields first
+  saveCustomerFields();
+  const missing=validateCustomer();
+  if(missing.length){showToast('Please fill: '+missing.join(', '),'error');return}
+  const c=loadCustomer(),items=loadCart(),btn=document.getElementById('checkout-btn');
+  btn.disabled=true;btn.textContent='Creating checkout...';
+  try{
+    const res=await fetch(STRIPE_EP,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      email:c.email,customerName:c.name,phone:c.phone,
+      items:items.map(i=>({puzzleId:i.puzzleId,name:i.name,price:i.price,qty:i.qty})),
+      shippingAddress:{name:c.name,address1:c.address1,address2:c.address2||'',city:c.city,postalCode:c.postal,country:c.country,phone:c.phone},
+    })});
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    const session=await res.json();const url=session.data?.url||session.url;
+    if(url){window.location.href=url;return}
     throw new Error('No checkout URL');
-  } catch (err) {
-    console.error('Checkout error:', err);
+  }catch(e){
+    console.error('Checkout error:',e);
     showToast('Checkout coming soon — email hello@stakcos.com to order!');
-    btn.disabled = false;
-    btn.textContent = 'Pay with Stripe →';
-    closeCheckout();
+    btn.disabled=false;btn.textContent='Checkout';
   }
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 4000);
-}
+// ============================================ TOAST ============================================
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500)}
 
-// ============================================
-// Init
-// ============================================
-async function init() {
-  try {
-    const albums = await loadAlbums(USER_ID);
-
-    // Flatten all puzzles
-    allPuzzles = albums.flatMap(a => a.puzzles);
-
-    if (!allPuzzles.length) {
-      document.getElementById('featured-puzzle').innerHTML =
-        '<div class="error-banner">No puzzles found. Check back soon!</div>';
-      return;
-    }
-
-    // First puzzle of first album = featured
-    const featured = allPuzzles[0];
-    renderFeatured(featured);
-
-    // Render each album as a section (skip the featured puzzle from its album)
-    const collectionsEl = document.getElementById('collections');
-    collectionsEl.innerHTML = albums
-      .map(album => renderAlbumSection(album, featured.puzzleId))
-      .join('');
-
-    // Event delegation for all buy buttons in grids
-    collectionsEl.addEventListener('click', (e) => {
-      const btn = e.target.closest('.btn-buy');
-      if (!btn) return;
-      e.preventDefault();
-      const card = btn.closest('.puzzle-card');
-      if (!card) return;
-      const p = allPuzzles.find(x => x.puzzleId === card.dataset.id);
-      if (p) openCheckout(p);
-    });
-
-  } catch (err) {
-    console.error('Init failed:', err);
-    document.getElementById('featured-puzzle').innerHTML =
-      '<div class="error-banner">Failed to load puzzles. Please try again later.</div>';
+// ============================================ INIT ============================================
+async function init(){
+  updateBadge();
+  try{
+    const albums=await loadAlbums();
+    allPuzzles=albums.flatMap(a=>a.puzzles);
+    allPuzzles.forEach(p=>puzzleMap[p.puzzleId]=p);
+    if(!allPuzzles.length){document.getElementById('featured-puzzle').innerHTML='<div class="error-banner">No puzzles found. Check back soon!</div>';return}
+    renderFeatured(allPuzzles[0]);
+    document.getElementById('collections').innerHTML=albums.map(a=>renderAlbum(a,allPuzzles[0].puzzleId)).join('');
+  }catch(e){
+    console.error('Init failed:',e);
+    document.getElementById('featured-puzzle').innerHTML='<div class="error-banner">Failed to load puzzles. Please try again later.</div>';
   }
 }
-
 init();
 </script>
 </body>
