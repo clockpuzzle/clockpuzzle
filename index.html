@@ -4,41 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clock Puzzles — Rotating Puzzles You Can Play & Own</title>
-<meta name="description" content="Beautiful multi-layer rotating puzzles. Play online free or buy printed versions delivered to your door.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-:root{
-  --bg-deep:#0c0c18;--bg-surface:#12121f;--bg-card:#181828;
-  --border:rgba(255,255,255,.06);--border-hover:rgba(249,167,67,.3);
-  --orange:#f9a743;--orange-dim:rgba(249,167,67,.15);
-  --pink:#ec4899;--green:#34d399;--red:#ef4444;
-  --text-primary:#f0eff4;--text-secondary:#8b8a97;--text-muted:#5a596a;
-  --radius-sm:8px;--radius-md:14px;--radius-lg:20px;--radius-xl:28px;
-  --font-display:'Outfit',sans-serif;--font-mono:'Space Mono',monospace;
-  --shadow-card:0 4px 24px rgba(0,0,0,.3);--shadow-card-hover:0 12px 48px rgba(0,0,0,.5);
-  --shadow-glow:0 0 60px rgba(249,167,67,.08);
-  --header-bg:rgba(12,12,24,.85);
-  --grad-a:#1a1a30;--grad-b:#0f0f20;--grid-a:#16162a;--grid-b:#0e0e1c;
-  --btn-text:#0c0c18;--pill-bg:rgba(0,0,0,.6);
-  --skel-a:#16162a;--skel-b:#1c1c34;--hover-bg:rgba(255,255,255,.05);
-  --player-bg:#ffffff;
-}
-[data-theme="light"]{
-  --bg-deep:#f4f2ee;--bg-surface:#fff;--bg-card:#fff;
-  --border:rgba(0,0,0,.08);--border-hover:rgba(249,167,67,.4);--orange-dim:rgba(249,167,67,.1);
-  --text-primary:#1a1a2e;--text-secondary:#5a596a;--text-muted:#8b8a97;
-  --shadow-card:0 2px 12px rgba(0,0,0,.06);--shadow-card-hover:0 8px 32px rgba(0,0,0,.1);
-  --shadow-glow:0 0 40px rgba(249,167,67,.06);--header-bg:rgba(244,242,238,.9);
-  --grad-a:#ece9e3;--grad-b:#e4e1db;--grid-a:#f0ede7;--grid-b:#e8e5df;
-  --btn-text:#1a1a2e;--pill-bg:rgba(255,255,255,.85);
-  --skel-a:#e8e5df;--skel-b:#f0ede7;--hover-bg:rgba(0,0,0,.04);
-  --player-bg:#f0ede7;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+:root{--bg-deep:#0c0c18;--bg-surface:#12121f;--bg-card:#181828;--border:rgba(255,255,255,.06);--border-hover:rgba(249,167,67,.3);--orange:#f9a743;--orange-dim:rgba(249,167,67,.15);--pink:#ec4899;--green:#34d399;--red:#ef4444;--text-primary:#f0eff4;--text-secondary:#8b8a97;--text-muted:#5a596a;--radius-sm:8px;--radius-md:14px;--radius-lg:20px;--radius-xl:28px;--font-display:'Outfit',sans-serif;--font-mono:'Space Mono',monospace;--shadow-card:0 4px 24px rgba(0,0,0,.3);--shadow-card-hover:0 12px 48px rgba(0,0,0,.5);--shadow-glow:0 0 60px rgba(249,167,67,.08);--header-bg:rgba(12,12,24,.85);--grad-a:#1a1a30;--grad-b:#0f0f20;--grid-a:#16162a;--grid-b:#0e0e1c;--btn-text:#0c0c18;--pill-bg:rgba(0,0,0,.6);--skel-a:#16162a;--skel-b:#1c1c34;--hover-bg:rgba(255,255,255,.05);--player-bg:#fff}
+[data-theme="light"]{--bg-deep:#f4f2ee;--bg-surface:#fff;--bg-card:#fff;--border:rgba(0,0,0,.08);--border-hover:rgba(249,167,67,.4);--orange-dim:rgba(249,167,67,.1);--text-primary:#1a1a2e;--text-secondary:#5a596a;--text-muted:#8b8a97;--shadow-card:0 2px 12px rgba(0,0,0,.06);--shadow-card-hover:0 8px 32px rgba(0,0,0,.1);--shadow-glow:0 0 40px rgba(249,167,67,.06);--header-bg:rgba(244,242,238,.9);--grad-a:#ece9e3;--grad-b:#e4e1db;--grid-a:#f0ede7;--grid-b:#e8e5df;--btn-text:#1a1a2e;--pill-bg:rgba(255,255,255,.85);--skel-a:#e8e5df;--skel-b:#f0ede7;--hover-bg:rgba(0,0,0,.04);--player-bg:#f0ede7}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
 body{font-family:var(--font-display);background:var(--bg-deep);color:var(--text-primary);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .4s,color .4s}
 body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
 .page-wrapper{position:relative;z-index:1}.container{max-width:1200px;margin:0 auto;padding:0 20px}
@@ -50,62 +23,39 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .header-links{display:flex;align-items:center;gap:6px;flex-shrink:0}
 .header-links a{color:var(--text-secondary);text-decoration:none;font-size:13px;font-weight:500;padding:6px 12px;border-radius:var(--radius-sm);transition:all .2s;white-space:nowrap}
 .header-links a:hover{color:var(--text-primary);background:var(--hover-bg)}
-.header-links .cta-link{color:var(--orange);border:1px solid rgba(249,167,67,.25)}
-.header-links .cta-link:hover{background:var(--orange-dim);border-color:var(--orange)}
+.header-links .cta-link{color:var(--orange);border:1px solid rgba(249,167,67,.25)}.header-links .cta-link:hover{background:var(--orange-dim);border-color:var(--orange)}
 .icon-btn{width:40px;height:40px;border:1px solid var(--border);background:transparent;border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);transition:all .2s;flex-shrink:0;font-size:16px}
 .icon-btn:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-dim)}
 .icon-btn svg{width:18px;height:18px}
-.cart-badge{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;background:var(--orange);color:var(--btn-text);font-size:11px;font-weight:700;font-family:var(--font-mono);border-radius:100px;display:none;align-items:center;justify-content:center;line-height:1}
-.cart-badge.visible{display:flex}
-.theme-btn .fa-sun{display:none}.theme-btn .fa-moon{display:inline}
-[data-theme="light"] .theme-btn .fa-sun{display:inline}[data-theme="light"] .theme-btn .fa-moon{display:none}
-.hero{padding:48px 0 40px}
-.hero-split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
-.hero-text{text-align:left}
+.cart-badge{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;background:var(--orange);color:var(--btn-text);font-size:11px;font-weight:700;font-family:var(--font-mono);border-radius:100px;display:none;align-items:center;justify-content:center;line-height:1}.cart-badge.visible{display:flex}
+.theme-btn .fa-sun{display:none}.theme-btn .fa-moon{display:inline}[data-theme="light"] .theme-btn .fa-sun{display:inline}[data-theme="light"] .theme-btn .fa-moon{display:none}
+.hero{padding:48px 0 40px}.hero-split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}.hero-text{text-align:left}
 .hero h1{font-size:clamp(28px,4vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:1.08;margin-bottom:14px;background:linear-gradient(135deg,var(--text-primary),var(--text-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--orange),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:16px;color:var(--text-secondary);max-width:480px;margin:0 0 28px;font-weight:400}
-.hero-ctas{display:flex;gap:10px;flex-wrap:wrap}
-.hero-featured{min-width:0}
+.hero-sub{font-size:16px;color:var(--text-secondary);max-width:480px;margin:0 0 28px;font-weight:400}.hero-ctas{display:flex;gap:10px;flex-wrap:wrap}.hero-featured{min-width:0}
 .featured-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;transition:all .4s;box-shadow:var(--shadow-card)}
-.featured-player-wrap{width:100%;aspect-ratio:1/1;position:relative;overflow:visible;background:var(--player-bg);border-radius:50%;margin:24px auto;width:calc(100% - 48px)}
-.featured-body{padding:20px 24px 24px}
-.featured-name{font-size:20px;font-weight:700;letter-spacing:-.4px;margin-bottom:14px}
+.featured-player-wrap{width:calc(100% - 16px);aspect-ratio:1/1;position:relative;overflow:visible;background:var(--player-bg);border-radius:50%;margin:8px auto}
+.featured-body{padding:20px 24px 24px}.featured-name{font-size:20px;font-weight:700;letter-spacing:-.4px;margin-bottom:14px}
 .featured-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.featured-price{font-size:28px;font-weight:800;color:var(--orange);letter-spacing:-1px;font-family:var(--font-mono)}
-.featured-price .currency{font-size:16px;font-weight:400;color:var(--text-muted);margin-right:2px}
+.featured-price{font-size:28px;font-weight:800;color:var(--orange);letter-spacing:-1px;font-family:var(--font-mono)}.featured-price .currency{font-size:16px;font-weight:400;color:var(--text-muted);margin-right:2px}
 .featured-actions{display:flex;gap:8px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:var(--radius-md);font-family:var(--font-display);font-size:13px;font-weight:600;cursor:pointer;transition:all .25s cubic-bezier(.23,1,.32,1);text-decoration:none;white-space:nowrap}
-.btn-buy{background:linear-gradient(135deg,var(--orange),#e09530);color:var(--btn-text);box-shadow:0 4px 16px rgba(249,167,67,.25)}
-.btn-buy:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(249,167,67,.35)}
-.btn-play{background:rgba(255,255,255,.06);color:var(--text-primary);border:1px solid var(--border)}
-.btn-play:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15)}
+.btn-buy{background:linear-gradient(135deg,var(--orange),#e09530);color:var(--btn-text);box-shadow:0 4px 16px rgba(249,167,67,.25)}.btn-buy:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(249,167,67,.35)}
+.btn-play{background:rgba(255,255,255,.06);color:var(--text-primary);border:1px solid var(--border)}.btn-play:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15)}
 .btn-sm{padding:8px 14px;font-size:12px;border-radius:var(--radius-sm)}
-
-/* Player modal */
-.player-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(16px);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:all .3s}
-.player-overlay.active{opacity:1;visibility:visible}
-.player-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border:none;background:rgba(255,255,255,.1);color:#fff;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;z-index:10;transition:all .2s}
-.player-close:hover{background:rgba(255,255,255,.2)}
+.player-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(16px);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:all .3s}.player-overlay.active{opacity:1;visibility:visible}
+.player-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border:none;background:rgba(255,255,255,.1);color:#fff;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;z-index:10;transition:all .2s}.player-close:hover{background:rgba(255,255,255,.2)}
 .player-title{color:#fff;font-size:20px;font-weight:700;margin-bottom:20px;text-align:center}
 .player-container{width:100%;max-width:420px;aspect-ratio:1/1;position:relative;overflow:visible}
-.player-footer{margin-top:20px;display:flex;gap:10px;align-items:center}
-.player-hint{color:rgba(255,255,255,.5);font-size:12px;margin-top:8px;text-align:center}
-
-/* Inline puzzle renderer */
-.pz-wrap{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;background:var(--player-bg);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
-.pz-wrap.grabbing{cursor:grabbing}
+.player-footer{margin-top:20px;display:flex;gap:10px;align-items:center}.player-hint{color:rgba(255,255,255,.5);font-size:12px;margin-top:8px;text-align:center}
+.pz-wrap{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;background:var(--player-bg);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}.pz-wrap.grabbing{cursor:grabbing}
 .pz-layer{position:absolute;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center;will-change:transform}
 .pz-indicators{position:absolute;inset:0;pointer-events:none;overflow:visible}
 .pz-bubble{position:absolute;border-radius:50%;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:2.5px solid rgba(255,255,255,.5);box-shadow:0 2px 12px rgba(0,0,0,.4);color:#fff;font-family:var(--font-display);font-weight:700;display:flex;align-items:center;justify-content:center;pointer-events:all;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;transition:background .2s,border-color .2s;transform:translate(-50%,-50%)}
-.pz-bubble:hover,.pz-bubble.active{background:rgba(249,167,68,.45);border-color:rgba(249,167,68,.9)}
-.pz-bubble.dragging{background:rgba(249,167,68,.6);border-color:#f9a743;cursor:grabbing}
+.pz-bubble:hover,.pz-bubble.active{background:rgba(249,167,68,.45);border-color:rgba(249,167,68,.9)}.pz-bubble.dragging{background:rgba(249,167,68,.6);border-color:#f9a743;cursor:grabbing}
 .pz-solved .pz-bubble{opacity:0;pointer-events:none;transition:opacity .5s}
-
-.album-section{padding:0 0 48px}
-.album-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border);gap:12px}
-.album-title{font-size:20px;font-weight:700;letter-spacing:-.4px}
-.album-label{color:var(--text-muted);font-weight:400;font-size:13px;margin-left:8px;font-family:var(--font-mono)}
+.album-section{padding:0 0 48px}.album-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border);gap:12px}
+.album-title{font-size:20px;font-weight:700;letter-spacing:-.4px}.album-label{color:var(--text-muted);font-weight:400;font-size:13px;margin-left:8px;font-family:var(--font-mono)}
 .album-count{font-size:13px;color:var(--text-muted);font-family:var(--font-mono);white-space:nowrap}
 .puzzles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
 .puzzle-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:all .35s cubic-bezier(.23,1,.32,1)}
@@ -114,78 +64,43 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .card-image img{max-width:80%;max-height:80%;object-fit:contain;border-radius:var(--radius-sm);filter:drop-shadow(0 8px 20px rgba(0,0,0,.4));transition:transform .5s cubic-bezier(.23,1,.32,1)}
 .puzzle-card:hover .card-image img{transform:scale(1.06) rotate(1deg)}
 .card-layers-badge{position:absolute;top:8px;right:8px;padding:3px 8px;background:var(--pill-bg);backdrop-filter:blur(8px);border-radius:100px;font-size:10px;font-weight:600;font-family:var(--font-mono);color:var(--text-secondary)}
-.card-body{padding:14px 16px 16px}
-.card-name{font-size:14px;font-weight:600;margin-bottom:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-body{padding:14px 16px 16px}.card-name{font-size:14px;font-weight:600;margin-bottom:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.card-price{font-size:18px;font-weight:700;color:var(--orange);letter-spacing:-.5px;font-family:var(--font-mono)}
-.card-price .currency{font-size:12px;color:var(--text-muted);font-weight:400}
-.card-actions{display:flex;gap:6px}
-.img-fallback{width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:24px;opacity:.3}
+.card-price{font-size:18px;font-weight:700;color:var(--orange);letter-spacing:-.5px;font-family:var(--font-mono)}.card-price .currency{font-size:12px;color:var(--text-muted);font-weight:400}
+.card-actions{display:flex;gap:6px}.img-fallback{width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:24px;opacity:.3}
 .skeleton-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
 .skeleton-image{width:100%;aspect-ratio:4/3;background:linear-gradient(90deg,var(--skel-a) 0%,var(--skel-b) 50%,var(--skel-a) 100%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite}
-.skeleton-body{padding:14px 16px 16px}
-.skeleton-line{height:14px;border-radius:6px;background:linear-gradient(90deg,rgba(128,128,128,.08) 0%,rgba(128,128,128,.15) 50%,rgba(128,128,128,.08) 100%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;margin-bottom:10px}
-.skeleton-line:last-child{width:60%;margin-bottom:0}.skeleton-line.price{width:30%;height:22px;margin-top:8px}
+.skeleton-body{padding:14px 16px 16px}.skeleton-line{height:14px;border-radius:6px;background:linear-gradient(90deg,rgba(128,128,128,.08) 0%,rgba(128,128,128,.15) 50%,rgba(128,128,128,.08) 100%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;margin-bottom:10px}.skeleton-line:last-child{width:60%;margin-bottom:0}.skeleton-line.price{width:30%;height:22px;margin-top:8px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.loading-state{text-align:center;padding:60px 0}
-.loader{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{color:var(--text-muted);font-size:13px}
+.loading-state{text-align:center;padding:60px 0}.loader{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}@keyframes spin{to{transform:rotate(360deg)}}.loading-text{color:var(--text-muted);font-size:13px}
 .error-banner{max-width:600px;margin:40px auto;padding:20px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius-md);color:#f87171;text-align:center;font-size:14px}
 .page-view{display:none}.page-view.active{display:block}
-.cart-page{padding:40px 0 80px}.cart-page h2{font-size:24px;font-weight:700;letter-spacing:-.5px;margin-bottom:24px}
-.cart-empty{text-align:center;padding:60px 20px;color:var(--text-muted)}.cart-empty p{margin-bottom:16px;font-size:15px}
-.cart-layout{display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
-.cart-items{display:flex;flex-direction:column;gap:12px}
+.cart-page{padding:40px 0 80px}.cart-page h2{font-size:24px;font-weight:700;letter-spacing:-.5px;margin-bottom:24px}.cart-empty{text-align:center;padding:60px 20px;color:var(--text-muted)}.cart-empty p{margin-bottom:16px;font-size:15px}
+.cart-layout{display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}.cart-items{display:flex;flex-direction:column;gap:12px}
 .cart-item{display:flex;gap:16px;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);transition:background .4s,border-color .4s}
-.cart-item-img{width:72px;height:72px;border-radius:var(--radius-sm);overflow:hidden;background:linear-gradient(135deg,var(--grid-a),var(--grid-b));flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.cart-item-img img{width:100%;height:100%;object-fit:cover}
-.cart-item-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
-.cart-item-name{font-size:14px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cart-item-meta{font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:6px}
-.cart-item-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.cart-item-price{font-size:16px;font-weight:700;color:var(--orange);font-family:var(--font-mono)}
-.cart-item-qty{display:flex;align-items:center}
-.cart-item-qty button{width:28px;height:28px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.cart-item-qty button:first-child{border-radius:var(--radius-sm) 0 0 var(--radius-sm)}
-.cart-item-qty button:last-child{border-radius:0 var(--radius-sm) var(--radius-sm) 0}
-.cart-item-qty button:hover{background:var(--hover-bg);color:var(--text-primary)}
+.cart-item-img{width:72px;height:72px;border-radius:var(--radius-sm);overflow:hidden;background:linear-gradient(135deg,var(--grid-a),var(--grid-b));flex-shrink:0;display:flex;align-items:center;justify-content:center}.cart-item-img img{width:100%;height:100%;object-fit:cover}
+.cart-item-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}.cart-item-name{font-size:14px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cart-item-meta{font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:6px}
+.cart-item-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}.cart-item-price{font-size:16px;font-weight:700;color:var(--orange);font-family:var(--font-mono)}
+.cart-item-qty{display:flex;align-items:center}.cart-item-qty button{width:28px;height:28px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.cart-item-qty button:first-child{border-radius:var(--radius-sm) 0 0 var(--radius-sm)}.cart-item-qty button:last-child{border-radius:0 var(--radius-sm) var(--radius-sm) 0}.cart-item-qty button:hover{background:var(--hover-bg);color:var(--text-primary)}
 .cart-item-qty span{width:32px;height:28px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;font-family:var(--font-mono)}
-.cart-item-remove{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:15px;padding:4px 6px;transition:all .15s;border-radius:var(--radius-sm)}
-.cart-item-remove:hover{color:var(--red);background:rgba(239,68,68,.1)}
-.cart-sidebar{position:sticky;top:80px}
-.sidebar-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:16px;transition:background .4s,border-color .4s}
-.sidebar-card h3{font-size:16px;font-weight:700;margin-bottom:16px;letter-spacing:-.3px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.form-field{margin-bottom:14px}
-.form-field label{display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:5px}
+.cart-item-remove{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:15px;padding:4px 6px;transition:all .15s;border-radius:var(--radius-sm)}.cart-item-remove:hover{color:var(--red);background:rgba(239,68,68,.1)}
+.cart-sidebar{position:sticky;top:80px}.sidebar-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:16px;transition:background .4s,border-color .4s}.sidebar-card h3{font-size:16px;font-weight:700;margin-bottom:16px;letter-spacing:-.3px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-field{margin-bottom:14px}.form-field label{display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:5px}
 .form-field input,.form-field select{width:100%;padding:10px 12px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-primary);font-family:var(--font-display);font-size:13px;transition:border-color .2s;outline:none}
-.form-field input:focus,.form-field select:focus{border-color:var(--orange)}
-.form-field input::placeholder{color:var(--text-muted)}
+.form-field input:focus,.form-field select:focus{border-color:var(--orange)}.form-field input::placeholder{color:var(--text-muted)}
 .form-field select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235a596a' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
-.collapsible-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;margin-bottom:16px}
-.collapsible-header h3{margin:0;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
-.toggle-icon{font-size:12px;color:var(--text-muted);transition:transform .25s;width:20px;text-align:center}
-.toggle-icon.collapsed{transform:rotate(-90deg)}
-.collapsible-body{overflow:hidden;transition:max-height .3s ease,opacity .25s ease;max-height:600px;opacity:1}
-.collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
-.collapsible-summary{font-size:12px;color:var(--text-secondary);line-height:1.5;display:none;margin-top:-8px}
-.collapsible-summary.visible{display:block}
-.collapsible-summary i{color:var(--green);margin-right:4px;font-size:11px}
-.summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px;color:var(--text-secondary)}
-.summary-row.total{font-size:16px;font-weight:700;color:var(--text-primary);padding-top:12px;margin-top:4px;border-top:1px solid var(--border)}
-.summary-row.total .summary-val{color:var(--orange);font-family:var(--font-mono)}
-.checkout-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--orange),#e09530);color:var(--btn-text);border:none;border-radius:var(--radius-md);font-family:var(--font-display);font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;margin-top:16px}
-.checkout-btn:hover{box-shadow:0 6px 24px rgba(249,167,67,.35);transform:translateY(-1px)}
-.checkout-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.collapsible-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;margin-bottom:16px}.collapsible-header h3{margin:0;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.toggle-icon{font-size:12px;color:var(--text-muted);transition:transform .25s;width:20px;text-align:center}.toggle-icon.collapsed{transform:rotate(-90deg)}
+.collapsible-body{overflow:hidden;transition:max-height .3s ease,opacity .25s ease;max-height:600px;opacity:1}.collapsible-body.collapsed{max-height:0;opacity:0;pointer-events:none}
+.collapsible-summary{font-size:12px;color:var(--text-secondary);line-height:1.5;display:none;margin-top:-8px}.collapsible-summary.visible{display:block}.collapsible-summary i{color:var(--green);margin-right:4px;font-size:11px}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px;color:var(--text-secondary)}.summary-row.total{font-size:16px;font-weight:700;color:var(--text-primary);padding-top:12px;margin-top:4px;border-top:1px solid var(--border)}.summary-row.total .summary-val{color:var(--orange);font-family:var(--font-mono)}
+.checkout-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--orange),#e09530);color:var(--btn-text);border:none;border-radius:var(--radius-md);font-family:var(--font-display);font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;margin-top:16px}.checkout-btn:hover{box-shadow:0 6px 24px rgba(249,167,67,.35);transform:translateY(-1px)}.checkout-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
 .checkout-note{text-align:center;font-size:10px;color:var(--text-muted);margin-top:10px;line-height:1.5}
-.clear-cart-link{display:block;text-align:center;font-size:11px;color:var(--text-muted);margin-top:12px;cursor:pointer;border:none;background:none;font-family:var(--font-display);transition:color .15s}
-.clear-cart-link:hover{color:var(--red)}
-.site-footer{border-top:1px solid var(--border);padding:32px 20px;text-align:center}
-.footer-brand{font-size:13px;color:var(--text-muted);margin-bottom:8px}.footer-brand a{color:var(--text-secondary);text-decoration:none}.footer-brand a:hover{color:var(--orange)}
+.clear-cart-link{display:block;text-align:center;font-size:11px;color:var(--text-muted);margin-top:12px;cursor:pointer;border:none;background:none;font-family:var(--font-display);transition:color .15s}.clear-cart-link:hover{color:var(--red)}
+.site-footer{border-top:1px solid var(--border);padding:32px 20px;text-align:center}.footer-brand{font-size:13px;color:var(--text-muted);margin-bottom:8px}.footer-brand a{color:var(--text-secondary);text-decoration:none}.footer-brand a:hover{color:var(--orange)}
 .footer-links-row{display:flex;justify-content:center;gap:20px}.footer-links-row a{color:var(--text-muted);text-decoration:none;font-size:12px;transition:color .2s}.footer-links-row a:hover{color:var(--text-secondary)}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;background:var(--bg-card);border:1px solid var(--green);border-radius:var(--radius-md);color:var(--green);font-weight:600;font-size:13px;z-index:300;box-shadow:0 12px 40px rgba(0,0,0,.5);transition:transform .4s cubic-bezier(.23,1,.32,1);white-space:nowrap;max-width:calc(100vw - 40px);text-align:center}
-.toast.show{transform:translateX(-50%) translateY(0)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;background:var(--bg-card);border:1px solid var(--green);border-radius:var(--radius-md);color:var(--green);font-weight:600;font-size:13px;z-index:300;box-shadow:0 12px 40px rgba(0,0,0,.5);transition:transform .4s cubic-bezier(.23,1,.32,1);white-space:nowrap;max-width:calc(100vw - 40px);text-align:center}.toast.show{transform:translateX(-50%) translateY(0)}
 @media(max-width:900px){.cart-layout{grid-template-columns:1fr}.cart-sidebar{position:static}.hero-split{grid-template-columns:1fr;text-align:center}.hero-text{text-align:center}.hero-sub{margin:0 auto 28px}.hero-ctas{justify-content:center}}
 @media(max-width:640px){.header-inner{height:56px}.header-links a.hide-mobile{display:none}.hero{padding:32px 0 28px}.hero-sub{font-size:14px}.featured-body{padding:16px 16px 20px}.featured-name{font-size:17px}.featured-price{font-size:22px}.featured-footer{flex-direction:column;align-items:flex-start;gap:12px}.featured-actions{width:100%}.featured-actions .btn{flex:1;justify-content:center}.puzzles-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.card-body{padding:10px 12px 14px}.card-name{font-size:13px}.card-footer{flex-direction:column;align-items:stretch;gap:8px}.card-actions{width:100%}.card-actions .btn{flex:1;justify-content:center}.album-header{flex-direction:column;gap:4px}.form-row{grid-template-columns:1fr}.cart-item{flex-direction:column;gap:10px}.cart-item-img{width:100%;height:140px}.cart-item-bottom{flex-wrap:wrap}.player-container{max-width:300px}}
 @media(max-width:380px){.puzzles-grid{grid-template-columns:1fr}}
@@ -210,10 +125,10 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
       <div class="hero-text">
         <h1>Rotating Puzzles<br>You Can <em>Play &amp; Own</em></h1>
         <p class="hero-sub">Multi-layer puzzles that twist and align to reveal beautiful artwork. Play online for free, or get a printed copy shipped to you.</p>
-        <div class="hero-ctas"><a href="#collections" class="btn btn-buy">Browse Collection</a><a href="https://play.stakcos.com" class="btn btn-play" target="_blank" rel="noopener">&#9654; Play Free Online</a></div>
+        <div class="hero-ctas"><a href="#collections" class="btn btn-buy">Browse Collection</a></div>
       </div>
       <div class="hero-featured" id="featured-puzzle">
-        <div class="featured-card"><div style="padding:24px"><div class="loading-state"><div class="loader"></div><div class="loading-text">Loading...</div></div></div><div class="featured-body"><div class="skeleton-line" style="width:200px;height:18px"></div><div class="skeleton-line price"></div></div></div>
+        <div class="featured-card"><div style="padding:8px"><div class="loading-state"><div class="loader"></div><div class="loading-text">Loading...</div></div></div><div class="featured-body"><div class="skeleton-line" style="width:200px;height:18px"></div><div class="skeleton-line price"></div></div></div>
       </div>
     </div></div></section>
     <div id="collections"></div>
@@ -221,7 +136,6 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
   <div class="page-view" id="view-cart"><div class="cart-page"><div class="container"><h2>Your Cart</h2><div id="cart-content"></div></div></div></div>
   <footer class="site-footer"><div class="footer-inner"><div class="footer-brand">Clock Puzzles &mdash; a product by <a href="https://flowsxr.com/">FlowsXR</a></div><div class="footer-links-row"><a href="https://play.stakcos.com">Play</a><a href="mailto:hello@stakcos.com">Contact</a></div></div></footer>
 </div>
-<!-- Player overlay -->
 <div class="player-overlay" id="player-overlay">
   <button class="player-close" onclick="closePlayer()">&times;</button>
   <div class="player-title" id="player-title"></div>
@@ -230,7 +144,6 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
   <div class="player-hint">Drag to rotate &middot; Align all layers to solve</div>
 </div>
 <div class="toast" id="toast"></div>
-
 <script>
 var GCS='https://storage.googleapis.com/stakco-images',PLAY='https://play.stakcos.com',UID='109208089060140847827',PRICE=24.99;
 var STRIPE_EP='https://api.stakcos.com/api/shop/checkout/create-session',SHIPPING=5,FREE_SHIP=80,TAX=0.09;
@@ -248,92 +161,36 @@ function puzzleImgUrls(u,id){var b=imgBase(id),n=getLayers(id),urls=[];for(var i
 function fmtName(id,title){if(title&&title.trim())return title.trim();var r=id.replace(/_\d+$/,''),p=r.replace(/_/g,' ').split(' ').filter(function(w){return!/^\d{4}-\d{2}-\d{2}$/.test(w)&&!/^\d{9,}$/.test(w)});return p.length?p.map(function(w){return w[0].toUpperCase()+w.slice(1).toLowerCase()}).join(' '):''}
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 async function fetchJson(url){var r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
-async function loadAlbums(){var uc=await fetchJson(GCS+'/'+UID+'/user.config');var ids=uc.Albums||[];if(!ids.length)return[];return(await Promise.all(ids.map(async function(aid){try{var a=await fetchJson(GCS+'/'+UID+'/'+aid+'.album.json');var nm=a.Name||a.Id;return{id:a.Id,name:nm,puzzles:(a.Puzzles||[]).sort(function(x,y){return x.Index-y.Index}).map(function(p,i){return{puzzleId:p.PuzzleId,name:fmtName(p.PuzzleId,p.Title)||nm+' #'+(i+1),layers:getLayers(p.PuzzleId),price:PRICE,thumbnail:layerUrl(UID,p.PuzzleId),thumbSmall:thumbUrl(UID,p.PuzzleId),playUrl:PLAY+'?username='+UID+'&puzzle='+p.PuzzleId,albumName:nm}})}}catch(e){return null}}))).filter(Boolean)}
+async function loadAlbums(){var uc=await fetchJson(GCS+'/'+UID+'/user.config');var ids=uc.Albums||[];if(!ids.length)return[];return(await Promise.all(ids.map(async function(aid){try{var a=await fetchJson(GCS+'/'+UID+'/'+aid+'.album.json');var nm=a.Name||a.Id;return{id:a.Id,name:nm,puzzles:(a.Puzzles||[]).sort(function(x,y){return x.Index-y.Index}).map(function(p,i){return{puzzleId:p.PuzzleId,name:fmtName(p.PuzzleId,p.Title)||nm+' #'+(i+1),layers:getLayers(p.PuzzleId),price:PRICE,thumbnail:layerUrl(UID,p.PuzzleId),thumbSmall:thumbUrl(UID,p.PuzzleId),albumName:nm}})}}catch(e){return null}}))).filter(Boolean)}
 
-/* ===== INLINE PUZZLE PLAYER ENGINE ===== */
 function PuzzlePlayer(container,imageUrls,opts){
   var self=this;opts=opts||{};self.tolerance=opts.tolerance||4;self.layers=[];self.active=0;self.solved=false;self.rafId=null;
   container.innerHTML='';
   var wrap=document.createElement('div');wrap.className='pz-wrap';
   var indRing=document.createElement('div');indRing.className='pz-indicators';
-  var count=imageUrls.length;
-  var offsets=genOffsets(count);
-  for(var i=0;i<count;i++){
-    var rot=30+Math.floor(Math.random()*300);
-    var el=document.createElement('div');el.className='pz-layer';el.style.transform='rotate('+rot+'deg)';wrap.appendChild(el);
-    var bub=document.createElement('div');bub.className='pz-bubble'+(i===0?' active':'');bub.textContent=String(i+1);indRing.appendChild(bub);
-    self.layers.push({rotation:rot,el:el,ind:bub,offset:offsets[i]});
-    bindBubble(self,bub,i);
-  }
-  container.appendChild(wrap);container.appendChild(indRing);
-  self.wrap=wrap;self.indRing=indRing;
-  loadImgs(self,imageUrls);
-  bindDrag(self,wrap);
-  startSync(self,wrap);
+  var count=imageUrls.length;var offsets=genOffsets(count);
+  for(var i=0;i<count;i++){var rot=30+Math.floor(Math.random()*300);var el=document.createElement('div');el.className='pz-layer';el.style.transform='rotate('+rot+'deg)';wrap.appendChild(el);var bub=document.createElement('div');bub.className='pz-bubble'+(i===0?' active':'');bub.textContent=String(i+1);indRing.appendChild(bub);self.layers.push({rotation:rot,el:el,ind:bub,offset:offsets[i]});bindBubble(self,bub,i)}
+  container.appendChild(wrap);container.appendChild(indRing);self.wrap=wrap;self.indRing=indRing;
+  loadImgs(self,imageUrls);bindDrag(self,wrap);startSync(self,wrap);
   self.destroy=function(){if(self.rafId)cancelAnimationFrame(self.rafId)};
 }
 function genOffsets(n){var o=[],min=60;for(var i=0;i<n;i++){var v,t=0;do{v=Math.floor(Math.random()*360);t++}while(t<50&&o.some(function(x){var d=Math.abs(v-x);return Math.min(d,360-d)<min}));o.push(v)}return o}
 function loadImgs(p,urls){var loaded=0,ok=0,n=urls.length;urls.forEach(function(url,i){var img=new Image();img.crossOrigin='anonymous';img.onload=function(){p.layers[i].el.style.backgroundImage='url('+url+')';ok++;loaded++;if(loaded===n&&ok>0)p.wrap.classList.add('loaded')};img.onerror=function(){loaded++;if(loaded===n&&ok>0)p.wrap.classList.add('loaded')};img.src=url})}
-function bindBubble(p,bub,idx){
-  var dragging=false,startX,startY,dragA,TH=5;
-  bub.addEventListener('pointerdown',function(e){if(p.solved)return;e.stopPropagation();e.preventDefault();bub.setPointerCapture(e.pointerId);dragging=false;startX=e.clientX;startY=e.clientY;dragA=angleFrom(p,e.clientX,e.clientY);bub.classList.add('dragging')},{passive:false});
-  bub.addEventListener('pointermove',function(e){if(!bub.hasPointerCapture(e.pointerId)||p.solved)return;var dx=e.clientX-startX,dy=e.clientY-startY;if(!dragging&&Math.sqrt(dx*dx+dy*dy)>TH){dragging=true;selectLayer(p,idx)}if(dragging){var cur=angleFrom(p,e.clientX,e.clientY),delta=cur-dragA;if(delta>180)delta-=360;if(delta<-180)delta+=360;rotateLayer(p,idx,delta);dragA=cur}},{passive:false});
-  bub.addEventListener('pointerup',function(){bub.classList.remove('dragging');if(!dragging)selectLayer(p,idx);else checkSolve(p)});
-  bub.addEventListener('pointercancel',function(){bub.classList.remove('dragging')});
-}
-function bindDrag(p,el){
-  var dragging=false,lastA=0;
-  function start(x,y){if(p.solved)return;dragging=true;lastA=angleFrom(p,x,y);p.wrap.classList.add('grabbing')}
-  function move(x,y){if(!dragging||p.solved)return;var cur=angleFrom(p,x,y),d=cur-lastA;if(d>180)d-=360;if(d<-180)d+=360;rotateLayer(p,p.active,d);lastA=cur}
-  function end(){if(!dragging)return;dragging=false;p.wrap.classList.remove('grabbing');checkSolve(p)}
-  el.addEventListener('mousedown',function(e){e.preventDefault();start(e.clientX,e.clientY)});
-  document.addEventListener('mousemove',function(e){if(dragging){e.preventDefault();move(e.clientX,e.clientY)}});
-  document.addEventListener('mouseup',end);
-  el.addEventListener('touchstart',function(e){e.preventDefault();var t=e.touches[0];start(t.clientX,t.clientY)},{passive:false});
-  document.addEventListener('touchmove',function(e){if(dragging){e.preventDefault();var t=e.touches[0];move(t.clientX,t.clientY)}},{passive:false});
-  document.addEventListener('touchend',end);
-  el.addEventListener('wheel',function(e){if(p.solved)return;e.preventDefault();rotateLayer(p,p.active,e.deltaY>0?3:-3);checkSolve(p)},{passive:false});
-}
-function startSync(p,wrap){
-  function sync(){var r=wrap.getBoundingClientRect(),rad=r.width/2,cx=r.width/2,cy=r.height/2,bs=Math.max(16,Math.min(44,r.width*.12)),fs=Math.max(9,bs*.45);
-  p.layers.forEach(function(l){var a=(l.rotation+l.offset-90)*Math.PI/180;l.ind.style.left=cx+rad*Math.cos(a)+'px';l.ind.style.top=cy+rad*Math.sin(a)+'px';l.ind.style.width=l.ind.style.height=bs+'px';l.ind.style.fontSize=fs+'px'});
-  p.rafId=requestAnimationFrame(sync)}
-  p.rafId=requestAnimationFrame(sync);
-}
+function bindBubble(p,bub,idx){var dragging=false,startX,startY,dragA,TH=5;bub.addEventListener('pointerdown',function(e){if(p.solved)return;e.stopPropagation();e.preventDefault();bub.setPointerCapture(e.pointerId);dragging=false;startX=e.clientX;startY=e.clientY;dragA=angleFrom(p,e.clientX,e.clientY);bub.classList.add('dragging')},{passive:false});bub.addEventListener('pointermove',function(e){if(!bub.hasPointerCapture(e.pointerId)||p.solved)return;var dx=e.clientX-startX,dy=e.clientY-startY;if(!dragging&&Math.sqrt(dx*dx+dy*dy)>TH){dragging=true;selectLayer(p,idx)}if(dragging){var cur=angleFrom(p,e.clientX,e.clientY),delta=cur-dragA;if(delta>180)delta-=360;if(delta<-180)delta+=360;rotateLayer(p,idx,delta);dragA=cur}},{passive:false});bub.addEventListener('pointerup',function(){bub.classList.remove('dragging');if(!dragging)selectLayer(p,idx);else checkSolve(p)});bub.addEventListener('pointercancel',function(){bub.classList.remove('dragging')})}
+function bindDrag(p,el){var dragging=false,lastA=0;function start(x,y){if(p.solved)return;dragging=true;lastA=angleFrom(p,x,y);p.wrap.classList.add('grabbing')}function move(x,y){if(!dragging||p.solved)return;var cur=angleFrom(p,x,y),d=cur-lastA;if(d>180)d-=360;if(d<-180)d+=360;rotateLayer(p,p.active,d);lastA=cur}function end(){if(!dragging)return;dragging=false;p.wrap.classList.remove('grabbing');checkSolve(p)}el.addEventListener('mousedown',function(e){e.preventDefault();start(e.clientX,e.clientY)});document.addEventListener('mousemove',function(e){if(dragging){e.preventDefault();move(e.clientX,e.clientY)}});document.addEventListener('mouseup',end);el.addEventListener('touchstart',function(e){e.preventDefault();var t=e.touches[0];start(t.clientX,t.clientY)},{passive:false});document.addEventListener('touchmove',function(e){if(dragging){e.preventDefault();var t=e.touches[0];move(t.clientX,t.clientY)}},{passive:false});document.addEventListener('touchend',end);el.addEventListener('wheel',function(e){if(p.solved)return;e.preventDefault();rotateLayer(p,p.active,e.deltaY>0?3:-3);checkSolve(p)},{passive:false})}
+function startSync(p,wrap){function sync(){var r=wrap.getBoundingClientRect(),rad=r.width/2,cx=r.width/2,cy=r.height/2,bs=Math.max(16,Math.min(44,r.width*.12)),fs=Math.max(9,bs*.45);p.layers.forEach(function(l){var a=(l.rotation+l.offset-90)*Math.PI/180;l.ind.style.left=cx+rad*Math.cos(a)+'px';l.ind.style.top=cy+rad*Math.sin(a)+'px';l.ind.style.width=l.ind.style.height=bs+'px';l.ind.style.fontSize=fs+'px'});p.rafId=requestAnimationFrame(sync)}p.rafId=requestAnimationFrame(sync)}
 function selectLayer(p,idx){p.active=idx;p.layers.forEach(function(l,i){l.ind.classList.toggle('active',i===idx)})}
 function rotateLayer(p,idx,delta){var l=p.layers[idx];if(!l)return;l.rotation+=delta;l.el.style.transform='rotate('+l.rotation+'deg)'}
 function angleFrom(p,cx,cy){var r=p.wrap.getBoundingClientRect();return Math.atan2(cy-(r.top+r.height/2),cx-(r.left+r.width/2))*180/Math.PI}
 function checkSolve(p){if(p.solved)return;var tol=p.tolerance;var norms=p.layers.map(function(l){return((l.rotation%360)+360)%360});var ref=norms[0];if(norms.every(function(n){var d=Math.abs(n-ref);return Math.min(d,360-d)<=tol})){p.solved=true;animSolve(p)}}
-function animSolve(p){
-  var ref=p.layers[0].rotation;
-  p.layers.forEach(function(l){l.el.style.transition='transform .4s ease-out';l.rotation=ref;l.el.style.transform='rotate('+ref+'deg)'});
-  setTimeout(function(){var deg=((ref%360)+360)%360;if(deg>180)deg-=360;
-    p.layers.forEach(function(l){l.el.style.transition='none';l.el.style.transform='rotate('+deg+'deg)';l.el.getBoundingClientRect();l.el.style.transition='transform 2s ease-in-out';l.rotation=0;l.el.style.transform='rotate(0deg)'});
-    p.indRing.classList.add('pz-solved');if(p.rafId){cancelAnimationFrame(p.rafId);p.rafId=null}
-  },500);
-}
+function animSolve(p){var ref=p.layers[0].rotation;p.layers.forEach(function(l){l.el.style.transition='transform .4s ease-out';l.rotation=ref;l.el.style.transform='rotate('+ref+'deg)'});setTimeout(function(){var deg=((ref%360)+360)%360;if(deg>180)deg-=360;p.layers.forEach(function(l){l.el.style.transition='none';l.el.style.transform='rotate('+deg+'deg)';l.el.getBoundingClientRect();l.el.style.transition='transform 2s ease-in-out';l.rotation=0;l.el.style.transform='rotate(0deg)'});p.indRing.classList.add('pz-solved');if(p.rafId){cancelAnimationFrame(p.rafId);p.rafId=null}},500)}
 
-/* ===== ACTIVE PLAYERS ===== */
 var featuredPlayer=null,modalPlayer=null;
-
-function openPlayer(puzzle){
-  if(modalPlayer){modalPlayer.destroy();modalPlayer=null}
-  document.getElementById('player-title').textContent=puzzle.name;
-  var ct=document.getElementById('player-container');ct.innerHTML='';
-  modalPlayer=new PuzzlePlayer(ct,puzzleImgUrls(UID,puzzle.puzzleId));
-  document.getElementById('player-buy').onclick=function(){addToCart(puzzle);closePlayer()};
-  document.getElementById('player-overlay').classList.add('active');
-  document.body.style.overflow='hidden';
-}
-function closePlayer(){
-  document.getElementById('player-overlay').classList.remove('active');
-  document.body.style.overflow='';
-  if(modalPlayer){modalPlayer.destroy();modalPlayer=null}
-}
+function openPlayer(puzzle){if(modalPlayer){modalPlayer.destroy();modalPlayer=null}document.getElementById('player-title').textContent=puzzle.name;var ct=document.getElementById('player-container');ct.innerHTML='';modalPlayer=new PuzzlePlayer(ct,puzzleImgUrls(UID,puzzle.puzzleId));document.getElementById('player-buy').onclick=function(){addToCart(puzzle);closePlayer()};document.getElementById('player-overlay').classList.add('active');document.body.style.overflow='hidden'}
+function closePlayer(){document.getElementById('player-overlay').classList.remove('active');document.body.style.overflow='';if(modalPlayer){modalPlayer.destroy();modalPlayer=null}}
 document.getElementById('player-overlay').addEventListener('click',function(e){if(e.target===e.currentTarget)closePlayer()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closePlayer()});
 
-/* ===== CART ===== */
 function loadCart(){try{return JSON.parse(localStorage.getItem(CART_KEY))||[]}catch(e){return[]}}
 function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c));updateBadge()}
 function addToCart(p){var c=loadCart(),idx=c.findIndex(function(i){return i.puzzleId===p.puzzleId});if(idx>=0)c[idx].qty++;else c.push({puzzleId:p.puzzleId,name:p.name,layers:p.layers,price:p.price,thumbSmall:p.thumbSmall,albumName:p.albumName,qty:1});saveCart(c);showToast(p.name+' added to cart')}
@@ -351,18 +208,12 @@ function showView(nm){document.querySelectorAll('.page-view').forEach(function(v
 function renderFeatured(p){
   if(featuredPlayer){featuredPlayer.destroy();featuredPlayer=null}
   var el=document.getElementById('featured-puzzle');
-  el.innerHTML='<div class="featured-card"><div style="padding:24px"><div class="featured-player-wrap" id="feat-player"></div></div><div class="featured-body"><div class="featured-name">'+esc(p.name)+'</div><div class="featured-footer"><div class="featured-price"><span class="currency">S$</span>'+p.price.toFixed(2)+'</div><div class="featured-actions"><button class="btn btn-buy" id="feat-cart">Add to Cart</button><button class="btn btn-play" id="feat-try">&#9654; Try it</button></div></div></div></div>';
+  el.innerHTML='<div class="featured-card"><div style="padding:8px"><div class="featured-player-wrap" id="feat-player"></div></div><div class="featured-body"><div class="featured-name">'+esc(p.name)+'</div><div class="featured-footer"><div class="featured-price"><span class="currency">S$</span>'+p.price.toFixed(2)+'</div><div class="featured-actions"><button class="btn btn-buy" id="feat-cart">Add to Cart</button><button class="btn btn-play" id="feat-try">&#9654; Try it</button></div></div></div></div>';
   featuredPlayer=new PuzzlePlayer(document.getElementById('feat-player'),puzzleImgUrls(UID,p.puzzleId));
   document.getElementById('feat-cart').onclick=function(){addToCart(puzzleMap[p.puzzleId])};
   document.getElementById('feat-try').onclick=function(){openPlayer(p)};
 }
-
-function renderAlbum(album,skipId){
-  var pzs=album.puzzles.filter(function(p){return p.puzzleId!==skipId});if(!pzs.length)return'';
-  return '<section class="album-section"><div class="container"><div class="album-header"><h2 class="album-title">'+esc(album.name)+'<span class="album-label">collection</span></h2><span class="album-count">'+pzs.length+' puzzle'+(pzs.length!==1?'s':'')+'</span></div><div class="puzzles-grid">'+pzs.map(function(p){
-    return '<div class="puzzle-card" data-id="'+esc(p.puzzleId)+'"><div class="card-image"><img src="'+p.thumbSmall+'" alt="'+esc(p.name)+'" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML=\'<div class=img-fallback>&#129513;</div>\'"><span class="card-layers-badge">'+p.layers+'L</span></div><div class="card-body"><div class="card-name">'+esc(p.name)+'</div><div class="card-footer"><div class="card-price"><span class="currency">S$</span>'+p.price.toFixed(2)+'</div><div class="card-actions"><button class="btn btn-buy btn-sm" data-action="cart">Add to Cart</button><button class="btn btn-play btn-sm" data-action="play">&#9654; Try</button></div></div></div></div>';
-  }).join('')+'</div></div></section>';
-}
+function renderAlbum(album,skipId){var pzs=album.puzzles.filter(function(p){return p.puzzleId!==skipId});if(!pzs.length)return'';return '<section class="album-section"><div class="container"><div class="album-header"><h2 class="album-title">'+esc(album.name)+'<span class="album-label">collection</span></h2><span class="album-count">'+pzs.length+' puzzle'+(pzs.length!==1?'s':'')+'</span></div><div class="puzzles-grid">'+pzs.map(function(p){return '<div class="puzzle-card" data-id="'+esc(p.puzzleId)+'"><div class="card-image"><img src="'+p.thumbSmall+'" alt="'+esc(p.name)+'" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML=\'<div class=img-fallback>&#129513;</div>\'"><span class="card-layers-badge">'+p.layers+'L</span></div><div class="card-body"><div class="card-name">'+esc(p.name)+'</div><div class="card-footer"><div class="card-price"><span class="currency">S$</span>'+p.price.toFixed(2)+'</div><div class="card-actions"><button class="btn btn-buy btn-sm" data-action="cart">Add to Cart</button><button class="btn btn-play btn-sm" data-action="play">&#9654; Try</button></div></div></div></div>'}).join('')+'</div></div></section>'}
 
 function renderCart(){
   var items=loadCart(),el=document.getElementById('cart-content');
@@ -370,19 +221,61 @@ function renderCart(){
   var sub=cartSubtotal(),ship=sub>=FREE_SHIP?0:SHIPPING,tax=+(sub*TAX).toFixed(2),total=+(sub+ship+tax).toFixed(2);
   var c=loadCust(),cOk=!!(c.email&&c.name&&c.phone),sOk=!!(c.address1&&c.city&&c.postal&&c.country),cn=COUNTRIES[c.country]||'';
   var co=Object.keys(COUNTRIES).map(function(k){return '<option value="'+k+'"'+(c.country===k?' selected':'')+'>'+COUNTRIES[k]+'</option>'}).join('');
-  el.innerHTML='<div class="cart-layout"><div class="cart-items">'+items.map(function(i){return '<div class="cart-item"><div class="cart-item-img"><img src="'+i.thumbSmall+'" alt="" onerror="this.onerror=null;this.parentElement.innerHTML=\'<div class=img-fallback>&#129513;</div>\'"></div><div class="cart-item-info"><div class="cart-item-name">'+esc(i.name)+'</div><div class="cart-item-meta">'+esc(i.albumName)+'</div><div class="cart-item-bottom"><div class="cart-item-price">S$'+(i.price*i.qty).toFixed(2)+'</div><div style="display:flex;align-items:center;gap:8px"><div class="cart-item-qty"><button onclick="updateQty(\''+i.puzzleId+'\',-1)">&minus;</button><span>'+i.qty+'</span><button onclick="updateQty(\''+i.puzzleId+'\',1)">+</button></div><button class="cart-item-remove" onclick="removeFromCart(\''+i.puzzleId+'\')" title="Remove"><i class="fa-regular fa-trash-can"></i></button></div></div></div></div>'}).join('')+'</div><div class="cart-sidebar">'+
-    '<div class="sidebar-card"><div class="collapsible-header" onclick="toggleSection(\'contact\')"><h3><i class="fa-regular fa-user"></i> Contact Details</h3><span class="toggle-icon'+(cOk?' collapsed':'')+'" id="contact-toggle"><i class="fa-solid fa-chevron-down"></i></span></div><div class="collapsible-summary'+(cOk?' visible':'')+'" id="contact-summary"><i class="fa-solid fa-circle-check"></i> '+esc(c.name)+' &middot; '+esc(c.email)+' &middot; '+esc(c.phone)+'</div><div class="collapsible-body'+(cOk?' collapsed':'')+'" id="contact-body"><div class="form-field"><label>Email *</label><input type="email" id="c-email" placeholder="you@example.com" value="'+esc(c.email||'')+'" autocomplete="email"></div><div class="form-field"><label>Full Name *</label><input type="text" id="c-name" placeholder="Your full name" value="'+esc(c.name||'')+'" autocomplete="name"></div><div class="form-field"><label>Phone *</label><input type="tel" id="c-phone" placeholder="+65 9123 4567" value="'+esc(c.phone||'')+'" autocomplete="tel"></div></div></div>'+
-    '<div class="sidebar-card"><div class="collapsible-header" onclick="toggleSection(\'shipping\')"><h3><i class="fa-solid fa-truck-fast"></i> Shipping Address</h3><span class="toggle-icon'+(sOk?' collapsed':'')+'" id="shipping-toggle"><i class="fa-solid fa-chevron-down"></i></span></div><div class="collapsible-summary'+(sOk?' visible':'')+'" id="shipping-summary"><i class="fa-solid fa-circle-check"></i> '+esc(c.address1||'')+(c.city?', '+esc(c.city):'')+(c.postal?' '+esc(c.postal):'')+(cn?' &middot; '+cn:'')+'</div><div class="collapsible-body'+(sOk?' collapsed':'')+'" id="shipping-body"><div class="form-field"><label>Address Line 1 *</label><input type="text" id="c-addr1" placeholder="Block, street, unit" value="'+esc(c.address1||'')+'" autocomplete="address-line1"></div><div class="form-field"><label>Address Line 2</label><input type="text" id="c-addr2" placeholder="Apartment, floor (optional)" value="'+esc(c.address2||'')+'" autocomplete="address-line2"></div><div class="form-row"><div class="form-field"><label>City *</label><input type="text" id="c-city" placeholder="Singapore" value="'+esc(c.city||'')+'" autocomplete="address-level2"></div><div class="form-field"><label>Postal Code *</label><input type="text" id="c-postal" placeholder="123456" value="'+esc(c.postal||'')+'" autocomplete="postal-code"></div></div><div class="form-field"><label>Country *</label><select id="c-country" autocomplete="country"><option value="">Select country</option>'+co+'</select></div></div></div>'+
-    '<div class="sidebar-card"><h3>Order Summary</h3><div class="summary-row"><span>Subtotal ('+items.reduce(function(s,i){return s+i.qty},0)+' items)</span><span>S$'+sub.toFixed(2)+'</span></div><div class="summary-row"><span>Shipping</span><span>'+(ship===0?'<span style="color:var(--green)">Free</span>':'S$'+ship.toFixed(2))+'</span></div>'+(sub<FREE_SHIP?'<div style="font-size:10px;color:var(--text-muted);text-align:right;margin-top:-4px">Free over S$'+FREE_SHIP+'</div>':'')+'<div class="summary-row"><span>GST ('+(TAX*100)+'%)</span><span>S$'+tax.toFixed(2)+'</span></div><div class="summary-row total"><span>Total</span><span class="summary-val">S$'+total.toFixed(2)+'</span></div><button class="checkout-btn" id="checkout-btn" onclick="handleCheckout()">Checkout &mdash; S$'+total.toFixed(2)+'</button><div class="checkout-note">Secure checkout powered by Stripe.</div><button class="clear-cart-link" onclick="if(confirm(\'Clear all items?\'))clearCartAll()">Clear cart</button></div></div></div>';
+  var cartHtml=items.map(function(i){return '<div class="cart-item"><div class="cart-item-img"><img src="'+i.thumbSmall+'" alt=""></div><div class="cart-item-info"><div class="cart-item-name">'+esc(i.name)+'</div><div class="cart-item-meta">'+esc(i.albumName)+'</div><div class="cart-item-bottom"><div class="cart-item-price">S$'+(i.price*i.qty).toFixed(2)+'</div><div style="display:flex;align-items:center;gap:8px"><div class="cart-item-qty"><button onclick="updateQty(\''+i.puzzleId+'\',-1)">&minus;</button><span>'+i.qty+'</span><button onclick="updateQty(\''+i.puzzleId+'\',1)">+</button></div><button class="cart-item-remove" onclick="removeFromCart(\''+i.puzzleId+'\')"><i class="fa-regular fa-trash-can"></i></button></div></div></div></div>'}).join('');
+  var contactHtml='<div class="sidebar-card"><div class="collapsible-header" onclick="toggleSection(\'contact\')"><h3><i class="fa-regular fa-user"></i> Contact Details</h3><span class="toggle-icon'+(cOk?' collapsed':'')+'" id="contact-toggle"><i class="fa-solid fa-chevron-down"></i></span></div><div class="collapsible-summary'+(cOk?' visible':'')+'" id="contact-summary"><i class="fa-solid fa-circle-check"></i> '+esc(c.name)+' &middot; '+esc(c.email)+' &middot; '+esc(c.phone)+'</div><div class="collapsible-body'+(cOk?' collapsed':'')+'" id="contact-body"><div class="form-field"><label>Email *</label><input type="email" id="c-email" placeholder="you@example.com" value="'+esc(c.email||'')+'" autocomplete="email"></div><div class="form-field"><label>Full Name *</label><input type="text" id="c-name" placeholder="Your full name" value="'+esc(c.name||'')+'" autocomplete="name"></div><div class="form-field"><label>Phone *</label><input type="tel" id="c-phone" placeholder="+65 9123 4567" value="'+esc(c.phone||'')+'" autocomplete="tel"></div></div></div>';
+  var shipHtml='<div class="sidebar-card"><div class="collapsible-header" onclick="toggleSection(\'shipping\')"><h3><i class="fa-solid fa-truck-fast"></i> Shipping Address</h3><span class="toggle-icon'+(sOk?' collapsed':'')+'" id="shipping-toggle"><i class="fa-solid fa-chevron-down"></i></span></div><div class="collapsible-summary'+(sOk?' visible':'')+'" id="shipping-summary"><i class="fa-solid fa-circle-check"></i> '+esc(c.address1||'')+(c.city?', '+esc(c.city):'')+(c.postal?' '+esc(c.postal):'')+(cn?' &middot; '+cn:'')+'</div><div class="collapsible-body'+(sOk?' collapsed':'')+'" id="shipping-body"><div class="form-field"><label>Address Line 1 *</label><input type="text" id="c-addr1" placeholder="Block, street, unit" value="'+esc(c.address1||'')+'" autocomplete="address-line1"></div><div class="form-field"><label>Address Line 2</label><input type="text" id="c-addr2" placeholder="Apartment, floor (optional)" value="'+esc(c.address2||'')+'" autocomplete="address-line2"></div><div class="form-row"><div class="form-field"><label>City *</label><input type="text" id="c-city" placeholder="Singapore" value="'+esc(c.city||'')+'" autocomplete="address-level2"></div><div class="form-field"><label>Postal Code *</label><input type="text" id="c-postal" placeholder="123456" value="'+esc(c.postal||'')+'" autocomplete="postal-code"></div></div><div class="form-field"><label>Country *</label><select id="c-country" autocomplete="country"><option value="">Select country</option>'+co+'</select></div></div></div>';
+  var sumHtml='<div class="sidebar-card"><h3>Order Summary</h3><div class="summary-row"><span>Subtotal ('+items.reduce(function(s,i){return s+i.qty},0)+' items)</span><span>S$'+sub.toFixed(2)+'</span></div><div class="summary-row"><span>Shipping</span><span>'+(ship===0?'<span style="color:var(--green)">Free</span>':'S$'+ship.toFixed(2))+'</span></div>'+(sub<FREE_SHIP?'<div style="font-size:10px;color:var(--text-muted);text-align:right;margin-top:-4px">Free over S$'+FREE_SHIP+'</div>':'')+'<div class="summary-row"><span>GST ('+(TAX*100)+'%)</span><span>S$'+tax.toFixed(2)+'</span></div><div class="summary-row total"><span>Total</span><span class="summary-val">S$'+total.toFixed(2)+'</span></div><button class="checkout-btn" id="checkout-btn" onclick="handleCheckout()">Checkout &mdash; S$'+total.toFixed(2)+'</button><div class="checkout-note">Secure checkout powered by Stripe.</div><button class="clear-cart-link" onclick="if(confirm(\'Clear all items?\'))clearCartAll()">Clear cart</button></div>';
+  el.innerHTML='<div class="cart-layout"><div class="cart-items">'+cartHtml+'</div><div class="cart-sidebar">'+contactHtml+shipHtml+sumHtml+'</div></div>';
   document.querySelectorAll('[id^="c-"]').forEach(function(inp){inp.addEventListener('blur',saveCustFields);inp.addEventListener('change',saveCustFields)});
 }
 function saveCustFields(){function g(id){return(document.getElementById(id)||{}).value||''}saveCust({email:g('c-email').trim(),name:g('c-name').trim(),phone:g('c-phone').trim(),address1:g('c-addr1').trim(),address2:g('c-addr2').trim(),city:g('c-city').trim(),postal:g('c-postal').trim(),country:g('c-country')});var c=loadCust();if(c.email&&c.name&&c.phone)collapseSection('contact');if(c.address1&&c.city&&c.postal&&c.country)collapseSection('shipping')}
-function toggleSection(sec){var body=document.getElementById(sec+'-body'),tog=document.getElementById(sec+'-toggle'),sum=document.getElementById(sec+'-summary');if(!body)return;if(body.classList.contains('collapsed')){body.classList.remove('collapsed');tog.classList.remove('collapsed');if(sum)sum.classList.remove('visible')}else{saveCustFields();body.classList.add('collapsed');tog.classList.add('collapsed');var c=loadCust();if(sec==='contact'&&sum){sum.innerHTML='<i class="fa-solid fa-circle-check"></i> '+esc(c.name||'\u2014')+' &middot; '+esc(c.email||'\u2014')+' &middot; '+esc(c.phone||'\u2014');sum.classList.add('visible')}if(sec==='shipping'&&sum){sum.innerHTML='<i class="fa-solid fa-circle-check"></i> '+esc(c.address1||'\u2014')+(c.city?', '+esc(c.city):'')+(c.postal?' '+esc(c.postal):'')+(COUNTRIES[c.country]?' &middot; '+COUNTRIES[c.country]:'');sum.classList.add('visible')}}}
+function toggleSection(sec){var body=document.getElementById(sec+'-body'),tog=document.getElementById(sec+'-toggle'),sum=document.getElementById(sec+'-summary');if(!body)return;if(body.classList.contains('collapsed')){body.classList.remove('collapsed');tog.classList.remove('collapsed');if(sum)sum.classList.remove('visible')}else{saveCustFields();body.classList.add('collapsed');tog.classList.add('collapsed');var c=loadCust();if(sec==='contact'&&sum){sum.innerHTML='<i class="fa-solid fa-circle-check"></i> '+esc(c.name||'\u2014')+' \u00b7 '+esc(c.email||'\u2014')+' \u00b7 '+esc(c.phone||'\u2014');sum.classList.add('visible')}if(sec==='shipping'&&sum){sum.innerHTML='<i class="fa-solid fa-circle-check"></i> '+esc(c.address1||'\u2014')+(c.city?', '+esc(c.city):'')+(c.postal?' '+esc(c.postal):'')+(COUNTRIES[c.country]?' \u00b7 '+COUNTRIES[c.country]:'');sum.classList.add('visible')}}}
 function collapseSection(sec){var body=document.getElementById(sec+'-body'),tog=document.getElementById(sec+'-toggle'),sum=document.getElementById(sec+'-summary');if(!body||body.classList.contains('collapsed'))return;body.classList.add('collapsed');if(tog)tog.classList.add('collapsed');if(sum)sum.classList.add('visible')}
 function validateCust(){var c=loadCust(),m=[];if(!c.email||c.email.indexOf('@')<0)m.push('email');if(!c.name)m.push('full name');if(!c.phone)m.push('phone');if(!c.address1)m.push('address');if(!c.city)m.push('city');if(!c.postal)m.push('postal code');if(!c.country)m.push('country');return m}
-async function handleCheckout(){saveCustFields();var missing=validateCust();if(missing.length){var cF=['email','full name','phone'],sF=['address','city','postal code','country'];if(missing.some(function(m){return cF.indexOf(m)>=0})){var b=document.getElementById('contact-body');if(b&&b.classList.contains('collapsed'))toggleSection('contact')}if(missing.some(function(m){return sF.indexOf(m)>=0})){var b2=document.getElementById('shipping-body');if(b2&&b2.classList.contains('collapsed'))toggleSection('shipping')}showToast('Please fill: '+missing.join(', '));return}var c=loadCust(),items=loadCart(),btn=document.getElementById('checkout-btn');btn.disabled=true;btn.textContent='Creating checkout...';try{var res=await fetch(STRIPE_EP,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:c.email,customerName:c.name,phone:c.phone,items:items.map(function(i){return{puzzleId:i.puzzleId,name:i.name,price:i.price,qty:i.qty}}),shippingAddress:{name:c.name,address1:c.address1,address2:c.address2||'',city:c.city,postalCode:c.postal,country:c.country,phone:c.phone}})});if(!res.ok)throw new Error('HTTP '+res.status);var session=await res.json(),url=(session.data&&session.data.url)||session.url;if(url){window.location.href=url;return}throw new Error('No URL')}catch(e){console.error('Checkout:',e);showToast('Checkout coming soon \u2014 email hello@stakcos.com to order!');btn.disabled=false;btn.textContent='Checkout'}}
+async function handleCheckout(){
+  saveCustFields();var missing=validateCust();
+  if(missing.length){
+    var cF=['email','full name','phone'],sF=['address','city','postal code','country'];
+    if(missing.some(function(m){return cF.indexOf(m)>=0})){var b=document.getElementById('contact-body');if(b&&b.classList.contains('collapsed'))toggleSection('contact')}
+    if(missing.some(function(m){return sF.indexOf(m)>=0})){var b2=document.getElementById('shipping-body');if(b2&&b2.classList.contains('collapsed'))toggleSection('shipping')}
+    showToast('Please fill: '+missing.join(', '));return;
+  }
+  var c=loadCust(),items=loadCart(),btn=document.getElementById('checkout-btn');
+  btn.disabled=true;btn.textContent='Creating checkout...';
+  try{
+    var res=await fetch(STRIPE_EP,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:c.email,customerName:c.name,phone:c.phone,items:items.map(function(i){return{puzzleId:i.puzzleId,name:i.name,price:i.price,qty:i.qty}}),shippingAddress:{name:c.name,address1:c.address1,address2:c.address2||'',city:c.city,postalCode:c.postal,country:c.country,phone:c.phone}})});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    var session=await res.json(),url=(session.data&&session.data.url)||session.url;
+    if(url){window.location.href=url;return}
+    throw new Error('No URL');
+  }catch(e){
+    console.error('Checkout:',e);
+    showToast('Checkout coming soon \u2014 email hello@stakcos.com to order!');
+    btn.disabled=false;btn.textContent='Checkout';
+  }
+}
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},3500)}
-async function init(){updateBadge();try{var albums=await loadAlbums();allPuzzles=albums.reduce(function(a,b){return a.concat(b.puzzles)},[]);allPuzzles.forEach(function(p){puzzleMap[p.puzzleId]=p});if(!allPuzzles.length){document.getElementById('featured-puzzle').innerHTML='<div class="error-banner">No puzzles found.</div>';return}renderFeatured(allPuzzles[0]);var html=albums.map(function(a){return renderAlbum(a,allPuzzles[0].puzzleId)}).join('');document.getElementById('collections').innerHTML=html;document.getElementById('collections').addEventListener('click',function(e){var btn=e.target.closest('[data-action]');if(!btn)return;e.preventDefault();var card=btn.closest('.puzzle-card');if(!card)return;var p=puzzleMap[card.dataset.id];if(!p)return;if(btn.dataset.action==='cart')addToCart(p);else if(btn.dataset.action==='play')openPlayer(p)})}catch(e){console.error('Init:',e);document.getElementById('featured-puzzle').innerHTML='<div class="error-banner">Failed to load puzzles.</div>'}}
+async function init(){
+  updateBadge();
+  try{
+    var albums=await loadAlbums();
+    allPuzzles=albums.reduce(function(a,b){return a.concat(b.puzzles)},[]);
+    allPuzzles.forEach(function(p){puzzleMap[p.puzzleId]=p});
+    if(!allPuzzles.length){document.getElementById('featured-puzzle').innerHTML='<div class="error-banner">No puzzles found.</div>';return}
+    renderFeatured(allPuzzles[0]);
+    document.getElementById('collections').innerHTML=albums.map(function(a){return renderAlbum(a,allPuzzles[0].puzzleId)}).join('');
+    document.getElementById('collections').addEventListener('click',function(e){
+      var btn=e.target.closest('[data-action]');if(!btn)return;e.preventDefault();
+      var card=btn.closest('.puzzle-card');if(!card)return;
+      var p=puzzleMap[card.dataset.id];if(!p)return;
+      if(btn.dataset.action==='cart')addToCart(p);
+      else if(btn.dataset.action==='play')openPlayer(p);
+    });
+  }catch(e){
+    console.error('Init:',e);
+    document.getElementById('featured-puzzle').innerHTML='<div class="error-banner">Failed to load puzzles.</div>';
+  }
+}
 init();
 </script>
 </body>
