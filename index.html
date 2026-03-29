@@ -112,12 +112,22 @@ body::before {
 .btn-play:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
 .btn-sm { padding: 8px 16px; font-size: 13px; border-radius: var(--radius-sm); }
 
-/* Grid section */
-.puzzles-section { padding: 0 0 80px; }
-.section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-.section-title { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-.section-count { font-size: 14px; color: var(--text-muted); font-family: var(--font-mono); }
-.puzzles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+/* Album sections */
+.album-section { padding: 0 0 60px; }
+.album-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 28px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.album-title { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; }
+.album-title .album-label { color: var(--text-muted); font-weight: 400; font-size: 14px; margin-left: 10px; font-family: var(--font-mono); }
+.album-count { font-size: 14px; color: var(--text-muted); font-family: var(--font-mono); }
+
+.puzzles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
 
 /* Puzzle card */
 .puzzle-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1); }
@@ -223,12 +233,13 @@ body::before {
       </a>
       <div class="header-links">
         <a href="https://studio.stakcos.com" class="hide-mobile">Create Your Own</a>
-        <a href="#puzzles">Browse All</a>
+        <a href="#collections">Browse All</a>
         <a href="https://play.stakcos.com" class="cta-link">Play Free</a>
       </div>
     </div>
   </header>
 
+  <!-- Hero + Featured -->
   <section class="hero">
     <div class="container">
       <div class="hero-badge">New puzzles every week</div>
@@ -250,20 +261,8 @@ body::before {
     </div>
   </section>
 
-  <section class="puzzles-section" id="puzzles">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">All Puzzles</h2>
-        <span class="section-count" id="puzzle-count"></span>
-      </div>
-      <div class="puzzles-grid" id="puzzles-grid">
-        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line price"></div></div></div>
-        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line price"></div></div></div>
-        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line price"></div></div></div>
-        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line price"></div></div></div>
-      </div>
-    </div>
-  </section>
+  <!-- Album sections rendered here by JS -->
+  <div id="collections"></div>
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -300,98 +299,112 @@ body::before {
 // ============================================
 // Configuration
 // ============================================
-const GCS_BUCKET = 'https://storage.googleapis.com/stakco-images';
-const PLAY_BASE  = 'https://play.stakcos.com';
-const CREATOR_ID = '109208089060140847827';
-const DEFAULT_PRICE = 24.99;
+const GCS      = 'https://storage.googleapis.com/stakco-images';
+const PLAY_URL = 'https://play.stakcos.com';
+const USER_ID  = '109208089060140847827';
+const PRICE    = 24.99; // SGD default
 
-// Backend Stripe endpoint (implement when ready)
-const STRIPE_CHECKOUT_ENDPOINT = 'https://api.stakcos.com/api/shop/checkout/create-session';
+const STRIPE_ENDPOINT = 'https://api.stakcos.com/api/shop/checkout/create-session';
 
 // ============================================
-// GCS URL Helpers — Stakco naming convention
+// GCS naming convention helpers
 // ============================================
 
-// Last _N in puzzle folder = layer count (2-6)
-// e.g. "watch6rotary_2" → 2, "2026-02-17_639062871440896545_3" → 3
-function getLayers(folder) {
-  const m = folder.match(/_(\d+)$/);
-  if (m) { const n = parseInt(m[1], 10); if (n >= 2 && n <= 6) return n; }
+// Last _N = layer count (2–6)
+function getLayers(puzzleId) {
+  const m = puzzleId.match(/_(\d+)$/);
+  if (m) { const n = +m[1]; if (n >= 2 && n <= 6) return n; }
   return 2;
 }
 
-// Strip layer-count suffix to get imageBase
-// e.g. "watch6rotary_2" → "watch6rotary"
-// e.g. "2026-02-17_639062871440896545_3" → "2026-02-17_639062871440896545"
-function getImageBase(folder) {
-  return folder.replace(/_\d+$/, '');
+// Strip layer suffix → imageBase
+// "639033000008658370_3" → "639033000008658370"
+// "2026-02-17_639062871440896545_3" → "2026-02-17_639062871440896545"
+function imageBase(puzzleId) {
+  return puzzleId.replace(/_\d+$/, '');
 }
 
-// Full-size layer 0: {bucket}/{userId}/{folder}/{imageBase}_0.png
-function getThumbnailUrl(userId, folder) {
-  return `${GCS_BUCKET}/${userId}/${folder}/${getImageBase(folder)}_0.png`;
+// Full layer-0 image
+function layerUrl(userId, puzzleId) {
+  return `${GCS}/${userId}/${puzzleId}/${imageBase(puzzleId)}_0.png`;
 }
 
-// Small thumb: {bucket}/{userId}/{folder}/{imageBase}_0_thumb.png
-function getThumbUrl(userId, folder) {
-  return `${GCS_BUCKET}/${userId}/${folder}/${getImageBase(folder)}_0_thumb.png`;
+// Thumbnail
+function thumbUrl(userId, puzzleId) {
+  return `${GCS}/${userId}/${puzzleId}/${imageBase(puzzleId)}_0_thumb.png`;
 }
 
-// Stakco Play URL
-function getPlayUrl(userId, folder) {
-  return `${PLAY_BASE}?username=${userId}&puzzle=${folder}`;
+// Play link
+function playUrl(userId, puzzleId) {
+  return `${PLAY_URL}?username=${userId}&puzzle=${puzzleId}`;
 }
 
-// Readable name from folder
-function formatName(folder) {
-  let raw = folder.replace(/_\d+$/, '');
+// Readable name from puzzleId or title
+function formatName(puzzleId, title) {
+  if (title && title.trim()) return title.trim();
+  let raw = puzzleId.replace(/_\d+$/, '');
   let parts = raw.replace(/_/g, ' ').split(' ');
-  // Filter out date prefixes & long numeric IDs
   parts = parts.filter(p => !/^\d{4}-\d{2}-\d{2}$/.test(p) && !/^\d{9,}$/.test(p));
-  if (!parts.length) return 'AI Puzzle';
+  if (!parts.length) return 'Puzzle';
   return parts.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
 }
 
 // ============================================
-// Data Fetching — GCS published.json (no API, no CORS)
-// Path: users/{userId}/published.json
-// Shape: { Puzzles: [{ PuzzleFolder, Name, Price, PublishedAt, IsActive }], ... }
+// Data loading chain:
+//   1. GET /{userId}/user.config → { Albums: ["sri-lanka", ...] }
+//   2. For each album: GET /{userId}/{albumId}.album.json
+//      → { Id, Name, Puzzles: [{ PuzzleId, Title, ... }] }
 // ============================================
-async function fetchPublished(userId) {
-  try {
-    const res = await fetch(`${GCS_BUCKET}/users/${userId}/published.json`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.json();
-  } catch (err) {
-    console.error('Failed to fetch published.json:', err);
-    return null;
-  }
+
+async function fetchJson(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status} for ${url}`);
+  return r.json();
 }
 
-function buildPuzzleList(published, userId) {
-  if (!published?.Puzzles) return [];
-  return published.Puzzles
-    .filter(p => p.IsActive !== false)
-    .map(e => ({
-      puzzleFolder: e.PuzzleFolder,
-      name: e.Name || formatName(e.PuzzleFolder),
-      layers: getLayers(e.PuzzleFolder),
-      price: e.Price > 0 ? e.Price : DEFAULT_PRICE,
-      thumbnail: getThumbnailUrl(userId, e.PuzzleFolder),
-      thumbSmall: getThumbUrl(userId, e.PuzzleFolder),
-      playUrl: getPlayUrl(userId, e.PuzzleFolder),
-      publishedAt: e.PublishedAt,
-    }))
-    .sort((a, b) => {
-      if (a.publishedAt && b.publishedAt) return new Date(b.publishedAt) - new Date(a.publishedAt);
-      return 0;
-    });
+async function loadAlbums(userId) {
+  // Step 1: user.config
+  const userConfig = await fetchJson(`${GCS}/${userId}/user.config`);
+  const albumIds = userConfig.Albums || [];
+  if (!albumIds.length) return [];
+
+  // Step 2: fetch each album in parallel
+  const albums = await Promise.all(
+    albumIds.map(async (albumId) => {
+      try {
+        const album = await fetchJson(`${GCS}/${userId}/${albumId}.album.json`);
+        return {
+          id: album.Id,
+          name: album.Name || album.Id,
+          description: album.Description || '',
+          puzzles: (album.Puzzles || [])
+            .sort((a, b) => a.Index - b.Index)
+            .map(p => ({
+              puzzleId:  p.PuzzleId,
+              title:     p.Title,
+              name:      formatName(p.PuzzleId, p.Title),
+              layers:    getLayers(p.PuzzleId),
+              price:     PRICE,
+              thumbnail: layerUrl(userId, p.PuzzleId),
+              thumbSmall: thumbUrl(userId, p.PuzzleId),
+              playUrl:   playUrl(userId, p.PuzzleId),
+              albumName: album.Name || album.Id,
+            })),
+        };
+      } catch (err) {
+        console.warn(`Failed to load album ${albumId}:`, err);
+        return null;
+      }
+    })
+  );
+
+  return albums.filter(Boolean);
 }
 
 // ============================================
 // State
 // ============================================
-let allPuzzles = [];
+let allPuzzles = []; // flat list for lookup
 let selectedPuzzle = null;
 
 // ============================================
@@ -411,7 +424,7 @@ function renderFeatured(p) {
         <div class="featured-meta">
           <span class="meta-chip">${p.layers} layers</span>
           <span class="meta-chip"><span class="dot"></span></span>
-          <span class="meta-chip">Clock Puzzles</span>
+          <span class="meta-chip">${esc(p.albumName)}</span>
         </div>
         <div class="featured-name">${esc(p.name)}</div>
         <div class="featured-desc">A beautifully crafted ${p.layers}-layer rotating puzzle. Twist each ring to align the artwork and complete the image. Perfect for display or gifting.</div>
@@ -427,19 +440,12 @@ function renderFeatured(p) {
   document.getElementById('featured-buy').addEventListener('click', () => openCheckout(p));
 }
 
-function renderGrid(puzzles) {
-  const grid = document.getElementById('puzzles-grid');
-  const count = document.getElementById('puzzle-count');
+function renderAlbumSection(album, skipPuzzleId) {
+  const puzzles = album.puzzles.filter(p => p.puzzleId !== skipPuzzleId);
+  if (!puzzles.length) return '';
 
-  if (!puzzles.length) {
-    grid.innerHTML = '<div class="empty-state">No puzzles available yet. Check back soon!</div>';
-    count.textContent = '';
-    return;
-  }
-
-  count.textContent = `${puzzles.length} puzzle${puzzles.length !== 1 ? 's' : ''}`;
-  grid.innerHTML = puzzles.map(p => `
-    <div class="puzzle-card" data-folder="${esc(p.puzzleFolder)}">
+  const cards = puzzles.map(p => `
+    <div class="puzzle-card" data-id="${esc(p.puzzleId)}">
       <div class="card-image">
         <img src="${p.thumbSmall}" alt="${esc(p.name)}" loading="lazy"
              onerror="this.onerror=null;this.parentElement.innerHTML='<div class=img-fallback>🧩</div>';">
@@ -458,16 +464,16 @@ function renderGrid(puzzles) {
       </div>
     </div>`).join('');
 
-  // Event delegation for buy buttons
-  grid.addEventListener('click', (e) => {
-    const btn = e.target.closest('.btn-buy');
-    if (!btn) return;
-    e.preventDefault();
-    const card = btn.closest('.puzzle-card');
-    if (!card) return;
-    const p = allPuzzles.find(x => x.puzzleFolder === card.dataset.folder);
-    if (p) openCheckout(p);
-  });
+  return `
+    <section class="album-section">
+      <div class="container">
+        <div class="album-header">
+          <h2 class="album-title">${esc(album.name)}<span class="album-label">collection</span></h2>
+          <span class="album-count">${puzzles.length} puzzle${puzzles.length !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="puzzles-grid">${cards}</div>
+      </div>
+    </section>`;
 }
 
 // ============================================
@@ -479,7 +485,7 @@ function openCheckout(p) {
     <img src="${p.thumbSmall}" alt="${esc(p.name)}" onerror="this.style.display='none'">
     <div class="modal-puzzle-info">
       <div class="mpz-name">${esc(p.name)}</div>
-      <div class="mpz-meta">${p.layers} layers · Printed</div>
+      <div class="mpz-meta">${p.layers} layers · ${esc(p.albumName)}</div>
       <div class="mpz-price">S$${p.price.toFixed(2)}</div>
     </div>`;
   document.getElementById('buyer-email').value = '';
@@ -516,12 +522,12 @@ async function handleCheckout() {
   btn.textContent = 'Creating checkout...';
 
   try {
-    const res = await fetch(STRIPE_CHECKOUT_ENDPOINT, {
+    const res = await fetch(STRIPE_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email,
-        puzzleId: selectedPuzzle.puzzleFolder,
+        puzzleId: selectedPuzzle.puzzleId,
         puzzleName: selectedPuzzle.name,
         price: selectedPuzzle.price,
         thumbnail: selectedPuzzle.thumbnail,
@@ -552,16 +558,43 @@ function showToast(msg) {
 // Init
 // ============================================
 async function init() {
-  const published = await fetchPublished(CREATOR_ID);
-  allPuzzles = buildPuzzleList(published, CREATOR_ID);
+  try {
+    const albums = await loadAlbums(USER_ID);
 
-  if (allPuzzles.length > 0) {
-    renderFeatured(allPuzzles[0]);
-    renderGrid(allPuzzles.slice(1));
-  } else {
+    // Flatten all puzzles
+    allPuzzles = albums.flatMap(a => a.puzzles);
+
+    if (!allPuzzles.length) {
+      document.getElementById('featured-puzzle').innerHTML =
+        '<div class="error-banner">No puzzles found. Check back soon!</div>';
+      return;
+    }
+
+    // First puzzle of first album = featured
+    const featured = allPuzzles[0];
+    renderFeatured(featured);
+
+    // Render each album as a section (skip the featured puzzle from its album)
+    const collectionsEl = document.getElementById('collections');
+    collectionsEl.innerHTML = albums
+      .map(album => renderAlbumSection(album, featured.puzzleId))
+      .join('');
+
+    // Event delegation for all buy buttons in grids
+    collectionsEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-buy');
+      if (!btn) return;
+      e.preventDefault();
+      const card = btn.closest('.puzzle-card');
+      if (!card) return;
+      const p = allPuzzles.find(x => x.puzzleId === card.dataset.id);
+      if (p) openCheckout(p);
+    });
+
+  } catch (err) {
+    console.error('Init failed:', err);
     document.getElementById('featured-puzzle').innerHTML =
-      '<div class="error-banner">Could not load puzzles. Please try again later.</div>';
-    renderGrid([]);
+      '<div class="error-banner">Failed to load puzzles. Please try again later.</div>';
   }
 }
 
