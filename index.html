@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 /* ============================================ RESET & VARS ============================================ */
 :root {
@@ -21,24 +22,52 @@
   --shadow-card: 0 4px 24px rgba(0,0,0,0.3);
   --shadow-card-hover: 0 12px 48px rgba(0,0,0,0.5);
   --shadow-glow: 0 0 60px rgba(249,167,67,0.08);
+  /* Theme-specific extras */
+  --header-bg: rgba(12,12,24,0.85);
+  --card-gradient-a: #1a1a30; --card-gradient-b: #0f0f20;
+  --grid-gradient-a: #16162a; --grid-gradient-b: #0e0e1c;
+  --logo-icon-text: #0c0c18;
+  --btn-buy-text: #0c0c18;
+  --badge-pill-bg: rgba(0,0,0,0.6);
+  --skeleton-a: #16162a; --skeleton-b: #1c1c34;
+  --hover-bg: rgba(255,255,255,0.05);
+  --noise-opacity: 0.025;
+}
+[data-theme="light"] {
+  --bg-deep: #f4f2ee; --bg-surface: #ffffff; --bg-card: #ffffff;
+  --border: rgba(0,0,0,0.08); --border-hover: rgba(249,167,67,0.4);
+  --orange-dim: rgba(249,167,67,0.1);
+  --text-primary: #1a1a2e; --text-secondary: #5a596a; --text-muted: #8b8a97;
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.1);
+  --shadow-glow: 0 0 40px rgba(249,167,67,0.06);
+  --header-bg: rgba(244,242,238,0.9);
+  --card-gradient-a: #ece9e3; --card-gradient-b: #e4e1db;
+  --grid-gradient-a: #f0ede7; --grid-gradient-b: #e8e5df;
+  --logo-icon-text: #ffffff;
+  --btn-buy-text: #1a1a2e;
+  --badge-pill-bg: rgba(255,255,255,0.85);
+  --skeleton-a: #e8e5df; --skeleton-b: #f0ede7;
+  --hover-bg: rgba(0,0,0,0.04);
+  --noise-opacity: 0.012;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--font-display);background:var(--bg-deep);color:var(--text-primary);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+body{font-family:var(--font-display);background:var(--bg-deep);color:var(--text-primary);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .4s ease,color .4s ease}
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:var(--noise-opacity);transition:opacity .4s ease}
 .page-wrapper{position:relative;z-index:1}
 .container{max-width:1200px;margin:0 auto;padding:0 20px}
 
 /* ============================================ HEADER ============================================ */
-.site-header{position:sticky;top:0;z-index:100;background:rgba(12,12,24,0.85);backdrop-filter:blur(20px) saturate(1.2);border-bottom:1px solid var(--border);padding:0 20px}
+.site-header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-filter:blur(20px) saturate(1.2);border-bottom:1px solid var(--border);padding:0 20px;transition:background .4s ease}
 .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text-primary);flex-shrink:0}
-.logo-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--orange),var(--pink));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#0c0c18;letter-spacing:-1px;flex-shrink:0}
+.logo-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--orange),var(--pink));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--logo-icon-text);letter-spacing:-1px;flex-shrink:0}
 .logo-text{font-size:17px;font-weight:700;letter-spacing:-0.3px;white-space:nowrap}
 .logo-text span{color:var(--orange)}
 .header-links{display:flex;align-items:center;gap:6px;flex-shrink:0}
 .header-links a{color:var(--text-secondary);text-decoration:none;font-size:13px;font-weight:500;padding:6px 12px;border-radius:var(--radius-sm);transition:all 0.2s;white-space:nowrap}
-.header-links a:hover{color:var(--text-primary);background:rgba(255,255,255,0.05)}
+.header-links a:hover{color:var(--text-primary);background:var(--hover-bg)}
 .header-links .cta-link{color:var(--orange);border:1px solid rgba(249,167,67,0.25)}
 .header-links .cta-link:hover{background:var(--orange-dim);border-color:var(--orange)}
 
@@ -46,8 +75,21 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .cart-btn{position:relative;width:40px;height:40px;border:1px solid var(--border);background:transparent;border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);transition:all 0.2s;flex-shrink:0}
 .cart-btn:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-dim)}
 .cart-btn svg{width:18px;height:18px}
-.cart-badge{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;background:var(--orange);color:#0c0c18;font-size:11px;font-weight:700;font-family:var(--font-mono);border-radius:100px;display:none;align-items:center;justify-content:center;line-height:1}
+.cart-badge{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;background:var(--orange);color:var(--btn-buy-text);font-size:11px;font-weight:700;font-family:var(--font-mono);border-radius:100px;display:none;align-items:center;justify-content:center;line-height:1}
 .cart-badge.visible{display:flex}
+
+/* Theme toggle */
+.theme-btn{width:40px;height:40px;border:1px solid var(--border);background:transparent;border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);transition:all .3s ease;flex-shrink:0;font-size:16px}
+.theme-btn:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-dim)}
+.theme-btn .fa-sun{display:none}
+.theme-btn .fa-moon{display:inline}
+[data-theme="light"] .theme-btn .fa-sun{display:inline}
+[data-theme="light"] .theme-btn .fa-moon{display:none}
+
+/* Smooth transitions for theme-affected elements */
+.sidebar-card,.featured-card,.puzzle-card,.cart-item,.site-footer,.modal-card{transition:background .4s ease,border-color .4s ease,box-shadow .4s ease}
+.card-image,.featured-image,.cart-item-img{transition:background .4s ease}
+h1,h2,h3,p,span,a,label,.card-name,.card-price,.featured-name,.featured-price{transition:color .4s ease}
 
 /* ============================================ HERO ============================================ */
 .hero{padding:48px 0 40px;text-align:center}
@@ -61,10 +103,10 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 /* Featured card */
 .featured-card{max-width:680px;margin:0 auto;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;transition:all 0.4s cubic-bezier(.23,1,.32,1);box-shadow:var(--shadow-card)}
 .featured-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-card-hover),var(--shadow-glow);transform:translateY(-2px)}
-.featured-image{width:100%;aspect-ratio:16/10;background:linear-gradient(135deg,#1a1a30,#0f0f20);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.featured-image{width:100%;aspect-ratio:16/10;background:linear-gradient(135deg,var(--card-gradient-a),var(--card-gradient-b));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .featured-image img{max-width:85%;max-height:85%;object-fit:contain;border-radius:var(--radius-md);filter:drop-shadow(0 16px 40px rgba(0,0,0,.5));transition:transform .6s cubic-bezier(.23,1,.32,1)}
 .featured-card:hover .featured-image img{transform:scale(1.03)}
-.featured-tag{position:absolute;top:16px;left:16px;padding:5px 12px;background:linear-gradient(135deg,var(--orange),#e09530);color:#0c0c18;font-size:11px;font-weight:700;border-radius:100px;text-transform:uppercase;letter-spacing:.8px}
+.featured-tag{position:absolute;top:16px;left:16px;padding:5px 12px;background:linear-gradient(135deg,var(--orange),#e09530);color:var(--btn-buy-text);font-size:11px;font-weight:700;border-radius:100px;text-transform:uppercase;letter-spacing:.8px}
 .featured-body{padding:24px 24px 28px}
 .featured-meta{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
 .meta-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-secondary);font-family:var(--font-mono)}
@@ -78,7 +120,7 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 
 /* ============================================ BUTTONS ============================================ */
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:var(--radius-md);font-family:var(--font-display);font-size:13px;font-weight:600;cursor:pointer;transition:all .25s cubic-bezier(.23,1,.32,1);text-decoration:none;white-space:nowrap}
-.btn-buy{background:linear-gradient(135deg,var(--orange),#e09530);color:#0c0c18;box-shadow:0 4px 16px rgba(249,167,67,.25)}
+.btn-buy{background:linear-gradient(135deg,var(--orange),#e09530);color:var(--btn-buy-text);box-shadow:0 4px 16px rgba(249,167,67,.25)}
 .btn-buy:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(249,167,67,.35)}
 .btn-play{background:rgba(255,255,255,.06);color:var(--text-primary);border:1px solid var(--border)}
 .btn-play:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15)}
@@ -97,10 +139,10 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 /* Puzzle card */
 .puzzle-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:all .35s cubic-bezier(.23,1,.32,1)}
 .puzzle-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-card-hover),var(--shadow-glow);transform:translateY(-4px)}
-.card-image{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#16162a,#0e0e1c);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.card-image{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,var(--grid-gradient-a),var(--grid-gradient-b));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .card-image img{max-width:80%;max-height:80%;object-fit:contain;border-radius:var(--radius-sm);filter:drop-shadow(0 8px 20px rgba(0,0,0,.4));transition:transform .5s cubic-bezier(.23,1,.32,1)}
 .puzzle-card:hover .card-image img{transform:scale(1.06) rotate(1deg)}
-.card-layers-badge{position:absolute;top:8px;right:8px;padding:3px 8px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border-radius:100px;font-size:10px;font-weight:600;font-family:var(--font-mono);color:var(--text-secondary);border:1px solid rgba(255,255,255,.08)}
+.card-layers-badge{position:absolute;top:8px;right:8px;padding:3px 8px;background:var(--badge-pill-bg);backdrop-filter:blur(8px);border-radius:100px;font-size:10px;font-weight:600;font-family:var(--font-mono);color:var(--text-secondary);border:1px solid rgba(255,255,255,.08)}
 .card-body{padding:14px 16px 16px}
 .card-name{font-size:14px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-detail{font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:12px}
@@ -112,7 +154,7 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 
 /* ============================================ SKELETON ============================================ */
 .skeleton-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
-.skeleton-image{width:100%;aspect-ratio:4/3;background:linear-gradient(90deg,#16162a 0%,#1c1c34 50%,#16162a 100%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite}
+.skeleton-image{width:100%;aspect-ratio:4/3;background:linear-gradient(90deg,var(--skeleton-a) 0%,var(--skeleton-b) 50%,var(--skeleton-a) 100%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite}
 .skeleton-body{padding:14px 16px 16px}
 .skeleton-line{height:14px;border-radius:6px;background:linear-gradient(90deg,rgba(255,255,255,.04) 0%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.04) 100%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;margin-bottom:10px}
 .skeleton-line:last-child{width:60%;margin-bottom:0}.skeleton-line.short{width:40%}.skeleton-line.price{width:30%;height:22px;margin-top:8px}
@@ -134,7 +176,7 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .cart-layout{display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
 .cart-items{display:flex;flex-direction:column;gap:12px}
 .cart-item{display:flex;gap:16px;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)}
-.cart-item-img{width:72px;height:72px;border-radius:var(--radius-sm);overflow:hidden;background:linear-gradient(135deg,#16162a,#0e0e1c);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.cart-item-img{width:72px;height:72px;border-radius:var(--radius-sm);overflow:hidden;background:linear-gradient(135deg,var(--grid-gradient-a),var(--grid-gradient-b));flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .cart-item-img img{width:100%;height:100%;object-fit:cover}
 .cart-item-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
 .cart-item-name{font-size:14px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -147,8 +189,19 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .cart-item-qty button:last-child{border-radius:0 var(--radius-sm) var(--radius-sm) 0}
 .cart-item-qty button:hover{background:rgba(255,255,255,.06);color:var(--text-primary)}
 .cart-item-qty span{width:32px;height:28px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;font-family:var(--font-mono)}
-.cart-item-remove{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;padding:4px;transition:color .15s}
-.cart-item-remove:hover{color:var(--red)}
+.cart-item-remove{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:15px;padding:4px 6px;transition:all .15s;border-radius:var(--radius-sm)}
+.cart-item-remove:hover{color:var(--red);background:rgba(239,68,68,.1)}
+
+/* Collapsible sections */
+.collapsible-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:0;margin-bottom:16px}
+.collapsible-header h3{margin:0;font-size:16px;font-weight:700;letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+.collapsible-header .toggle-icon{font-size:12px;color:var(--text-muted);transition:transform .25s ease;width:20px;text-align:center}
+.collapsible-header .toggle-icon.collapsed{transform:rotate(-90deg)}
+.collapsible-body{overflow:hidden;transition:max-height .3s ease,opacity .25s ease;max-height:600px;opacity:1}
+.collapsible-body.collapsed{max-height:0;opacity:0;margin:0;pointer-events:none}
+.collapsible-summary{font-size:12px;color:var(--text-secondary);line-height:1.5;display:none;margin-top:-8px;margin-bottom:0;padding:0 2px}
+.collapsible-summary.visible{display:block}
+.collapsible-summary i{color:var(--green);margin-right:4px;font-size:11px}
 
 /* Sidebar */
 .cart-sidebar{position:sticky;top:80px}
@@ -169,7 +222,7 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px;color:var(--text-secondary)}
 .summary-row.total{font-size:16px;font-weight:700;color:var(--text-primary);padding-top:12px;margin-top:4px;border-top:1px solid var(--border)}
 .summary-row.total .summary-val{color:var(--orange);font-family:var(--font-mono)}
-.checkout-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--orange),#e09530);color:#0c0c18;border:none;border-radius:var(--radius-md);font-family:var(--font-display);font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;margin-top:16px}
+.checkout-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--orange),#e09530);color:var(--btn-buy-text);border:none;border-radius:var(--radius-md);font-family:var(--font-display);font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;margin-top:16px}
 .checkout-btn:hover{box-shadow:0 6px 24px rgba(249,167,67,.35);transform:translateY(-1px)}
 .checkout-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
 .checkout-note{text-align:center;font-size:10px;color:var(--text-muted);margin-top:10px;line-height:1.5}
@@ -235,9 +288,12 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
         <div class="logo-text">Clock <span>Puzzles</span></div>
       </a>
       <div class="header-links">
-        <a href="https://studio.stakcos.com" class="hide-mobile">Create</a>
         <a href="#collections" class="hide-mobile" onclick="showView('shop')">Browse</a>
         <a href="https://play.stakcos.com" class="cta-link hide-mobile">Play Free</a>
+        <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme" id="theme-btn">
+          <i class="fa-solid fa-moon"></i>
+          <i class="fa-solid fa-sun"></i>
+        </button>
         <button class="cart-btn" onclick="showView('cart')" title="Cart">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           <span class="cart-badge" id="cart-badge">0</span>
@@ -278,7 +334,7 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
       <div class="footer-links-row">
         <a href="https://studio.stakcos.com">Studio</a>
         <a href="https://play.stakcos.com">Play</a>
-        <a href="mailto:hello@stakcos.com">Contact</a>
+        <a href="/cdn-cgi/l/email-protection#660e030a0a09261512070d0509154805090b">Contact</a>
       </div>
     </div>
   </footer>
@@ -286,7 +342,7 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ============================================ CONFIG ============================================
 const GCS='https://storage.googleapis.com/stakco-images',PLAY='https://play.stakcos.com',UID='109208089060140847827',PRICE=24.99;
 const STRIPE_EP='https://api.stakcos.com/api/shop/checkout/create-session';
@@ -406,6 +462,10 @@ function renderCart(){
   }
   const sub=cartSubtotal(),ship=sub>=FREE_SHIP_THRESHOLD?0:SHIPPING,tax=+(sub*TAX_RATE).toFixed(2),total=+(sub+ship+tax).toFixed(2);
   const cust=loadCustomer();
+  const contactSaved=!!(cust.email&&cust.name&&cust.phone);
+  const shippingSaved=!!(cust.address1&&cust.city&&cust.postal&&cust.country);
+  const countryNames={SG:'Singapore',MY:'Malaysia',ID:'Indonesia',TH:'Thailand',PH:'Philippines',VN:'Vietnam',IN:'India',LK:'Sri Lanka',AU:'Australia',NZ:'New Zealand',JP:'Japan',KR:'South Korea',US:'United States',GB:'United Kingdom',CA:'Canada',DE:'Germany',FR:'France',OTHER:'Other'};
+  const countryName=countryNames[cust.country]||'';
 
   el.innerHTML=`<div class="cart-layout">
     <!-- Items -->
@@ -423,7 +483,7 @@ function renderCart(){
                 <span>${i.qty}</span>
                 <button onclick="updateQty('${i.puzzleId}',1)">+</button>
               </div>
-              <button class="cart-item-remove" onclick="removeFromCart('${i.puzzleId}')" title="Remove">×</button>
+              <button class="cart-item-remove" onclick="removeFromCart('${i.puzzleId}')" title="Remove"><i class="fa-regular fa-trash-can"></i></button>
             </div>
           </div>
         </div>
@@ -432,67 +492,83 @@ function renderCart(){
 
     <!-- Sidebar -->
     <div class="cart-sidebar">
-      <!-- Customer Details -->
+      <!-- Customer Details (collapsible) -->
       <div class="sidebar-card">
-        <h3>Contact Details ${cust.email?'<span class="saved-tag">✓ saved</span>':''}</h3>
-        <div class="form-field">
-          <label for="c-email">Email *</label>
-          <input type="email" id="c-email" placeholder="you@example.com" value="${esc(cust.email||'')}" autocomplete="email">
+        <div class="collapsible-header" onclick="toggleSection('contact')">
+          <h3><i class="fa-regular fa-user"></i> Contact Details</h3>
+          <span class="toggle-icon ${contactSaved?'collapsed':''}" id="contact-toggle"><i class="fa-solid fa-chevron-down"></i></span>
         </div>
-        <div class="form-field">
-          <label for="c-name">Full Name *</label>
-          <input type="text" id="c-name" placeholder="Your full name" value="${esc(cust.name||'')}" autocomplete="name">
+        <div class="collapsible-summary ${contactSaved?'visible':''}" id="contact-summary">
+          <i class="fa-solid fa-circle-check"></i> ${esc(cust.name)} · ${esc(cust.email)} · ${esc(cust.phone)}
         </div>
-        <div class="form-field">
-          <label for="c-phone">Phone *</label>
-          <input type="tel" id="c-phone" placeholder="+65 9123 4567" value="${esc(cust.phone||'')}" autocomplete="tel">
+        <div class="collapsible-body ${contactSaved?'collapsed':''}" id="contact-body">
+          <div class="form-field">
+            <label for="c-email">Email *</label>
+            <input type="email" id="c-email" placeholder="you@example.com" value="${esc(cust.email||'')}" autocomplete="email">
+          </div>
+          <div class="form-field">
+            <label for="c-name">Full Name *</label>
+            <input type="text" id="c-name" placeholder="Your full name" value="${esc(cust.name||'')}" autocomplete="name">
+          </div>
+          <div class="form-field">
+            <label for="c-phone">Phone *</label>
+            <input type="tel" id="c-phone" placeholder="+65 9123 4567" value="${esc(cust.phone||'')}" autocomplete="tel">
+          </div>
         </div>
       </div>
 
-      <!-- Shipping Address -->
+      <!-- Shipping Address (collapsible) -->
       <div class="sidebar-card">
-        <h3>Shipping Address ${cust.address1?'<span class="saved-tag">✓ saved</span>':''}</h3>
-        <div class="form-field">
-          <label for="c-addr1">Address Line 1 *</label>
-          <input type="text" id="c-addr1" placeholder="Block, street, unit" value="${esc(cust.address1||'')}" autocomplete="address-line1">
+        <div class="collapsible-header" onclick="toggleSection('shipping')">
+          <h3><i class="fa-solid fa-truck-fast"></i> Shipping Address</h3>
+          <span class="toggle-icon ${shippingSaved?'collapsed':''}" id="shipping-toggle"><i class="fa-solid fa-chevron-down"></i></span>
         </div>
-        <div class="form-field">
-          <label for="c-addr2">Address Line 2</label>
-          <input type="text" id="c-addr2" placeholder="Apartment, floor (optional)" value="${esc(cust.address2||'')}" autocomplete="address-line2">
+        <div class="collapsible-summary ${shippingSaved?'visible':''}" id="shipping-summary">
+          <i class="fa-solid fa-circle-check"></i> ${esc(cust.address1)}${cust.city?', '+esc(cust.city):''}${cust.postal?' '+esc(cust.postal):''}${countryName?' · '+countryName:''}
         </div>
-        <div class="form-row">
+        <div class="collapsible-body ${shippingSaved?'collapsed':''}" id="shipping-body">
           <div class="form-field">
-            <label for="c-city">City *</label>
-            <input type="text" id="c-city" placeholder="Singapore" value="${esc(cust.city||'')}" autocomplete="address-level2">
+            <label for="c-addr1">Address Line 1 *</label>
+            <input type="text" id="c-addr1" placeholder="Block, street, unit" value="${esc(cust.address1||'')}" autocomplete="address-line1">
           </div>
           <div class="form-field">
-            <label for="c-postal">Postal Code *</label>
-            <input type="text" id="c-postal" placeholder="123456" value="${esc(cust.postal||'')}" autocomplete="postal-code">
+            <label for="c-addr2">Address Line 2</label>
+            <input type="text" id="c-addr2" placeholder="Apartment, floor (optional)" value="${esc(cust.address2||'')}" autocomplete="address-line2">
           </div>
-        </div>
-        <div class="form-field">
-          <label for="c-country">Country *</label>
-          <select id="c-country" autocomplete="country">
-            <option value="">Select country</option>
-            <option value="SG" ${cust.country==='SG'?'selected':''}>Singapore</option>
-            <option value="MY" ${cust.country==='MY'?'selected':''}>Malaysia</option>
-            <option value="ID" ${cust.country==='ID'?'selected':''}>Indonesia</option>
-            <option value="TH" ${cust.country==='TH'?'selected':''}>Thailand</option>
-            <option value="PH" ${cust.country==='PH'?'selected':''}>Philippines</option>
-            <option value="VN" ${cust.country==='VN'?'selected':''}>Vietnam</option>
-            <option value="IN" ${cust.country==='IN'?'selected':''}>India</option>
-            <option value="LK" ${cust.country==='LK'?'selected':''}>Sri Lanka</option>
-            <option value="AU" ${cust.country==='AU'?'selected':''}>Australia</option>
-            <option value="NZ" ${cust.country==='NZ'?'selected':''}>New Zealand</option>
-            <option value="JP" ${cust.country==='JP'?'selected':''}>Japan</option>
-            <option value="KR" ${cust.country==='KR'?'selected':''}>South Korea</option>
-            <option value="US" ${cust.country==='US'?'selected':''}>United States</option>
-            <option value="GB" ${cust.country==='GB'?'selected':''}>United Kingdom</option>
-            <option value="CA" ${cust.country==='CA'?'selected':''}>Canada</option>
-            <option value="DE" ${cust.country==='DE'?'selected':''}>Germany</option>
-            <option value="FR" ${cust.country==='FR'?'selected':''}>France</option>
-            <option value="OTHER" ${cust.country==='OTHER'?'selected':''}>Other</option>
-          </select>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="c-city">City *</label>
+              <input type="text" id="c-city" placeholder="Singapore" value="${esc(cust.city||'')}" autocomplete="address-level2">
+            </div>
+            <div class="form-field">
+              <label for="c-postal">Postal Code *</label>
+              <input type="text" id="c-postal" placeholder="123456" value="${esc(cust.postal||'')}" autocomplete="postal-code">
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="c-country">Country *</label>
+            <select id="c-country" autocomplete="country">
+              <option value="">Select country</option>
+              <option value="SG" ${cust.country==='SG'?'selected':''}>Singapore</option>
+              <option value="MY" ${cust.country==='MY'?'selected':''}>Malaysia</option>
+              <option value="ID" ${cust.country==='ID'?'selected':''}>Indonesia</option>
+              <option value="TH" ${cust.country==='TH'?'selected':''}>Thailand</option>
+              <option value="PH" ${cust.country==='PH'?'selected':''}>Philippines</option>
+              <option value="VN" ${cust.country==='VN'?'selected':''}>Vietnam</option>
+              <option value="IN" ${cust.country==='IN'?'selected':''}>India</option>
+              <option value="LK" ${cust.country==='LK'?'selected':''}>Sri Lanka</option>
+              <option value="AU" ${cust.country==='AU'?'selected':''}>Australia</option>
+              <option value="NZ" ${cust.country==='NZ'?'selected':''}>New Zealand</option>
+              <option value="JP" ${cust.country==='JP'?'selected':''}>Japan</option>
+              <option value="KR" ${cust.country==='KR'?'selected':''}>South Korea</option>
+              <option value="US" ${cust.country==='US'?'selected':''}>United States</option>
+              <option value="GB" ${cust.country==='GB'?'selected':''}>United Kingdom</option>
+              <option value="CA" ${cust.country==='CA'?'selected':''}>Canada</option>
+              <option value="DE" ${cust.country==='DE'?'selected':''}>Germany</option>
+              <option value="FR" ${cust.country==='FR'?'selected':''}>France</option>
+              <option value="OTHER" ${cust.country==='OTHER'?'selected':''}>Other</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -521,6 +597,50 @@ function renderCart(){
 function saveCustomerFields(){
   const get=id=>(document.getElementById(id)?.value||'').trim();
   saveCustomer({email:get('c-email'),name:get('c-name'),phone:get('c-phone'),address1:get('c-addr1'),address2:get('c-addr2'),city:get('c-city'),postal:get('c-postal'),country:get('c-country')});
+  // Auto-collapse sections when all required fields are filled
+  const c=loadCustomer();
+  if(c.email&&c.name&&c.phone)collapseSection('contact',c);
+  if(c.address1&&c.city&&c.postal&&c.country)collapseSection('shipping',c);
+}
+
+function toggleSection(section){
+  const body=document.getElementById(section+'-body');
+  const toggle=document.getElementById(section+'-toggle');
+  const summary=document.getElementById(section+'-summary');
+  if(!body)return;
+  const isCollapsed=body.classList.contains('collapsed');
+  if(isCollapsed){
+    body.classList.remove('collapsed');
+    toggle.classList.remove('collapsed');
+    if(summary)summary.classList.remove('visible');
+  }else{
+    // Save before collapsing
+    saveCustomerFields();
+    body.classList.add('collapsed');
+    toggle.classList.add('collapsed');
+    // Update summary text
+    const c=loadCustomer();
+    if(section==='contact'&&summary){
+      const countryNames={SG:'Singapore',MY:'Malaysia',ID:'Indonesia',TH:'Thailand',PH:'Philippines',VN:'Vietnam',IN:'India',LK:'Sri Lanka',AU:'Australia',NZ:'New Zealand',JP:'Japan',KR:'South Korea',US:'United States',GB:'United Kingdom',CA:'Canada',DE:'Germany',FR:'France',OTHER:'Other'};
+      summary.innerHTML='<i class="fa-solid fa-circle-check"></i> '+esc(c.name||'—')+' · '+esc(c.email||'—')+' · '+esc(c.phone||'—');
+      summary.classList.add('visible');
+    }
+    if(section==='shipping'&&summary){
+      const countryNames={SG:'Singapore',MY:'Malaysia',ID:'Indonesia',TH:'Thailand',PH:'Philippines',VN:'Vietnam',IN:'India',LK:'Sri Lanka',AU:'Australia',NZ:'New Zealand',JP:'Japan',KR:'South Korea',US:'United States',GB:'United Kingdom',CA:'Canada',DE:'Germany',FR:'France',OTHER:'Other'};
+      summary.innerHTML='<i class="fa-solid fa-circle-check"></i> '+esc(c.address1||'—')+(c.city?', '+esc(c.city):'')+(c.postal?' '+esc(c.postal):'')+(countryNames[c.country]?' · '+countryNames[c.country]:'');
+      summary.classList.add('visible');
+    }
+  }
+}
+
+function collapseSection(section,c){
+  const body=document.getElementById(section+'-body');
+  const toggle=document.getElementById(section+'-toggle');
+  const summary=document.getElementById(section+'-summary');
+  if(!body||body.classList.contains('collapsed'))return;
+  body.classList.add('collapsed');
+  if(toggle)toggle.classList.add('collapsed');
+  if(summary)summary.classList.add('visible');
 }
 
 function validateCustomer(){
@@ -539,7 +659,18 @@ async function handleCheckout(){
   // Save fields first
   saveCustomerFields();
   const missing=validateCustomer();
-  if(missing.length){showToast('Please fill: '+missing.join(', '),'error');return}
+  if(missing.length){
+    // Expand sections that have missing fields
+    const contactFields=['email','full name','phone'];
+    const shippingFields=['address','city','postal code','country'];
+    if(missing.some(m=>contactFields.includes(m))){
+      const b=document.getElementById('contact-body');if(b&&b.classList.contains('collapsed')){toggleSection('contact')}
+    }
+    if(missing.some(m=>shippingFields.includes(m))){
+      const b=document.getElementById('shipping-body');if(b&&b.classList.contains('collapsed')){toggleSection('shipping')}
+    }
+    showToast('Please fill: '+missing.join(', '));return;
+  }
   const c=loadCustomer(),items=loadCart(),btn=document.getElementById('checkout-btn');
   btn.disabled=true;btn.textContent='Creating checkout...';
   try{
@@ -561,6 +692,14 @@ async function handleCheckout(){
 
 // ============================================ TOAST ============================================
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500)}
+
+// ============================================ THEME ============================================
+const THEME_KEY='cp_theme';
+function getTheme(){return localStorage.getItem(THEME_KEY)||'dark'}
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem(THEME_KEY,t)}
+function toggleTheme(){applyTheme(getTheme()==='dark'?'light':'dark')}
+// Apply saved theme immediately (before render)
+applyTheme(getTheme());
 
 // ============================================ INIT ============================================
 async function init(){
