@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clock Puzzles — Rotating Puzzles You Can Play & Own</title>
+<meta name="description" content="Beautiful multi-layer rotating puzzles. Play online free or buy printed versions delivered to your door.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================
+   CSS Variables & Reset
+   ============================================ */
+:root {
+  --bg-deep: #0c0c18;
+  --bg-surface: #12121f;
+  --bg-card: #181828;
+  --bg-card-hover: #1e1e32;
+  --border: rgba(255,255,255,0.06);
+  --border-hover: rgba(249, 167, 67, 0.3);
+
+  --orange: #f9a743;
+  --orange-dim: rgba(249, 167, 67, 0.15);
+  --pink: #ec4899;
+  --pink-dim: rgba(236, 72, 153, 0.12);
+  --green: #34d399;
+  --purple: #a78bfa;
+
+  --text-primary: #f0eff4;
+  --text-secondary: #8b8a97;
+  --text-muted: #5a596a;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --font-display: 'Outfit', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --shadow-glow-orange: 0 0 60px rgba(249, 167, 67, 0.08);
+  --shadow-glow-pink: 0 0 60px rgba(236, 72, 153, 0.08);
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.3);
+  --shadow-card-hover: 0 12px 48px rgba(0,0,0,0.5);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-display);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   Layout
+   ============================================ */
+.page-wrapper { position: relative; z-index: 1; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(12, 12, 24, 0.85);
+  backdrop-filter: blur(20px) saturate(1.2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0c0c18;
+  letter-spacing: -1px;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.logo-text span {
+  color: var(--orange);
+}
+
+.header-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.header-links a:hover {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.05);
+}
+
+.header-links .cta-link {
+  color: var(--orange);
+  border: 1px solid rgba(249, 167, 67, 0.25);
+}
+
+.header-links .cta-link:hover {
+  background: var(--orange-dim);
+  border-color: var(--orange);
+}
+
+/* ============================================
+   Hero / Featured Puzzle
+   ============================================ */
+.hero {
+  padding: 64px 0 48px;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: var(--orange-dim);
+  border: 1px solid rgba(249, 167, 67, 0.2);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--orange);
+  margin-bottom: 20px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--orange);
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.hero h1 {
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 520px;
+  margin: 0 auto 40px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Featured puzzle card */
+.featured-card {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: var(--shadow-card);
+  cursor: default;
+}
+
+.featured-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-card-hover), var(--shadow-glow-orange);
+  transform: translateY(-2px);
+}
+
+.featured-image {
+  width: 100%;
+  aspect-ratio: 16/10;
+  background: linear-gradient(135deg, #1a1a30, #0f0f20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-image img {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  filter: drop-shadow(0 16px 40px rgba(0,0,0,0.5));
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.featured-card:hover .featured-image img {
+  transform: scale(1.03);
+}
+
+.featured-image .featured-tag {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, var(--orange), #e09530);
+  color: #0c0c18;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.featured-body {
+  padding: 28px 32px 32px;
+}
+
+.featured-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.featured-meta .meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.meta-chip .dot {
+  width: 4px;
+  height: 4px;
+  background: var(--text-muted);
+  border-radius: 50%;
+}
+
+.featured-name {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.featured-desc {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.featured-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.featured-price {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--orange);
+  letter-spacing: -1px;
+  font-family: var(--font-mono);
+}
+
+.featured-price .currency {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-right: 2px;
+}
+
+.featured-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-buy {
+  background: linear-gradient(135deg, var(--orange), #e09530);
+  color: #0c0c18;
+  box-shadow: 0 4px 16px rgba(249, 167, 67, 0.25);
+}
+
+.btn-buy:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(249, 167, 67, 0.35);
+}
+
+.btn-play {
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-play:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.15);
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   Puzzles Grid Section
+   ============================================ */
+.puzzles-section {
+  padding: 0 0 80px;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.section-count {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.puzzles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* ============================================
+   Puzzle Card (Thumbnail)
+   ============================================ */
+.puzzle-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.puzzle-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-card-hover), var(--shadow-glow-orange);
+  transform: translateY(-4px);
+}
+
+.puzzle-card .card-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: linear-gradient(135deg, #16162a, #0e0e1c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.puzzle-card .card-image img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.puzzle-card:hover .card-image img {
+  transform: scale(1.06) rotate(1deg);
+}
+
+.card-layers-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 3px 10px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.card-publisher-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 3px 10px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255,255,255,0.06);
+  max-width: calc(100% - 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-publisher-badge.official {
+  color: var(--orange);
+  border-color: rgba(249, 167, 67, 0.2);
+}
+
+.card-body {
+  padding: 16px 18px 18px;
+}
+
+.card-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-detail {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-bottom: 14px;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--orange);
+  letter-spacing: -0.5px;
+  font-family: var(--font-mono);
+}
+
+.card-price .currency {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.card-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* ============================================
+   Loading & Empty States
+   ============================================ */
+.loading-state {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 0;
+  color: var(--text-muted);
+}
+
+.error-banner {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px 24px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-md);
+  color: #f87171;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Skeleton */
+.skeleton-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: linear-gradient(90deg, #16162a 0%, #1c1c34 50%, #16162a 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-body {
+  padding: 16px 18px 18px;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  margin-bottom: 10px;
+}
+
+.skeleton-line:last-child { width: 60%; margin-bottom: 0; }
+.skeleton-line.short { width: 40%; }
+.skeleton-line.price { width: 30%; height: 22px; margin-top: 8px; }
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================
+   Checkout Modal
+   ============================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(12px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  max-width: 440px;
+  width: 100%;
+  padding: 36px;
+  position: relative;
+  transform: scale(0.95) translateY(10px);
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.modal-overlay.active .modal-card {
+  transform: scale(1) translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.modal-close:hover { background: rgba(255,255,255,0.12); color: var(--text-primary); }
+
+.modal-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+
+.modal-subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+
+.modal-puzzle-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+}
+
+.modal-puzzle-preview img {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.modal-puzzle-info .modal-puzzle-name {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+
+.modal-puzzle-info .modal-puzzle-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.modal-puzzle-info .modal-puzzle-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--orange);
+  font-family: var(--font-mono);
+}
+
+.form-field {
+  margin-bottom: 18px;
+}
+
+.form-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 14px;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.form-field input:focus {
+  border-color: var(--orange);
+}
+
+.form-field input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-field .field-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--orange), #e09530);
+  color: #0c0c18;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  margin-top: 8px;
+}
+
+.checkout-btn:hover { box-shadow: 0 6px 24px rgba(249, 167, 67, 0.35); transform: translateY(-1px); }
+.checkout-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.checkout-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.5;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-brand {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.footer-brand a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.footer-brand a:hover { color: var(--orange); }
+
+.footer-links-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.footer-links-row a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+.footer-links-row a:hover { color: var(--text-secondary); }
+
+/* ============================================
+   Success toast
+   ============================================ */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  padding: 14px 28px;
+  background: var(--bg-card);
+  border: 1px solid var(--green);
+  border-radius: var(--radius-md);
+  color: var(--green);
+  font-weight: 600;
+  font-size: 14px;
+  z-index: 300;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  white-space: nowrap;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+  .hero { padding: 40px 0 32px; }
+  .hero-sub { font-size: 16px; }
+
+  .featured-body { padding: 20px 20px 24px; }
+  .featured-name { font-size: 20px; }
+  .featured-footer { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .featured-actions { width: 100%; }
+  .featured-actions .btn { flex: 1; justify-content: center; }
+
+  .puzzles-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+
+  .card-footer { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .card-actions { width: 100%; }
+  .card-actions .btn { flex: 1; justify-content: center; }
+
+  .header-links a.hide-mobile { display: none; }
+}
+
+@media (max-width: 480px) {
+  .puzzles-grid { grid-template-columns: 1fr; }
+  .featured-card { border-radius: var(--radius-lg); }
+}
+</style>
+</head>
+<body>
+
+<div class="page-wrapper" id="app">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <div class="logo-icon">CP</div>
+        <div class="logo-text">Clock <span>Puzzles</span></div>
+      </a>
+      <div class="header-links">
+        <a href="https://studio.stakcos.com" class="hide-mobile">Create Your Own</a>
+        <a href="#puzzles">Browse All</a>
+        <a href="https://play.stakcos.com" class="cta-link">Play Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">New puzzles every week</div>
+      <h1>Rotating Puzzles<br>You Can <em>Play & Own</em></h1>
+      <p class="hero-sub">Multi-layer puzzles that twist and align to reveal beautiful artwork. Play online for free, or get a printed copy shipped to you.</p>
+
+      <!-- Featured Puzzle (filled by JS) -->
+      <div id="featured-puzzle">
+        <!-- Skeleton while loading -->
+        <div class="featured-card">
+          <div class="featured-image" style="background:linear-gradient(135deg,#1a1a30,#0f0f20);">
+            <div style="color:var(--text-muted);font-size:14px;">Loading featured puzzle...</div>
+          </div>
+          <div class="featured-body">
+            <div class="skeleton-line" style="width:120px;height:12px;"></div>
+            <div class="skeleton-line" style="width:260px;height:22px;margin:10px 0;"></div>
+            <div class="skeleton-line" style="width:100%;"></div>
+            <div class="skeleton-line price"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- All Puzzles Grid -->
+  <section class="puzzles-section" id="puzzles">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">All Puzzles</h2>
+        <span class="section-count" id="puzzle-count"></span>
+      </div>
+      <div class="puzzles-grid" id="puzzles-grid">
+        <!-- Skeleton cards -->
+        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line price"></div></div></div>
+        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line price"></div></div></div>
+        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line price"></div></div></div>
+        <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line price"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">Clock Puzzles — a product by <a href="https://stakcos.com">Stakco</a></div>
+      <div class="footer-links-row">
+        <a href="https://studio.stakcos.com">Studio</a>
+        <a href="https://play.stakcos.com">Play</a>
+        <a href="mailto:hello@stakcos.com">Contact</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeCheckout()">&times;</button>
+    <div class="modal-title">Buy This Puzzle</div>
+    <div class="modal-subtitle">Printed on premium card stock and shipped worldwide.</div>
+    <div class="modal-puzzle-preview" id="modal-preview"></div>
+    <div class="form-field">
+      <label for="buyer-email">Email address</label>
+      <input type="email" id="buyer-email" placeholder="you@example.com" autocomplete="email">
+      <div class="field-hint">We'll send your order confirmation here.</div>
+    </div>
+    <button class="checkout-btn" id="checkout-btn" onclick="handleCheckout()">
+      Pay with Stripe →
+    </button>
+    <div class="checkout-note">Secure checkout powered by Stripe.<br>You'll be redirected to complete payment.</div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================
+// Configuration
+// ============================================
+const CONFIG = {
+  API_BASE: 'https://api.stakcos.com',
+  PLAY_BASE: 'https://play.stakcos.com',
+  // Stripe checkout will be created server-side via API
+  // For now, we use a placeholder that shows the flow
+  STRIPE_CHECKOUT_ENDPOINT: 'https://api.stakcos.com/api/shop/checkout/create-session',
+};
+
+// ============================================
+// State
+// ============================================
+let allPuzzles = [];
+let featuredPuzzle = null;
+let selectedPuzzle = null;
+
+// ============================================
+// API
+// ============================================
+async function fetchPuzzles() {
+  try {
+    // Fetch from marketplace puzzles endpoint (public, no auth needed)
+    const response = await fetch(`${CONFIG.API_BASE}/api/shop/marketplace/puzzles`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+
+    // Handle wrapped response { success, data }
+    const puzzles = data.success !== undefined ? data.data : data;
+    return Array.isArray(puzzles) ? puzzles : [];
+  } catch (err) {
+    console.error('Failed to fetch puzzles:', err);
+    return [];
+  }
+}
+
+// ============================================
+// Render Functions
+// ============================================
+
+function renderFeaturedPuzzle(puzzle) {
+  if (!puzzle) return;
+  const container = document.getElementById('featured-puzzle');
+  const price = (puzzle.price || 24.99).toFixed(2);
+
+  container.innerHTML = `
+    <div class="featured-card">
+      <div class="featured-image">
+        <img src="${puzzle.thumbnail}" alt="${puzzle.name}" onerror="this.style.display='none'">
+        <span class="featured-tag">★ Featured</span>
+      </div>
+      <div class="featured-body">
+        <div class="featured-meta">
+          <span class="meta-chip">${puzzle.layers || 3} layers</span>
+          <span class="meta-chip"><span class="dot"></span></span>
+          <span class="meta-chip">${puzzle.isOfficial ? 'Official' : puzzle.publisherName}</span>
+        </div>
+        <div class="featured-name">${puzzle.name}</div>
+        <div class="featured-desc">A beautifully crafted ${puzzle.layers || 3}-layer rotating puzzle. Twist each ring to align the artwork and complete the image. Perfect for display or gifting.</div>
+        <div class="featured-footer">
+          <div class="featured-price"><span class="currency">$</span>${price}</div>
+          <div class="featured-actions">
+            <button class="btn btn-buy" onclick="openCheckout(${JSON.stringify(puzzle).replace(/"/g, '&quot;')})">Buy Printed</button>
+            <a class="btn btn-play" href="${puzzle.playUrl}" target="_blank" rel="noopener">▶ Play Free</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderPuzzleCard(puzzle) {
+  const price = (puzzle.price || 24.99).toFixed(2);
+  const escapedPuzzle = JSON.stringify(puzzle).replace(/"/g, '&quot;');
+
+  return `
+    <div class="puzzle-card">
+      <div class="card-image">
+        <img src="${puzzle.thumbnail}" alt="${puzzle.name}" loading="lazy" onerror="this.style.display='none'">
+        <span class="card-layers-badge">${puzzle.layers || 3}L</span>
+        <span class="card-publisher-badge ${puzzle.isOfficial ? 'official' : ''}">${puzzle.isOfficial ? '✦ Official' : puzzle.publisherName}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${puzzle.name}</div>
+        <div class="card-detail">${puzzle.layers || 3} layers · Printed puzzle</div>
+        <div class="card-footer">
+          <div class="card-price"><span class="currency">$</span>${price}</div>
+          <div class="card-actions">
+            <button class="btn btn-buy btn-sm" onclick="openCheckout(${escapedPuzzle})">Buy</button>
+            <a class="btn btn-play btn-sm" href="${puzzle.playUrl}" target="_blank" rel="noopener">▶ Play</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderPuzzlesGrid(puzzles) {
+  const grid = document.getElementById('puzzles-grid');
+  const count = document.getElementById('puzzle-count');
+
+  if (puzzles.length === 0) {
+    grid.innerHTML = '<div class="empty-state">No puzzles available yet. Check back soon!</div>';
+    count.textContent = '';
+    return;
+  }
+
+  count.textContent = `${puzzles.length} puzzle${puzzles.length !== 1 ? 's' : ''}`;
+  grid.innerHTML = puzzles.map(renderPuzzleCard).join('');
+}
+
+// ============================================
+// Checkout Modal
+// ============================================
+
+function openCheckout(puzzle) {
+  selectedPuzzle = puzzle;
+  const modal = document.getElementById('checkout-modal');
+  const preview = document.getElementById('modal-preview');
+  const price = (puzzle.price || 24.99).toFixed(2);
+
+  preview.innerHTML = `
+    <img src="${puzzle.thumbnail}" alt="${puzzle.name}" onerror="this.style.display='none'">
+    <div class="modal-puzzle-info">
+      <div class="modal-puzzle-name">${puzzle.name}</div>
+      <div class="modal-puzzle-meta">${puzzle.layers || 3} layers · Printed</div>
+      <div class="modal-puzzle-price">$${price}</div>
+    </div>
+  `;
+
+  document.getElementById('buyer-email').value = '';
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  // Focus email field after animation
+  setTimeout(() => document.getElementById('buyer-email').focus(), 350);
+}
+
+function closeCheckout() {
+  const modal = document.getElementById('checkout-modal');
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+  selectedPuzzle = null;
+}
+
+// Close modal on overlay click
+document.getElementById('checkout-modal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeCheckout();
+});
+
+// Close on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeCheckout();
+});
+
+async function handleCheckout() {
+  const email = document.getElementById('buyer-email').value.trim();
+  const btn = document.getElementById('checkout-btn');
+
+  if (!email || !email.includes('@')) {
+    document.getElementById('buyer-email').style.borderColor = '#ef4444';
+    document.getElementById('buyer-email').focus();
+    return;
+  }
+
+  document.getElementById('buyer-email').style.borderColor = '';
+
+  if (!selectedPuzzle) return;
+
+  btn.disabled = true;
+  btn.textContent = 'Creating checkout...';
+
+  try {
+    // Create Stripe Checkout session via backend
+    const response = await fetch(CONFIG.STRIPE_CHECKOUT_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        puzzleId: selectedPuzzle.puzzleFolder,
+        puzzleName: selectedPuzzle.name,
+        price: selectedPuzzle.price || 24.99,
+        thumbnail: selectedPuzzle.thumbnail,
+      }),
+    });
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const session = await response.json();
+    const checkoutUrl = session.data?.url || session.url;
+
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl;
+    } else {
+      throw new Error('No checkout URL returned');
+    }
+  } catch (err) {
+    console.error('Checkout error:', err);
+    // Fallback: show a message since backend checkout endpoint may not be deployed yet
+    showToast('Checkout coming soon — email hello@stakcos.com to order!');
+    btn.disabled = false;
+    btn.textContent = 'Pay with Stripe →';
+    closeCheckout();
+  }
+}
+
+// ============================================
+// Toast
+// ============================================
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+// ============================================
+// Initialize
+// ============================================
+async function init() {
+  allPuzzles = await fetchPuzzles();
+
+  if (allPuzzles.length > 0) {
+    // Pick the first official puzzle as featured, or just the first one
+    featuredPuzzle = allPuzzles.find(p => p.isOfficial) || allPuzzles[0];
+
+    renderFeaturedPuzzle(featuredPuzzle);
+
+    // Show remaining puzzles in grid (exclude featured)
+    const gridPuzzles = allPuzzles.filter(p => p.puzzleFolder !== featuredPuzzle.puzzleFolder);
+    renderPuzzlesGrid(gridPuzzles);
+  } else {
+    // Show empty / error state
+    document.getElementById('featured-puzzle').innerHTML = '';
+    renderPuzzlesGrid([]);
+  }
+}
+
+init();
+</script>
+
+</body>
+</html>
