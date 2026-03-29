@@ -342,11 +342,10 @@ h1,h2,h3,p,span,a,label,.card-name,.card-price,.featured-name,.featured-price{tr
   <!-- Footer -->
   <footer class="site-footer">
     <div class="footer-inner">
-      <div class="footer-brand">Clock Puzzles — a product by <a href="https://stakcos.com">Stakco</a></div>
+      <div class="footer-brand">Clock Puzzles — a product by <a href="https://flowsxr.com/">FlowsXR</a></div>
       <div class="footer-links-row">
-        <a href="https://studio.stakcos.com">Studio</a>
         <a href="https://play.stakcos.com">Play</a>
-        <a href="/cdn-cgi/l/email-protection#660e030a0a09261512070d0509154805090b">Contact</a>
+        <a href="mailto:hello@stakcos.com">Contact</a>
       </div>
     </div>
   </footer>
@@ -420,21 +419,14 @@ function renderFeatured(p){
   <div class="featured-card">
     <div class="featured-image">
       <img src="${p.thumbnail}" alt="${esc(p.name)}" onerror="this.onerror=null;this.src='${p.thumbSmall}'">
-      <span class="featured-tag">★ Featured</span>
     </div>
     <div class="featured-body">
-      <div class="featured-meta">
-        <span class="meta-chip">${p.layers} layers</span>
-        <span class="meta-chip"><span class="dot"></span></span>
-        <span class="meta-chip">${esc(p.albumName)}</span>
-      </div>
       <div class="featured-name">${esc(p.name)}</div>
-      <div class="featured-desc">A beautifully crafted ${p.layers}-layer rotating puzzle. Twist each ring to align the artwork. Perfect for display or gifting.</div>
       <div class="featured-footer">
         <div class="featured-price"><span class="currency">S$</span>${p.price.toFixed(2)}</div>
         <div class="featured-actions">
           <button class="btn btn-buy" onclick="addToCart(puzzleMap['${p.puzzleId}'])">Add to Cart</button>
-          <a class="btn btn-play" href="${p.playUrl}" target="_blank" rel="noopener">▶ Play Free</a>
+          <a class="btn btn-play" href="${p.playUrl}" target="_blank" rel="noopener">▶ Play</a>
         </div>
       </div>
     </div>
