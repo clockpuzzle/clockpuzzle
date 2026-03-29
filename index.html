@@ -25,7 +25,6 @@
   --grad-a:#1a1a30;--grad-b:#0f0f20;--grid-a:#16162a;--grid-b:#0e0e1c;
   --btn-text:#0c0c18;--pill-bg:rgba(0,0,0,.6);
   --skel-a:#16162a;--skel-b:#1c1c34;--hover-bg:rgba(255,255,255,.05);
-  --noise-opacity:.025;
 }
 [data-theme="light"]{
   --bg-deep:#f4f2ee;--bg-surface:#fff;--bg-card:#fff;
@@ -38,14 +37,11 @@
   --grad-a:#ece9e3;--grad-b:#e4e1db;--grid-a:#f0ede7;--grid-b:#e8e5df;
   --btn-text:#1a1a2e;--pill-bg:rgba(255,255,255,.85);
   --skel-a:#e8e5df;--skel-b:#f0ede7;--hover-bg:rgba(0,0,0,.04);
-  --noise-opacity:.012;
 }
-
-/* ===== RESET ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--font-display);background:var(--bg-deep);color:var(--text-primary);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .4s,color .4s}
-body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:var(--noise-opacity);transition:opacity .4s}
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
 .page-wrapper{position:relative;z-index:1}
 .container{max-width:1200px;margin:0 auto;padding:0 20px}
 
@@ -70,7 +66,7 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 [data-theme="light"] .theme-btn .fa-sun{display:inline}
 [data-theme="light"] .theme-btn .fa-moon{display:none}
 
-/* ===== HERO (2-col desktop, stacked mobile) ===== */
+/* ===== HERO ===== */
 .hero{padding:48px 0 40px}
 .hero-split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
 .hero-text{text-align:left}
@@ -81,11 +77,8 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .hero-featured{min-width:0}
 
 /* ===== FEATURED CARD ===== */
-.featured-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;transition:all .4s cubic-bezier(.23,1,.32,1);box-shadow:var(--shadow-card)}
-.featured-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-card-hover),var(--shadow-glow);transform:translateY(-2px)}
-.featured-image{width:100%;aspect-ratio:16/10;background:linear-gradient(135deg,var(--grad-a),var(--grad-b));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.featured-image img{max-width:85%;max-height:85%;object-fit:contain;border-radius:var(--radius-md);filter:drop-shadow(0 16px 40px rgba(0,0,0,.5));transition:transform .6s cubic-bezier(.23,1,.32,1)}
-.featured-card:hover .featured-image img{transform:scale(1.03)}
+.featured-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;transition:all .4s;box-shadow:var(--shadow-card)}
+.featured-player{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--bg-surface)}
 .featured-body{padding:20px 24px 24px}
 .featured-name{font-size:20px;font-weight:700;letter-spacing:-.4px;margin-bottom:14px}
 .featured-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -101,21 +94,31 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .btn-play:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15)}
 .btn-sm{padding:8px 14px;font-size:12px;border-radius:var(--radius-sm)}
 
-/* ===== ALBUM / GRID ===== */
+/* ===== PUZZLE PLAYER MODAL ===== */
+.player-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:all .3s}
+.player-overlay.active{opacity:1;visibility:visible}
+.player-modal{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-xl);max-width:520px;width:100%;padding:24px;position:relative;transform:scale(.95);transition:transform .3s cubic-bezier(.23,1,.32,1)}
+.player-overlay.active .player-modal{transform:scale(1)}
+.player-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border:none;background:rgba(255,255,255,.06);color:var(--text-secondary);border-radius:8px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:10;transition:all .2s}
+.player-close:hover{background:rgba(255,255,255,.12);color:var(--text-primary)}
+.player-puzzle-area{width:100%;aspect-ratio:1/1;margin-bottom:16px;border-radius:var(--radius-md);overflow:hidden;background:var(--bg-card)}
+.player-info{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.player-name{font-size:16px;font-weight:700}
+.player-hint{font-size:12px;color:var(--text-muted);margin-top:4px}
+
+/* ===== GRID ===== */
 .album-section{padding:0 0 48px}
 .album-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border);gap:12px}
 .album-title{font-size:20px;font-weight:700;letter-spacing:-.4px}
 .album-label{color:var(--text-muted);font-weight:400;font-size:13px;margin-left:8px;font-family:var(--font-mono)}
 .album-count{font-size:13px;color:var(--text-muted);font-family:var(--font-mono);white-space:nowrap}
 .puzzles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
-
-/* ===== PUZZLE CARD ===== */
 .puzzle-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:all .35s cubic-bezier(.23,1,.32,1)}
 .puzzle-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-card-hover),var(--shadow-glow);transform:translateY(-4px)}
 .card-image{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,var(--grid-a),var(--grid-b));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .card-image img{max-width:80%;max-height:80%;object-fit:contain;border-radius:var(--radius-sm);filter:drop-shadow(0 8px 20px rgba(0,0,0,.4));transition:transform .5s cubic-bezier(.23,1,.32,1)}
 .puzzle-card:hover .card-image img{transform:scale(1.06) rotate(1deg)}
-.card-layers-badge{position:absolute;top:8px;right:8px;padding:3px 8px;background:var(--pill-bg);backdrop-filter:blur(8px);border-radius:100px;font-size:10px;font-weight:600;font-family:var(--font-mono);color:var(--text-secondary);border:1px solid rgba(255,255,255,.08)}
+.card-layers-badge{position:absolute;top:8px;right:8px;padding:3px 8px;background:var(--pill-bg);backdrop-filter:blur(8px);border-radius:100px;font-size:10px;font-weight:600;font-family:var(--font-mono);color:var(--text-secondary)}
 .card-body{padding:14px 16px 16px}
 .card-name{font-size:14px;font-weight:600;margin-bottom:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -129,9 +132,7 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .skeleton-image{width:100%;aspect-ratio:4/3;background:linear-gradient(90deg,var(--skel-a) 0%,var(--skel-b) 50%,var(--skel-a) 100%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite}
 .skeleton-body{padding:14px 16px 16px}
 .skeleton-line{height:14px;border-radius:6px;background:linear-gradient(90deg,rgba(128,128,128,.08) 0%,rgba(128,128,128,.15) 50%,rgba(128,128,128,.08) 100%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;margin-bottom:10px}
-.skeleton-line:last-child{width:60%;margin-bottom:0}
-.skeleton-line.short{width:40%}
-.skeleton-line.price{width:30%;height:22px;margin-top:8px}
+.skeleton-line:last-child{width:60%;margin-bottom:0}.skeleton-line.price{width:30%;height:22px;margin-top:8px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .loading-state{text-align:center;padding:60px 0}
 .loader{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
@@ -177,8 +178,6 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .form-field input:focus,.form-field select:focus{border-color:var(--orange)}
 .form-field input::placeholder{color:var(--text-muted)}
 .form-field select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235a596a' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
-
-/* ===== COLLAPSIBLE ===== */
 .collapsible-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;margin-bottom:16px}
 .collapsible-header h3{margin:0;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
 .toggle-icon{font-size:12px;color:var(--text-muted);transition:transform .25s;width:20px;text-align:center}
@@ -188,8 +187,6 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .collapsible-summary{font-size:12px;color:var(--text-secondary);line-height:1.5;display:none;margin-top:-8px}
 .collapsible-summary.visible{display:block}
 .collapsible-summary i{color:var(--green);margin-right:4px;font-size:11px}
-
-/* ===== SUMMARY ===== */
 .summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px;color:var(--text-secondary)}
 .summary-row.total{font-size:16px;font-weight:700;color:var(--text-primary);padding-top:12px;margin-top:4px;border-top:1px solid var(--border)}
 .summary-row.total .summary-val{color:var(--orange);font-family:var(--font-mono)}
@@ -208,8 +205,6 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 .footer-links-row{display:flex;justify-content:center;gap:20px}
 .footer-links-row a{color:var(--text-muted);text-decoration:none;font-size:12px;transition:color .2s}
 .footer-links-row a:hover{color:var(--text-secondary)}
-
-/* Toast */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:12px 24px;background:var(--bg-card);border:1px solid var(--green);border-radius:var(--radius-md);color:var(--green);font-weight:600;font-size:13px;z-index:300;box-shadow:0 12px 40px rgba(0,0,0,.5);transition:transform .4s cubic-bezier(.23,1,.32,1);white-space:nowrap;max-width:calc(100vw - 40px);text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
@@ -221,7 +216,7 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 }
 @media(max-width:640px){
   .header-inner{height:56px}.header-links a.hide-mobile{display:none}
-  .hero{padding:32px 0 28px}.hero-sub{font-size:14px;margin-bottom:24px}
+  .hero{padding:32px 0 28px}.hero-sub{font-size:14px}
   .featured-body{padding:16px 16px 20px}.featured-name{font-size:17px}.featured-price{font-size:22px}
   .featured-footer{flex-direction:column;align-items:flex-start;gap:12px}
   .featured-actions{width:100%}.featured-actions .btn{flex:1;justify-content:center}
@@ -232,17 +227,14 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
   .album-header{flex-direction:column;gap:4px}.form-row{grid-template-columns:1fr}
   .cart-item{flex-direction:column;gap:10px}
   .cart-item-img{width:100%;height:140px}.cart-item-bottom{flex-wrap:wrap}
+  .player-modal{padding:16px}
 }
-@media(max-width:380px){.puzzles-grid{grid-template-columns:1fr}.featured-card{border-radius:var(--radius-lg)}}
-
-/* Smooth theme transitions on key elements */
-.sidebar-card,.featured-card,.puzzle-card,.cart-item,.site-footer,.modal-card{transition:background .4s,border-color .4s,box-shadow .4s}
+@media(max-width:380px){.puzzles-grid{grid-template-columns:1fr}}
+.sidebar-card,.featured-card,.puzzle-card,.cart-item,.site-footer{transition:background .4s,border-color .4s,box-shadow .4s}
 </style>
 </head>
 <body>
 <div class="page-wrapper" id="app">
-
-  <!-- HEADER -->
   <header class="site-header">
     <div class="header-inner">
       <a href="#" class="logo" onclick="showView('shop');return false">
@@ -263,62 +255,59 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
     </div>
   </header>
 
-  <!-- SHOP VIEW -->
+  <!-- SHOP -->
   <div class="page-view active" id="view-shop">
-    <section class="hero">
-      <div class="container">
-        <div class="hero-split">
-          <div class="hero-text">
-            <h1>Rotating Puzzles<br>You Can <em>Play & Own</em></h1>
-            <p class="hero-sub">Multi-layer puzzles that twist and align to reveal beautiful artwork. Play online for free, or get a printed copy shipped to you.</p>
-            <div class="hero-ctas">
-              <a href="#collections" class="btn btn-buy">Browse Collection</a>
-              <a href="https://play.stakcos.com" class="btn btn-play" target="_blank" rel="noopener">&#9654; Play Free Online</a>
-            </div>
-          </div>
-          <div class="hero-featured" id="featured-puzzle">
-            <div class="featured-card">
-              <div class="featured-image"><div class="loading-state"><div class="loader"></div><div class="loading-text">Loading...</div></div></div>
-              <div class="featured-body"><div class="skeleton-line" style="width:200px;height:18px"></div><div class="skeleton-line price"></div></div>
-            </div>
-          </div>
+    <section class="hero"><div class="container"><div class="hero-split">
+      <div class="hero-text">
+        <h1>Rotating Puzzles<br>You Can <em>Play &amp; Own</em></h1>
+        <p class="hero-sub">Multi-layer puzzles that twist and align to reveal beautiful artwork. Play online for free, or get a printed copy shipped to you.</p>
+        <div class="hero-ctas">
+          <a href="#collections" class="btn btn-buy">Browse Collection</a>
+          <a href="https://play.stakcos.com" class="btn btn-play" target="_blank" rel="noopener">&#9654; Play Free Online</a>
         </div>
       </div>
-    </section>
+      <div class="hero-featured" id="featured-puzzle">
+        <div class="featured-card"><div class="featured-player"><div class="loading-state"><div class="loader"></div><div class="loading-text">Loading...</div></div></div><div class="featured-body"><div class="skeleton-line" style="width:200px;height:18px"></div><div class="skeleton-line price"></div></div></div>
+      </div>
+    </div></div></section>
     <div id="collections"></div>
   </div>
 
-  <!-- CART VIEW -->
+  <!-- CART -->
   <div class="page-view" id="view-cart">
-    <div class="cart-page"><div class="container">
-      <h2>Your Cart</h2>
-      <div id="cart-content"></div>
-    </div></div>
+    <div class="cart-page"><div class="container"><h2>Your Cart</h2><div id="cart-content"></div></div></div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-brand">Clock Puzzles &mdash; a product by <a href="https://flowsxr.com/">FlowsXR</a></div>
-      <div class="footer-links-row">
-        <a href="https://play.stakcos.com">Play</a>
-        <a href="mailto:hello@stakcos.com">Contact</a>
-      </div>
+  <footer class="site-footer"><div class="footer-inner">
+    <div class="footer-brand">Clock Puzzles &mdash; a product by <a href="https://flowsxr.com/">FlowsXR</a></div>
+    <div class="footer-links-row"><a href="https://play.stakcos.com">Play</a><a href="mailto:hello@stakcos.com">Contact</a></div>
+  </div></footer>
+</div>
+
+<!-- Player modal -->
+<div class="player-overlay" id="player-overlay">
+  <div class="player-modal">
+    <button class="player-close" onclick="closePlayer()">&times;</button>
+    <div class="player-puzzle-area" id="player-area"></div>
+    <div class="player-info">
+      <div><div class="player-name" id="player-name"></div><div class="player-hint">Drag to rotate &middot; Align all layers</div></div>
+      <button class="btn btn-buy btn-sm" id="player-buy">Add to Cart</button>
     </div>
-  </footer>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
+<!-- Embed component for interactive puzzles -->
+<script src="https://cdn.stakcos.com/embed/stakco-daily-embed.js"></script>
+
 <script>
 /* ===== CONFIG ===== */
-const GCS='https://storage.googleapis.com/stakco-images';
-const PLAY='https://play.stakcos.com';
-const UID='109208089060140847827';
-const PRICE=24.99;
-const STRIPE_EP='https://api.stakcos.com/api/shop/checkout/create-session';
-const SHIPPING=5,FREE_SHIP=80,TAX=0.09;
-const CART_KEY='cp_cart',CUST_KEY='cp_customer',THEME_KEY='cp_theme';
+var GCS='https://storage.googleapis.com/stakco-images',PLAY='https://play.stakcos.com',UID='109208089060140847827',PRICE=24.99;
+var STRIPE_EP='https://api.stakcos.com/api/shop/checkout/create-session';
+var SHIPPING=5,FREE_SHIP=80,TAX=0.09;
+var CART_KEY='cp_cart',CUST_KEY='cp_customer',THEME_KEY='cp_theme';
+var COUNTRIES={SG:'Singapore',MY:'Malaysia',ID:'Indonesia',TH:'Thailand',PH:'Philippines',VN:'Vietnam',IN:'India',LK:'Sri Lanka',AU:'Australia',NZ:'New Zealand',JP:'Japan',KR:'South Korea',US:'United States',GB:'United Kingdom',CA:'Canada',DE:'Germany',FR:'France',OTHER:'Other'};
 
 /* ===== THEME ===== */
 function getTheme(){return localStorage.getItem(THEME_KEY)||'dark'}
@@ -326,291 +315,156 @@ function applyTheme(t){document.documentElement.setAttribute('data-theme',t);loc
 function toggleTheme(){applyTheme(getTheme()==='dark'?'light':'dark')}
 applyTheme(getTheme());
 
-/* ===== GCS HELPERS ===== */
-function getLayers(id){const m=id.match(/_(\d+)$/);if(m){const n=+m[1];if(n>=2&&n<=6)return n}return 2}
+/* ===== GCS ===== */
+function getLayers(id){var m=id.match(/_(\d+)$/);if(m){var n=+m[1];if(n>=2&&n<=6)return n}return 2}
 function imgBase(id){return id.replace(/_\d+$/,'')}
 function layerUrl(u,id){return GCS+'/'+u+'/'+id+'/'+imgBase(id)+'_0.png'}
 function thumbUrl(u,id){return GCS+'/'+u+'/'+id+'/'+imgBase(id)+'_0_thumb.png'}
-function playLink(u,id){return PLAY+'?username='+u+'&puzzle='+id}
-function fmtName(id,title){
-  if(title&&title.trim())return title.trim();
-  var r=id.replace(/_\d+$/,''),p=r.replace(/_/g,' ').split(' ').filter(function(w){return!/^\d{4}-\d{2}-\d{2}$/.test(w)&&!/^\d{9,}$/.test(w)});
-  return p.length?p.map(function(w){return w[0].toUpperCase()+w.slice(1).toLowerCase()}).join(' '):'';
-}
+function puzzleImageUrls(u,id){var base=imgBase(id),n=getLayers(id),urls=[];for(var i=0;i<n;i++)urls.push(GCS+'/'+u+'/'+id+'/'+base+'_'+i+'.png');return urls}
+function fmtName(id,title){if(title&&title.trim())return title.trim();var r=id.replace(/_\d+$/,''),p=r.replace(/_/g,' ').split(' ').filter(function(w){return!/^\d{4}-\d{2}-\d{2}$/.test(w)&&!/^\d{9,}$/.test(w)});return p.length?p.map(function(w){return w[0].toUpperCase()+w.slice(1).toLowerCase()}).join(' '):''}
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
-/* ===== DATA LOADING ===== */
+/* ===== DATA ===== */
 async function fetchJson(url){var r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
 async function loadAlbums(){
-  var uc=await fetchJson(GCS+'/'+UID+'/user.config');
-  var ids=uc.Albums||[];
-  if(!ids.length)return[];
+  var uc=await fetchJson(GCS+'/'+UID+'/user.config');var ids=uc.Albums||[];if(!ids.length)return[];
   var results=await Promise.all(ids.map(async function(aid){
-    try{
-      var a=await fetchJson(GCS+'/'+UID+'/'+aid+'.album.json');
-      var name=a.Name||a.Id;
-      return{id:a.Id,name:name,puzzles:(a.Puzzles||[]).sort(function(x,y){return x.Index-y.Index}).map(function(p,i){
-        return{puzzleId:p.PuzzleId,name:fmtName(p.PuzzleId,p.Title)||name+' #'+(i+1),layers:getLayers(p.PuzzleId),price:PRICE,
-          thumbnail:layerUrl(UID,p.PuzzleId),thumbSmall:thumbUrl(UID,p.PuzzleId),playUrl:playLink(UID,p.PuzzleId),albumName:name};
-      })};
-    }catch(e){console.warn('Album '+aid+':',e);return null}
-  }));
-  return results.filter(Boolean);
+    try{var a=await fetchJson(GCS+'/'+UID+'/'+aid+'.album.json');var name=a.Name||a.Id;
+    return{id:a.Id,name:name,puzzles:(a.Puzzles||[]).sort(function(x,y){return x.Index-y.Index}).map(function(p,i){
+      return{puzzleId:p.PuzzleId,name:fmtName(p.PuzzleId,p.Title)||name+' #'+(i+1),layers:getLayers(p.PuzzleId),price:PRICE,
+        thumbnail:layerUrl(UID,p.PuzzleId),thumbSmall:thumbUrl(UID,p.PuzzleId),playUrl:PLAY+'?username='+UID+'&puzzle='+p.PuzzleId,albumName:name};
+    })}}catch(e){console.warn('Album '+aid+':',e);return null}
+  }));return results.filter(Boolean);
 }
 
-/* ===== CART (localStorage) ===== */
+/* ===== CART ===== */
 function loadCart(){try{return JSON.parse(localStorage.getItem(CART_KEY))||[]}catch(e){return[]}}
 function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c));updateBadge()}
-function addToCart(p){
-  var c=loadCart(),idx=c.findIndex(function(i){return i.puzzleId===p.puzzleId});
-  if(idx>=0)c[idx].qty++;else c.push({puzzleId:p.puzzleId,name:p.name,layers:p.layers,price:p.price,thumbSmall:p.thumbSmall,albumName:p.albumName,qty:1});
-  saveCart(c);showToast(p.name+' added to cart');
-}
+function addToCart(p){var c=loadCart(),idx=c.findIndex(function(i){return i.puzzleId===p.puzzleId});if(idx>=0)c[idx].qty++;else c.push({puzzleId:p.puzzleId,name:p.name,layers:p.layers,price:p.price,thumbSmall:p.thumbSmall,albumName:p.albumName,qty:1});saveCart(c);showToast(p.name+' added to cart')}
 function updateQty(id,d){var c=loadCart(),idx=c.findIndex(function(i){return i.puzzleId===id});if(idx<0)return;c[idx].qty+=d;if(c[idx].qty<=0)c.splice(idx,1);saveCart(c);renderCart()}
 function removeFromCart(id){saveCart(loadCart().filter(function(i){return i.puzzleId!==id}));renderCart()}
 function clearCartAll(){saveCart([]);renderCart()}
 function cartCount(){return loadCart().reduce(function(s,i){return s+i.qty},0)}
 function cartSubtotal(){return loadCart().reduce(function(s,i){return s+i.price*i.qty},0)}
 function updateBadge(){var b=document.getElementById('cart-badge'),n=cartCount();b.textContent=n;b.classList.toggle('visible',n>0)}
-
-/* ===== CUSTOMER (localStorage) ===== */
 function loadCust(){try{return JSON.parse(localStorage.getItem(CUST_KEY))||{}}catch(e){return{}}}
 function saveCust(d){localStorage.setItem(CUST_KEY,JSON.stringify(d))}
 
 /* ===== VIEWS ===== */
 var allPuzzles=[],puzzleMap={};
-function showView(name){
-  document.querySelectorAll('.page-view').forEach(function(v){v.classList.remove('active')});
-  var el=document.getElementById('view-'+name);if(el)el.classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(name==='cart')renderCart();
+function showView(name){document.querySelectorAll('.page-view').forEach(function(v){v.classList.remove('active')});var el=document.getElementById('view-'+name);if(el)el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(name==='cart')renderCart()}
+
+/* ===== EMBEDDED PUZZLE PLAYER ===== */
+function openPlayer(p){
+  var overlay=document.getElementById('player-overlay');
+  var area=document.getElementById('player-area');
+  document.getElementById('player-name').textContent=p.name;
+  // Create a stakco-daily-embed in direct-image mode using interactive bubbles
+  // We build the image URLs and create the embed element with them
+  area.innerHTML='';
+  var embed=document.createElement('stakco-daily-embed');
+  embed.setAttribute('size','100%');
+  embed.setAttribute('interactive','');
+  embed.setAttribute('controls','bubbles');
+  embed.setAttribute('rounded','false');
+  embed.setAttribute('linked','false');
+  embed.setAttribute('tolerance','4');
+  area.appendChild(embed);
+  // Override the resolve method to load our specific puzzle directly
+  var urls=puzzleImageUrls(UID,p.puzzleId);
+  embed.resolve=function(){};// prevent default resolution
+  if(embed.controls==='rings')embed._initRings(urls);else embed._initBubbles(urls);
+  // Buy button
+  var buyBtn=document.getElementById('player-buy');
+  buyBtn.onclick=function(){addToCart(p);closePlayer()};
+  overlay.classList.add('active');
+  document.body.style.overflow='hidden';
 }
+function closePlayer(){
+  document.getElementById('player-overlay').classList.remove('active');
+  document.body.style.overflow='';
+  document.getElementById('player-area').innerHTML='';
+}
+document.getElementById('player-overlay').addEventListener('click',function(e){if(e.target===e.currentTarget)closePlayer()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closePlayer()});
 
 /* ===== RENDER FEATURED ===== */
 function renderFeatured(p){
-  document.getElementById('featured-puzzle').innerHTML=
-    '<div class="featured-card">'+
-      '<div class="featured-image">'+
-        '<img src="'+p.thumbnail+'" alt="'+esc(p.name)+'" onerror="this.onerror=null;this.src=\''+p.thumbSmall+'\'">'+
-      '</div>'+
-      '<div class="featured-body">'+
-        '<div class="featured-name">'+esc(p.name)+'</div>'+
-        '<div class="featured-footer">'+
-          '<div class="featured-price"><span class="currency">S$</span>'+p.price.toFixed(2)+'</div>'+
-          '<div class="featured-actions">'+
-            '<button class="btn btn-buy" onclick="addToCart(puzzleMap[\''+p.puzzleId+'\'])">Add to Cart</button>'+
-            '<a class="btn btn-play" href="'+p.playUrl+'" target="_blank" rel="noopener">&#9654; Play</a>'+
-          '</div>'+
+  var el=document.getElementById('featured-puzzle');
+  el.innerHTML='<div class="featured-card">'+
+    '<div class="featured-player" id="featured-player-area"></div>'+
+    '<div class="featured-body">'+
+      '<div class="featured-name">'+esc(p.name)+'</div>'+
+      '<div class="featured-footer">'+
+        '<div class="featured-price"><span class="currency">S$</span>'+p.price.toFixed(2)+'</div>'+
+        '<div class="featured-actions">'+
+          '<button class="btn btn-buy" id="feat-cart">Add to Cart</button>'+
+          '<button class="btn btn-play" id="feat-play">&#9654; Try it</button>'+
         '</div>'+
       '</div>'+
-    '</div>';
+    '</div>'+
+  '</div>';
+  // Embed interactive puzzle in the featured card
+  var area=document.getElementById('featured-player-area');
+  var embed=document.createElement('stakco-daily-embed');
+  embed.setAttribute('size','100%');
+  embed.setAttribute('interactive','');
+  embed.setAttribute('controls','bubbles');
+  embed.setAttribute('rounded','false');
+  embed.setAttribute('linked','false');
+  embed.setAttribute('tolerance','4');
+  area.appendChild(embed);
+  var urls=puzzleImageUrls(UID,p.puzzleId);
+  embed.resolve=function(){};
+  // Small delay to ensure component is connected
+  setTimeout(function(){if(embed.controls==='rings')embed._initRings(urls);else embed._initBubbles(urls)},50);
+  document.getElementById('feat-cart').onclick=function(){addToCart(puzzleMap[p.puzzleId])};
+  document.getElementById('feat-play').onclick=function(){openPlayer(p)};
 }
 
 /* ===== RENDER ALBUM ===== */
 function renderAlbum(album,skipId){
-  var pzs=album.puzzles.filter(function(p){return p.puzzleId!==skipId});
-  if(!pzs.length)return'';
-  var cards=pzs.map(function(p){
-    return '<div class="puzzle-card">'+
-      '<div class="card-image">'+
-        '<img src="'+p.thumbSmall+'" alt="'+esc(p.name)+'" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML=\'<div class=img-fallback>&#129513;</div>\'">'+
-        '<span class="card-layers-badge">'+p.layers+'L</span>'+
-      '</div>'+
-      '<div class="card-body">'+
-        '<div class="card-name">'+esc(p.name)+'</div>'+
-        '<div class="card-footer">'+
-          '<div class="card-price"><span class="currency">S$</span>'+p.price.toFixed(2)+'</div>'+
-          '<div class="card-actions">'+
-            '<button class="btn btn-buy btn-sm" onclick="addToCart(puzzleMap[\''+p.puzzleId+'\'])">Add to Cart</button>'+
-            '<a class="btn btn-play btn-sm" href="'+p.playUrl+'" target="_blank" rel="noopener">&#9654; Play</a>'+
-          '</div>'+
-        '</div>'+
-      '</div>'+
-    '</div>';
-  }).join('');
+  var pzs=album.puzzles.filter(function(p){return p.puzzleId!==skipId});if(!pzs.length)return'';
   return '<section class="album-section"><div class="container">'+
     '<div class="album-header"><h2 class="album-title">'+esc(album.name)+'<span class="album-label">collection</span></h2><span class="album-count">'+pzs.length+' puzzle'+(pzs.length!==1?'s':'')+'</span></div>'+
-    '<div class="puzzles-grid">'+cards+'</div>'+
-  '</div></section>';
+    '<div class="puzzles-grid">'+pzs.map(function(p){
+      return '<div class="puzzle-card" data-id="'+esc(p.puzzleId)+'">'+
+        '<div class="card-image"><img src="'+p.thumbSmall+'" alt="'+esc(p.name)+'" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML=\'<div class=img-fallback>&#129513;</div>\'"><span class="card-layers-badge">'+p.layers+'L</span></div>'+
+        '<div class="card-body"><div class="card-name">'+esc(p.name)+'</div>'+
+          '<div class="card-footer"><div class="card-price"><span class="currency">S$</span>'+p.price.toFixed(2)+'</div>'+
+            '<div class="card-actions">'+
+              '<button class="btn btn-buy btn-sm" data-action="cart">Add to Cart</button>'+
+              '<button class="btn btn-play btn-sm" data-action="play">&#9654; Try</button>'+
+            '</div></div></div></div>';
+    }).join('')+'</div></div></section>';
 }
 
 /* ===== RENDER CART ===== */
-var COUNTRIES={SG:'Singapore',MY:'Malaysia',ID:'Indonesia',TH:'Thailand',PH:'Philippines',VN:'Vietnam',IN:'India',LK:'Sri Lanka',AU:'Australia',NZ:'New Zealand',JP:'Japan',KR:'South Korea',US:'United States',GB:'United Kingdom',CA:'Canada',DE:'Germany',FR:'France',OTHER:'Other'};
-
 function renderCart(){
   var items=loadCart(),el=document.getElementById('cart-content');
   if(!items.length){el.innerHTML='<div class="cart-empty"><p>Your cart is empty</p><button class="btn btn-buy" onclick="showView(\'shop\')">Browse Puzzles</button></div>';return}
-
   var sub=cartSubtotal(),ship=sub>=FREE_SHIP?0:SHIPPING,tax=+(sub*TAX).toFixed(2),total=+(sub+ship+tax).toFixed(2);
-  var c=loadCust();
-  var cOk=!!(c.email&&c.name&&c.phone);
-  var sOk=!!(c.address1&&c.city&&c.postal&&c.country);
-  var cName=COUNTRIES[c.country]||'';
-
-  var itemsHtml=items.map(function(i){
-    return '<div class="cart-item">'+
-      '<div class="cart-item-img"><img src="'+i.thumbSmall+'" alt="" onerror="this.onerror=null;this.parentElement.innerHTML=\'<div class=img-fallback>&#129513;</div>\'"></div>'+
-      '<div class="cart-item-info">'+
-        '<div class="cart-item-name">'+esc(i.name)+'</div>'+
-        '<div class="cart-item-meta">'+esc(i.albumName)+'</div>'+
-        '<div class="cart-item-bottom">'+
-          '<div class="cart-item-price">S$'+(i.price*i.qty).toFixed(2)+'</div>'+
-          '<div style="display:flex;align-items:center;gap:8px">'+
-            '<div class="cart-item-qty">'+
-              '<button onclick="updateQty(\''+i.puzzleId+'\',-1)">&minus;</button>'+
-              '<span>'+i.qty+'</span>'+
-              '<button onclick="updateQty(\''+i.puzzleId+'\',1)">+</button>'+
-            '</div>'+
-            '<button class="cart-item-remove" onclick="removeFromCart(\''+i.puzzleId+'\')" title="Remove"><i class="fa-regular fa-trash-can"></i></button>'+
-          '</div>'+
-        '</div>'+
-      '</div>'+
-    '</div>';
-  }).join('');
-
+  var c=loadCust(),cOk=!!(c.email&&c.name&&c.phone),sOk=!!(c.address1&&c.city&&c.postal&&c.country),cName=COUNTRIES[c.country]||'';
   var countryOpts=Object.keys(COUNTRIES).map(function(k){return '<option value="'+k+'"'+(c.country===k?' selected':'')+'>'+COUNTRIES[k]+'</option>'}).join('');
-
-  el.innerHTML='<div class="cart-layout">'+
-    '<div class="cart-items">'+itemsHtml+'</div>'+
-    '<div class="cart-sidebar">'+
-
-      /* Contact */
-      '<div class="sidebar-card">'+
-        '<div class="collapsible-header" onclick="toggleSection(\'contact\')">'+
-          '<h3><i class="fa-regular fa-user"></i> Contact Details</h3>'+
-          '<span class="toggle-icon'+(cOk?' collapsed':'')+'" id="contact-toggle"><i class="fa-solid fa-chevron-down"></i></span>'+
-        '</div>'+
-        '<div class="collapsible-summary'+(cOk?' visible':'')+'" id="contact-summary"><i class="fa-solid fa-circle-check"></i> '+esc(c.name)+' &middot; '+esc(c.email)+' &middot; '+esc(c.phone)+'</div>'+
-        '<div class="collapsible-body'+(cOk?' collapsed':'')+'" id="contact-body">'+
-          '<div class="form-field"><label>Email *</label><input type="email" id="c-email" placeholder="you@example.com" value="'+esc(c.email||'')+'" autocomplete="email"></div>'+
-          '<div class="form-field"><label>Full Name *</label><input type="text" id="c-name" placeholder="Your full name" value="'+esc(c.name||'')+'" autocomplete="name"></div>'+
-          '<div class="form-field"><label>Phone *</label><input type="tel" id="c-phone" placeholder="+65 9123 4567" value="'+esc(c.phone||'')+'" autocomplete="tel"></div>'+
-        '</div>'+
-      '</div>'+
-
-      /* Shipping */
-      '<div class="sidebar-card">'+
-        '<div class="collapsible-header" onclick="toggleSection(\'shipping\')">'+
-          '<h3><i class="fa-solid fa-truck-fast"></i> Shipping Address</h3>'+
-          '<span class="toggle-icon'+(sOk?' collapsed':'')+'" id="shipping-toggle"><i class="fa-solid fa-chevron-down"></i></span>'+
-        '</div>'+
-        '<div class="collapsible-summary'+(sOk?' visible':'')+'" id="shipping-summary"><i class="fa-solid fa-circle-check"></i> '+esc(c.address1||'')+(c.city?', '+esc(c.city):'')+(c.postal?' '+esc(c.postal):'')+(cName?' &middot; '+cName:'')+'</div>'+
-        '<div class="collapsible-body'+(sOk?' collapsed':'')+'" id="shipping-body">'+
-          '<div class="form-field"><label>Address Line 1 *</label><input type="text" id="c-addr1" placeholder="Block, street, unit" value="'+esc(c.address1||'')+'" autocomplete="address-line1"></div>'+
-          '<div class="form-field"><label>Address Line 2</label><input type="text" id="c-addr2" placeholder="Apartment, floor (optional)" value="'+esc(c.address2||'')+'" autocomplete="address-line2"></div>'+
-          '<div class="form-row">'+
-            '<div class="form-field"><label>City *</label><input type="text" id="c-city" placeholder="Singapore" value="'+esc(c.city||'')+'" autocomplete="address-level2"></div>'+
-            '<div class="form-field"><label>Postal Code *</label><input type="text" id="c-postal" placeholder="123456" value="'+esc(c.postal||'')+'" autocomplete="postal-code"></div>'+
-          '</div>'+
-          '<div class="form-field"><label>Country *</label><select id="c-country" autocomplete="country"><option value="">Select country</option>'+countryOpts+'</select></div>'+
-        '</div>'+
-      '</div>'+
-
-      /* Summary */
-      '<div class="sidebar-card">'+
-        '<h3>Order Summary</h3>'+
-        '<div class="summary-row"><span>Subtotal ('+items.reduce(function(s,i){return s+i.qty},0)+' items)</span><span>S$'+sub.toFixed(2)+'</span></div>'+
-        '<div class="summary-row"><span>Shipping</span><span>'+(ship===0?'<span style="color:var(--green)">Free</span>':'S$'+ship.toFixed(2))+'</span></div>'+
-        (sub<FREE_SHIP?'<div style="font-size:10px;color:var(--text-muted);text-align:right;margin-top:-4px">Free shipping over S$'+FREE_SHIP+'</div>':'')+
-        '<div class="summary-row"><span>GST ('+(TAX*100)+'%)</span><span>S$'+tax.toFixed(2)+'</span></div>'+
-        '<div class="summary-row total"><span>Total</span><span class="summary-val">S$'+total.toFixed(2)+'</span></div>'+
-        '<button class="checkout-btn" id="checkout-btn" onclick="handleCheckout()">Checkout &mdash; S$'+total.toFixed(2)+'</button>'+
-        '<div class="checkout-note">Secure checkout powered by Stripe. You\'ll be redirected to complete payment.</div>'+
-        '<button class="clear-cart-link" onclick="if(confirm(\'Clear all items?\'))clearCartAll()">Clear cart</button>'+
-      '</div>'+
-
-    '</div>'+
-  '</div>';
-
-  document.querySelectorAll('[id^="c-"]').forEach(function(inp){
-    inp.addEventListener('blur',saveCustFields);
-    inp.addEventListener('change',saveCustFields);
-  });
+  el.innerHTML='<div class="cart-layout"><div class="cart-items">'+items.map(function(i){
+    return '<div class="cart-item"><div class="cart-item-img"><img src="'+i.thumbSmall+'" alt="" onerror="this.onerror=null;this.parentElement.innerHTML=\'<div class=img-fallback>&#129513;</div>\'"></div><div class="cart-item-info"><div class="cart-item-name">'+esc(i.name)+'</div><div class="cart-item-meta">'+esc(i.albumName)+'</div><div class="cart-item-bottom"><div class="cart-item-price">S$'+(i.price*i.qty).toFixed(2)+'</div><div style="display:flex;align-items:center;gap:8px"><div class="cart-item-qty"><button onclick="updateQty(\''+i.puzzleId+'\',-1)">&minus;</button><span>'+i.qty+'</span><button onclick="updateQty(\''+i.puzzleId+'\',1)">+</button></div><button class="cart-item-remove" onclick="removeFromCart(\''+i.puzzleId+'\')" title="Remove"><i class="fa-regular fa-trash-can"></i></button></div></div></div></div>';
+  }).join('')+'</div><div class="cart-sidebar">'+
+    '<div class="sidebar-card"><div class="collapsible-header" onclick="toggleSection(\'contact\')"><h3><i class="fa-regular fa-user"></i> Contact Details</h3><span class="toggle-icon'+(cOk?' collapsed':'')+'" id="contact-toggle"><i class="fa-solid fa-chevron-down"></i></span></div><div class="collapsible-summary'+(cOk?' visible':'')+'" id="contact-summary"><i class="fa-solid fa-circle-check"></i> '+esc(c.name)+' &middot; '+esc(c.email)+' &middot; '+esc(c.phone)+'</div><div class="collapsible-body'+(cOk?' collapsed':'')+'" id="contact-body"><div class="form-field"><label>Email *</label><input type="email" id="c-email" placeholder="you@example.com" value="'+esc(c.email||'')+'" autocomplete="email"></div><div class="form-field"><label>Full Name *</label><input type="text" id="c-name" placeholder="Your full name" value="'+esc(c.name||'')+'" autocomplete="name"></div><div class="form-field"><label>Phone *</label><input type="tel" id="c-phone" placeholder="+65 9123 4567" value="'+esc(c.phone||'')+'" autocomplete="tel"></div></div></div>'+
+    '<div class="sidebar-card"><div class="collapsible-header" onclick="toggleSection(\'shipping\')"><h3><i class="fa-solid fa-truck-fast"></i> Shipping Address</h3><span class="toggle-icon'+(sOk?' collapsed':'')+'" id="shipping-toggle"><i class="fa-solid fa-chevron-down"></i></span></div><div class="collapsible-summary'+(sOk?' visible':'')+'" id="shipping-summary"><i class="fa-solid fa-circle-check"></i> '+esc(c.address1||'')+(c.city?', '+esc(c.city):'')+(c.postal?' '+esc(c.postal):'')+(cName?' &middot; '+cName:'')+'</div><div class="collapsible-body'+(sOk?' collapsed':'')+'" id="shipping-body"><div class="form-field"><label>Address Line 1 *</label><input type="text" id="c-addr1" placeholder="Block, street, unit" value="'+esc(c.address1||'')+'" autocomplete="address-line1"></div><div class="form-field"><label>Address Line 2</label><input type="text" id="c-addr2" placeholder="Apartment, floor (optional)" value="'+esc(c.address2||'')+'" autocomplete="address-line2"></div><div class="form-row"><div class="form-field"><label>City *</label><input type="text" id="c-city" placeholder="Singapore" value="'+esc(c.city||'')+'" autocomplete="address-level2"></div><div class="form-field"><label>Postal Code *</label><input type="text" id="c-postal" placeholder="123456" value="'+esc(c.postal||'')+'" autocomplete="postal-code"></div></div><div class="form-field"><label>Country *</label><select id="c-country" autocomplete="country"><option value="">Select country</option>'+countryOpts+'</select></div></div></div>'+
+    '<div class="sidebar-card"><h3>Order Summary</h3><div class="summary-row"><span>Subtotal ('+items.reduce(function(s,i){return s+i.qty},0)+' items)</span><span>S$'+sub.toFixed(2)+'</span></div><div class="summary-row"><span>Shipping</span><span>'+(ship===0?'<span style="color:var(--green)">Free</span>':'S$'+ship.toFixed(2))+'</span></div>'+(sub<FREE_SHIP?'<div style="font-size:10px;color:var(--text-muted);text-align:right;margin-top:-4px">Free shipping over S$'+FREE_SHIP+'</div>':'')+'<div class="summary-row"><span>GST ('+(TAX*100)+'%)</span><span>S$'+tax.toFixed(2)+'</span></div><div class="summary-row total"><span>Total</span><span class="summary-val">S$'+total.toFixed(2)+'</span></div><button class="checkout-btn" id="checkout-btn" onclick="handleCheckout()">Checkout &mdash; S$'+total.toFixed(2)+'</button><div class="checkout-note">Secure checkout powered by Stripe.</div><button class="clear-cart-link" onclick="if(confirm(\'Clear all items?\'))clearCartAll()">Clear cart</button></div>'+
+  '</div></div>';
+  document.querySelectorAll('[id^="c-"]').forEach(function(inp){inp.addEventListener('blur',saveCustFields);inp.addEventListener('change',saveCustFields)});
 }
 
-/* ===== CUSTOMER SAVE / VALIDATE ===== */
-function saveCustFields(){
-  function g(id){return(document.getElementById(id)||{}).value||''}
-  saveCust({email:g('c-email').trim(),name:g('c-name').trim(),phone:g('c-phone').trim(),address1:g('c-addr1').trim(),address2:g('c-addr2').trim(),city:g('c-city').trim(),postal:g('c-postal').trim(),country:g('c-country')});
-  var c=loadCust();
-  if(c.email&&c.name&&c.phone)collapseSection('contact',c);
-  if(c.address1&&c.city&&c.postal&&c.country)collapseSection('shipping',c);
-}
-
-function toggleSection(sec){
-  var body=document.getElementById(sec+'-body');
-  var tog=document.getElementById(sec+'-toggle');
-  var sum=document.getElementById(sec+'-summary');
-  if(!body)return;
-  if(body.classList.contains('collapsed')){
-    body.classList.remove('collapsed');
-    tog.classList.remove('collapsed');
-    if(sum)sum.classList.remove('visible');
-  }else{
-    saveCustFields();
-    body.classList.add('collapsed');
-    tog.classList.add('collapsed');
-    var c=loadCust();
-    if(sec==='contact'&&sum){
-      sum.innerHTML='<i class="fa-solid fa-circle-check"></i> '+esc(c.name||'\u2014')+' &middot; '+esc(c.email||'\u2014')+' &middot; '+esc(c.phone||'\u2014');
-      sum.classList.add('visible');
-    }
-    if(sec==='shipping'&&sum){
-      sum.innerHTML='<i class="fa-solid fa-circle-check"></i> '+esc(c.address1||'\u2014')+(c.city?', '+esc(c.city):'')+(c.postal?' '+esc(c.postal):'')+(COUNTRIES[c.country]?' &middot; '+COUNTRIES[c.country]:'');
-      sum.classList.add('visible');
-    }
-  }
-}
-
-function collapseSection(sec){
-  var body=document.getElementById(sec+'-body');
-  var tog=document.getElementById(sec+'-toggle');
-  var sum=document.getElementById(sec+'-summary');
-  if(!body||body.classList.contains('collapsed'))return;
-  body.classList.add('collapsed');
-  if(tog)tog.classList.add('collapsed');
-  if(sum)sum.classList.add('visible');
-}
-
-function validateCust(){
-  var c=loadCust(),m=[];
-  if(!c.email||c.email.indexOf('@')<0)m.push('email');
-  if(!c.name)m.push('full name');if(!c.phone)m.push('phone');
-  if(!c.address1)m.push('address');if(!c.city)m.push('city');
-  if(!c.postal)m.push('postal code');if(!c.country)m.push('country');
-  return m;
-}
+/* ===== CUSTOMER ===== */
+function saveCustFields(){function g(id){return(document.getElementById(id)||{}).value||''}saveCust({email:g('c-email').trim(),name:g('c-name').trim(),phone:g('c-phone').trim(),address1:g('c-addr1').trim(),address2:g('c-addr2').trim(),city:g('c-city').trim(),postal:g('c-postal').trim(),country:g('c-country')});var c=loadCust();if(c.email&&c.name&&c.phone)collapseSection('contact');if(c.address1&&c.city&&c.postal&&c.country)collapseSection('shipping')}
+function toggleSection(sec){var body=document.getElementById(sec+'-body'),tog=document.getElementById(sec+'-toggle'),sum=document.getElementById(sec+'-summary');if(!body)return;if(body.classList.contains('collapsed')){body.classList.remove('collapsed');tog.classList.remove('collapsed');if(sum)sum.classList.remove('visible')}else{saveCustFields();body.classList.add('collapsed');tog.classList.add('collapsed');var c=loadCust();if(sec==='contact'&&sum){sum.innerHTML='<i class="fa-solid fa-circle-check"></i> '+esc(c.name||'\u2014')+' &middot; '+esc(c.email||'\u2014')+' &middot; '+esc(c.phone||'\u2014');sum.classList.add('visible')}if(sec==='shipping'&&sum){sum.innerHTML='<i class="fa-solid fa-circle-check"></i> '+esc(c.address1||'\u2014')+(c.city?', '+esc(c.city):'')+(c.postal?' '+esc(c.postal):'')+(COUNTRIES[c.country]?' &middot; '+COUNTRIES[c.country]:'');sum.classList.add('visible')}}}
+function collapseSection(sec){var body=document.getElementById(sec+'-body'),tog=document.getElementById(sec+'-toggle'),sum=document.getElementById(sec+'-summary');if(!body||body.classList.contains('collapsed'))return;body.classList.add('collapsed');if(tog)tog.classList.add('collapsed');if(sum)sum.classList.add('visible')}
+function validateCust(){var c=loadCust(),m=[];if(!c.email||c.email.indexOf('@')<0)m.push('email');if(!c.name)m.push('full name');if(!c.phone)m.push('phone');if(!c.address1)m.push('address');if(!c.city)m.push('city');if(!c.postal)m.push('postal code');if(!c.country)m.push('country');return m}
 
 /* ===== CHECKOUT ===== */
-async function handleCheckout(){
-  saveCustFields();
-  var missing=validateCust();
-  if(missing.length){
-    var cFields=['email','full name','phone'],sFields=['address','city','postal code','country'];
-    if(missing.some(function(m){return cFields.indexOf(m)>=0})){var b=document.getElementById('contact-body');if(b&&b.classList.contains('collapsed'))toggleSection('contact')}
-    if(missing.some(function(m){return sFields.indexOf(m)>=0})){var b2=document.getElementById('shipping-body');if(b2&&b2.classList.contains('collapsed'))toggleSection('shipping')}
-    showToast('Please fill: '+missing.join(', '));return;
-  }
-  var c=loadCust(),items=loadCart(),btn=document.getElementById('checkout-btn');
-  btn.disabled=true;btn.textContent='Creating checkout...';
-  try{
-    var res=await fetch(STRIPE_EP,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-      email:c.email,customerName:c.name,phone:c.phone,
-      items:items.map(function(i){return{puzzleId:i.puzzleId,name:i.name,price:i.price,qty:i.qty}}),
-      shippingAddress:{name:c.name,address1:c.address1,address2:c.address2||'',city:c.city,postalCode:c.postal,country:c.country,phone:c.phone}
-    })});
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    var session=await res.json(),url=(session.data&&session.data.url)||session.url;
-    if(url){window.location.href=url;return}
-    throw new Error('No checkout URL');
-  }catch(e){
-    console.error('Checkout:',e);
-    showToast('Checkout coming soon \u2014 email hello@stakcos.com to order!');
-    btn.disabled=false;btn.textContent='Checkout';
-  }
-}
+async function handleCheckout(){saveCustFields();var missing=validateCust();if(missing.length){var cF=['email','full name','phone'],sF=['address','city','postal code','country'];if(missing.some(function(m){return cF.indexOf(m)>=0})){var b=document.getElementById('contact-body');if(b&&b.classList.contains('collapsed'))toggleSection('contact')}if(missing.some(function(m){return sF.indexOf(m)>=0})){var b2=document.getElementById('shipping-body');if(b2&&b2.classList.contains('collapsed'))toggleSection('shipping')}showToast('Please fill: '+missing.join(', '));return}var c=loadCust(),items=loadCart(),btn=document.getElementById('checkout-btn');btn.disabled=true;btn.textContent='Creating checkout...';try{var res=await fetch(STRIPE_EP,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:c.email,customerName:c.name,phone:c.phone,items:items.map(function(i){return{puzzleId:i.puzzleId,name:i.name,price:i.price,qty:i.qty}}),shippingAddress:{name:c.name,address1:c.address1,address2:c.address2||'',city:c.city,postalCode:c.postal,country:c.country,phone:c.phone}})});if(!res.ok)throw new Error('HTTP '+res.status);var session=await res.json(),url=(session.data&&session.data.url)||session.url;if(url){window.location.href=url;return}throw new Error('No checkout URL')}catch(e){console.error('Checkout:',e);showToast('Checkout coming soon \u2014 email hello@stakcos.com to order!');btn.disabled=false;btn.textContent='Checkout'}}
 
-/* ===== TOAST ===== */
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},3500)}
 
 /* ===== INIT ===== */
@@ -618,14 +472,23 @@ async function init(){
   updateBadge();
   try{
     var albums=await loadAlbums();
-    allPuzzles=albums.reduce(function(arr,a){return arr.concat(a.puzzles)},[]);
+    allPuzzles=albums.reduce(function(a,b){return a.concat(b.puzzles)},[]);
     allPuzzles.forEach(function(p){puzzleMap[p.puzzleId]=p});
-    if(!allPuzzles.length){document.getElementById('featured-puzzle').innerHTML='<div class="error-banner">No puzzles found. Check back soon!</div>';return}
+    if(!allPuzzles.length){document.getElementById('featured-puzzle').innerHTML='<div class="error-banner">No puzzles found.</div>';return}
     renderFeatured(allPuzzles[0]);
-    document.getElementById('collections').innerHTML=albums.map(function(a){return renderAlbum(a,allPuzzles[0].puzzleId)}).join('');
+    var html=albums.map(function(a){return renderAlbum(a,allPuzzles[0].puzzleId)}).join('');
+    document.getElementById('collections').innerHTML=html;
+    // Event delegation for grid card buttons
+    document.getElementById('collections').addEventListener('click',function(e){
+      var btn=e.target.closest('[data-action]');if(!btn)return;e.preventDefault();
+      var card=btn.closest('.puzzle-card');if(!card)return;
+      var p=puzzleMap[card.dataset.id];if(!p)return;
+      if(btn.dataset.action==='cart')addToCart(p);
+      else if(btn.dataset.action==='play')openPlayer(p);
+    });
   }catch(e){
-    console.error('Init failed:',e);
-    document.getElementById('featured-puzzle').innerHTML='<div class="error-banner">Failed to load puzzles. Please try again later.</div>';
+    console.error('Init:',e);
+    document.getElementById('featured-puzzle').innerHTML='<div class="error-banner">Failed to load puzzles.</div>';
   }
 }
 init();
