@@ -92,16 +92,17 @@ body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xm
 h1,h2,h3,p,span,a,label,.card-name,.card-price,.featured-name,.featured-price{transition:color .4s ease}
 
 /* ============================================ HERO ============================================ */
-.hero{padding:48px 0 40px;text-align:center}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:var(--orange-dim);border:1px solid rgba(249,167,67,0.2);border-radius:100px;font-size:12px;font-weight:600;color:var(--orange);margin-bottom:18px;font-family:var(--font-mono);letter-spacing:0.5px}
-.hero-badge::before{content:'';width:6px;height:6px;background:var(--orange);border-radius:50%;animation:pulse-dot 2s infinite}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.hero h1{font-size:clamp(28px,5.5vw,60px);font-weight:800;letter-spacing:-1.5px;line-height:1.08;margin-bottom:14px;background:linear-gradient(135deg,var(--text-primary),var(--text-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero{padding:48px 0 40px}
+.hero-split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.hero-text{text-align:left}
+.hero h1{font-size:clamp(28px,4vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:1.08;margin-bottom:14px;background:linear-gradient(135deg,var(--text-primary),var(--text-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--orange),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:16px;color:var(--text-secondary);max-width:480px;margin:0 auto 32px;font-weight:400}
+.hero-sub{font-size:16px;color:var(--text-secondary);max-width:480px;margin:0 0 28px;font-weight:400}
+.hero-ctas{display:flex;gap:10px;flex-wrap:wrap}
+.hero-featured{min-width:0}
 
 /* Featured card */
-.featured-card{max-width:680px;margin:0 auto;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;transition:all 0.4s cubic-bezier(.23,1,.32,1);box-shadow:var(--shadow-card)}
+.featured-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;transition:all 0.4s cubic-bezier(.23,1,.32,1);box-shadow:var(--shadow-card)}
 .featured-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-card-hover),var(--shadow-glow);transform:translateY(-2px)}
 .featured-image{width:100%;aspect-ratio:16/10;background:linear-gradient(135deg,var(--card-gradient-a),var(--card-gradient-b));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .featured-image img{max-width:85%;max-height:85%;object-fit:contain;border-radius:var(--radius-md);filter:drop-shadow(0 16px 40px rgba(0,0,0,.5));transition:transform .6s cubic-bezier(.23,1,.32,1)}
@@ -246,6 +247,10 @@ h1,h2,h3,p,span,a,label,.card-name,.card-price,.featured-name,.featured-price{tr
 @media(max-width:900px){
   .cart-layout{grid-template-columns:1fr}
   .cart-sidebar{position:static}
+  .hero-split{grid-template-columns:1fr;text-align:center}
+  .hero-text{text-align:center}
+  .hero-sub{margin:0 auto 28px}
+  .hero-ctas{justify-content:center}
 }
 @media(max-width:640px){
   .header-inner{height:56px}
@@ -306,11 +311,18 @@ h1,h2,h3,p,span,a,label,.card-name,.card-price,.featured-name,.featured-price{tr
   <div class="page-view active" id="view-shop">
     <section class="hero">
       <div class="container">
-        <div class="hero-badge">New puzzles every week</div>
-        <h1>Rotating Puzzles<br>You Can <em>Play & Own</em></h1>
-        <p class="hero-sub">Multi-layer puzzles that twist and align to reveal beautiful artwork. Play online for free, or get a printed copy shipped to you.</p>
-        <div id="featured-puzzle">
-          <div class="featured-card"><div class="featured-image"><div class="loading-state"><div class="loader"></div><div class="loading-text">Loading puzzles...</div></div></div><div class="featured-body"><div class="skeleton-line" style="width:120px;height:12px"></div><div class="skeleton-line" style="width:260px;height:22px;margin:10px 0"></div><div class="skeleton-line" style="width:100%"></div><div class="skeleton-line price"></div></div></div>
+        <div class="hero-split">
+          <div class="hero-text">
+            <h1>Rotating Puzzles<br>You Can <em>Play & Own</em></h1>
+            <p class="hero-sub">Multi-layer puzzles that twist and align to reveal beautiful artwork. Play online for free, or get a printed copy shipped to you.</p>
+            <div class="hero-ctas">
+              <a href="#collections" class="btn btn-buy">Browse Collection</a>
+              <a href="https://play.stakcos.com" class="btn btn-play" target="_blank" rel="noopener">▶ Play Free Online</a>
+            </div>
+          </div>
+          <div class="hero-featured" id="featured-puzzle">
+            <div class="featured-card"><div class="featured-image"><div class="loading-state"><div class="loader"></div><div class="loading-text">Loading puzzles...</div></div></div><div class="featured-body"><div class="skeleton-line" style="width:120px;height:12px"></div><div class="skeleton-line" style="width:260px;height:22px;margin:10px 0"></div><div class="skeleton-line" style="width:100%"></div><div class="skeleton-line price"></div></div></div>
+          </div>
         </div>
       </div>
     </section>
