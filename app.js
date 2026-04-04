@@ -5,7 +5,9 @@ var GCS = 'https://storage.googleapis.com/stakco-images';
 var PLAY = 'https://play.stakcos.com';
 var UID = '109208089060140847827';
 var PRICE = 24.99;
-var STRIPE_EP = 'https://api.stakcos.com/api/shop/checkout/create-session';
+var STRIPE_EP = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3001/api/checkout'
+  : 'https://api.stakcos.com/api/checkout';
 var SHIPPING = 5, FREE_SHIP = 80, TAX = 0.09;
 var CART_KEY = 'cp_cart', CUST_KEY = 'cp_customer', THEME_KEY = 'cp_theme';
 var COUNTRIES = {
@@ -501,7 +503,7 @@ async function handleCheckout() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: c.email, customerName: c.name, phone: c.phone,
-        items: items.map(function(i) { return { puzzleId: i.puzzleId, name: i.name, price: i.price, qty: i.qty }; }),
+        items: items.map(function(i) { return { puzzleId: i.puzzleId, name: i.name, layers: i.layers, price: i.price, qty: i.qty }; }),
         shippingAddress: { name: c.name, address1: c.address1, address2: c.address2 || '', city: c.city, postalCode: c.postal, country: c.country, phone: c.phone }
       })
     });
@@ -524,9 +526,39 @@ function showToast(msg) {
   setTimeout(function() { t.classList.remove('show'); }, 3500);
 }
 
+/* ===== CHECKOUT RESULT HANDLING ===== */
+function handleCheckoutResult() {
+  var params = new URLSearchParams(window.location.search);
+  var checkoutStatus = params.get('checkout');
+  var orderId = params.get('order');
+
+  if (!checkoutStatus) return;
+
+  // Clean URL without reloading
+  var cleanUrl = window.location.pathname;
+  window.history.replaceState({}, '', cleanUrl);
+
+  if (checkoutStatus === 'success' && orderId) {
+    // Clear cart and customer data after successful payment
+    saveCart([]);
+    localStorage.removeItem(CUST_KEY);
+    updateBadge();
+
+    // Show success message
+    setTimeout(function() {
+      showToast('Order ' + orderId + ' confirmed! Thank you!');
+    }, 500);
+  } else if (checkoutStatus === 'cancelled') {
+    setTimeout(function() {
+      showToast('Checkout cancelled — your cart is still saved.');
+    }, 500);
+  }
+}
+
 /* ===== INIT ===== */
 async function init() {
   updateBadge();
+  handleCheckoutResult();
   try {
     var albums = await loadAlbums();
     allPuzzles = albums.reduce(function(a, b) { return a.concat(b.puzzles); }, []);
