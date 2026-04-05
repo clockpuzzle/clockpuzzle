@@ -455,6 +455,122 @@ body::before {
 .footer-links-row a { color: var(--text-muted); text-decoration: none; font-size: 12px; transition: color .2s; }
 .footer-links-row a:hover { color: var(--text-secondary); }
 
+/* ===== ADDRESS BOOK ===== */
+.addr-book { display: flex; flex-direction: column; gap: 10px; }
+
+/* Each saved address = a clickable row (radio-style selection) */
+.addr-row {
+  display: flex; gap: 12px; padding: 14px;
+  background: var(--bg-surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); cursor: pointer;
+  transition: all .2s;
+}
+.addr-row:hover { border-color: rgba(249,167,67,.35); }
+.addr-row.selected {
+  border-color: var(--orange);
+  background: var(--orange-dim);
+}
+.addr-row-radio { flex-shrink: 0; padding-top: 3px; }
+.addr-radio-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid var(--text-muted);
+  background: transparent; transition: all .2s;
+  position: relative;
+}
+.addr-row.selected .addr-radio-dot {
+  border-color: var(--orange);
+}
+.addr-radio-dot.active::after {
+  content: ''; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--orange);
+}
+.addr-row-body { flex: 1; min-width: 0; }
+.addr-row-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 4px;
+}
+.addr-label {
+  font-size: 13px; font-weight: 600;
+  color: var(--text-primary);
+}
+.addr-default-tag {
+  font-size: 9px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .5px;
+  padding: 2px 6px; border-radius: 100px;
+  background: var(--orange-dim); color: var(--orange);
+  font-family: var(--font-mono);
+}
+.addr-row-lines {
+  font-size: 12px; color: var(--text-secondary);
+  line-height: 1.5; margin-bottom: 8px;
+}
+.addr-row-actions {
+  display: flex; gap: 14px; flex-wrap: wrap;
+}
+.addr-action-link {
+  background: none; border: none; padding: 0;
+  font-family: var(--font-display); font-size: 11px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  transition: color .15s;
+}
+.addr-action-link:hover { color: var(--text-primary); }
+.addr-action-link.danger:hover { color: var(--red); }
+
+/* Add-new button: subtle dashed outline */
+.addr-add-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 12px;
+  background: transparent; border: 1.5px dashed var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-display); font-size: 12px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  transition: all .2s;
+}
+.addr-add-btn:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: var(--orange-dim);
+}
+.addr-add-btn i { font-size: 10px; }
+
+/* Inline address form (edit + add new) */
+.addr-form {
+  padding: 14px; background: var(--bg-surface);
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+}
+.addr-form-header {
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .5px;
+  color: var(--text-muted); margin-bottom: 12px;
+  font-family: var(--font-mono);
+}
+.addr-form .form-field { margin-bottom: 10px; }
+.addr-form .form-field:last-of-type { margin-bottom: 12px; }
+.addr-form-actions {
+  display: flex; gap: 8px; margin-top: 6px;
+}
+.addr-form-actions .btn { flex: 1; justify-content: center; }
+.field-hint {
+  font-size: 10px; color: var(--text-muted);
+  font-weight: 400; margin-left: 4px;
+}
+
+/* ===== FORGET MY DETAILS ===== */
+.forget-details-row {
+  text-align: center; padding: 8px 0 0;
+}
+.forget-details-link {
+  background: none; border: none;
+  font-family: var(--font-display); font-size: 11px;
+  color: var(--text-muted); cursor: pointer;
+  padding: 8px 12px; display: inline-flex; align-items: center; gap: 6px;
+  transition: color .15s;
+}
+.forget-details-link:hover { color: var(--red); }
+.forget-details-link i { font-size: 10px; }
+
 /* ===== TOAST ===== */
 .toast {
   position: fixed; bottom: 24px; left: 50%;

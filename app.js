@@ -9,7 +9,7 @@ var STRIPE_EP = window.location.hostname === 'localhost' || window.location.host
   ? 'http://localhost:3001/api/checkout'
   : 'https://api.stakcos.com/api/checkout';
 var SHIPPING = 5, FREE_SHIP = 80, TAX = 0.09;
-var CART_KEY = 'cp_cart', CUST_KEY = 'cp_customer', THEME_KEY = 'cp_theme', ORDERS_KEY = 'cp_orders';
+var CART_KEY = 'cp_cart', CUST_KEY = 'cp_customer', THEME_KEY = 'cp_theme', ORDERS_KEY = 'cp_orders', ADDR_KEY = 'cp_addresses';
 var API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:3001/api'
   : 'https://api.stakcos.com/api';
@@ -310,9 +310,131 @@ function cartCount() { return loadCart().reduce(function(s, i) { return s + i.qt
 function cartSubtotal() { return loadCart().reduce(function(s, i) { return s + i.price * i.qty; }, 0); }
 function updateBadge() { var b = document.getElementById('cart-badge'), n = cartCount(); b.textContent = n; b.classList.toggle('visible', n > 0); }
 
-/* ===== CUSTOMER ===== */
+/* ===== CUSTOMER (contact only — addresses live in ADDR_KEY) ===== */
 function loadCust() { try { return JSON.parse(localStorage.getItem(CUST_KEY)) || {}; } catch (e) { return {}; } }
 function saveCust(d) { localStorage.setItem(CUST_KEY, JSON.stringify(d)); }
+
+/* ===== ADDRESS BOOK ===== */
+// Addresses are stored as an array. Each has { id, label, address1, address2,
+// city, postal, country, isDefault }. Exactly one address has isDefault=true
+// at any given time (unless the book is empty).
+//
+// The address currently selected for THIS checkout is tracked in-memory
+// (selectedAddrId). It defaults to whichever address has isDefault=true.
+function loadAddrs() { try { return JSON.parse(localStorage.getItem(ADDR_KEY)) || []; } catch (e) { return []; } }
+function saveAddrs(a) { localStorage.setItem(ADDR_KEY, JSON.stringify(a)); }
+
+function genAddrId() {
+  return 'addr_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function getDefaultAddr() {
+  var addrs = loadAddrs();
+  return addrs.find(function(a) { return a.isDefault; }) || addrs[0] || null;
+}
+
+function getAddrById(id) {
+  return loadAddrs().find(function(a) { return a.id === id; }) || null;
+}
+
+function setDefaultAddr(id) {
+  var addrs = loadAddrs();
+  addrs.forEach(function(a) { a.isDefault = (a.id === id); });
+  saveAddrs(addrs);
+}
+
+function upsertAddr(addr) {
+  var addrs = loadAddrs();
+  if (addr.id) {
+    var idx = addrs.findIndex(function(a) { return a.id === addr.id; });
+    if (idx >= 0) {
+      // Keep the existing isDefault flag; editing doesn't change default
+      addr.isDefault = addrs[idx].isDefault;
+      addrs[idx] = addr;
+    } else {
+      addrs.push(addr);
+    }
+  } else {
+    addr.id = genAddrId();
+    // First address automatically becomes default
+    if (!addrs.length) addr.isDefault = true;
+    addrs.push(addr);
+  }
+  saveAddrs(addrs);
+  return addr;
+}
+
+function deleteAddr(id) {
+  var addrs = loadAddrs();
+  var target = addrs.find(function(a) { return a.id === id; });
+  if (!target) return;
+  var wasDefault = target.isDefault;
+  addrs = addrs.filter(function(a) { return a.id !== id; });
+  // If we removed the default, promote the first remaining to default
+  if (wasDefault && addrs.length) addrs[0].isDefault = true;
+  saveAddrs(addrs);
+  // If the deleted address was currently selected, fall back to default
+  if (selectedAddrId === id) selectedAddrId = null;
+}
+
+// ── One-time migration: old flat CUST_KEY had address fields mixed in ──
+// If we detect old-shape data, split it: contact stays in CUST_KEY, address
+// fields move into ADDR_KEY as the first (default) address.
+function migrateCustToAddrBook() {
+  var raw = localStorage.getItem(CUST_KEY);
+  if (!raw) return;
+  var c;
+  try { c = JSON.parse(raw); } catch (e) { return; }
+  if (!c || typeof c !== 'object') return;
+  // Old shape detection: address fields exist AND address book is empty
+  var hasAddrFields = !!(c.address1 || c.city || c.postal || c.country);
+  if (!hasAddrFields) return;
+  var existingAddrs = loadAddrs();
+  if (existingAddrs.length) {
+    // Address book already populated — just strip address fields from cust
+    saveCust({ email: c.email || '', name: c.name || '', phone: c.phone || '' });
+    return;
+  }
+  // Move address fields into the book
+  upsertAddr({
+    label: 'Home',
+    address1: c.address1 || '',
+    address2: c.address2 || '',
+    city: c.city || '',
+    postal: c.postal || '',
+    country: c.country || ''
+  });
+  saveCust({ email: c.email || '', name: c.name || '', phone: c.phone || '' });
+}
+
+// ── Forget everything (privacy action) ──
+function forgetEverything() {
+  if (!confirm('This will clear all saved details from this browser:\n\n\u2022 Your contact info (email, name, phone)\n\u2022 All saved shipping addresses\n\u2022 Local order history\n\nYour cart will remain. Continue?')) return;
+  localStorage.removeItem(CUST_KEY);
+  localStorage.removeItem(ADDR_KEY);
+  localStorage.removeItem(ORDERS_KEY);
+  selectedAddrId = null;
+  editingAddrId = null;
+  isAddingAddr = false;
+  showToast('All saved details cleared');
+  renderCart();
+}
+
+// ── In-memory state for the address book UI ──
+// selectedAddrId: which address is picked for THIS order (defaults to default)
+// editingAddrId:  which address is currently being edited inline
+// isAddingAddr:   true when the "+ Add new address" form is open
+var selectedAddrId = null;
+var editingAddrId = null;
+var isAddingAddr = false;
+
+function getSelectedAddr() {
+  if (selectedAddrId) {
+    var byId = getAddrById(selectedAddrId);
+    if (byId) return byId;
+  }
+  return getDefaultAddr();
+}
 
 /* ===== VIEWS ===== */
 var allPuzzles = [], puzzleMap = {};
@@ -379,6 +501,9 @@ function renderAlbum(album, skipId) {
 
 /* ===== RENDER CART ===== */
 function renderCart() {
+  // Run migration once on every cart render (idempotent after first pass)
+  migrateCustToAddrBook();
+
   var items = loadCart(), el = document.getElementById('cart-content');
   if (!items.length) {
     el.innerHTML = '<div class="cart-empty"><p>Your cart is empty</p><button class="btn btn-buy" onclick="showView(\'shop\')">Browse Puzzles</button></div>';
@@ -388,9 +513,9 @@ function renderCart() {
   var tax = +(sub * TAX).toFixed(2), total = +(sub + ship + tax).toFixed(2);
   var c = loadCust();
   var cOk = !!(c.email && c.name && c.phone);
-  var sOk = !!(c.address1 && c.city && c.postal && c.country);
-  var cn = COUNTRIES[c.country] || '';
-  var co = Object.keys(COUNTRIES).map(function(k) { return '<option value="' + k + '"' + (c.country === k ? ' selected' : '') + '>' + COUNTRIES[k] + '</option>'; }).join('');
+  var addrs = loadAddrs();
+  var selAddr = getSelectedAddr();
+  var sOk = !!(selAddr && selAddr.address1 && selAddr.city && selAddr.postal && selAddr.country);
 
   var cartHtml = items.map(function(i) {
     return '<div class="cart-item"><div class="cart-item-img"><img src="' + i.thumbSmall + '" alt=""></div>' +
@@ -403,9 +528,36 @@ function renderCart() {
       '</div></div></div></div>';
   }).join('');
 
-  var contactHtml = '<div class="sidebar-card"><div class="collapsible-header" onclick="toggleSection(\'contact\')"><h3><i class="fa-regular fa-user"></i> Contact Details</h3><span class="toggle-icon' + (cOk ? ' collapsed' : '') + '" id="contact-toggle"><i class="fa-solid fa-chevron-down"></i></span></div><div class="collapsible-summary' + (cOk ? ' visible' : '') + '" id="contact-summary"><i class="fa-solid fa-circle-check"></i> ' + esc(c.name) + ' \u00b7 ' + esc(c.email) + ' \u00b7 ' + esc(c.phone) + '</div><div class="collapsible-body' + (cOk ? ' collapsed' : '') + '" id="contact-body"><div class="form-field"><label>Email *</label><input type="email" id="c-email" placeholder="you@example.com" value="' + esc(c.email || '') + '" autocomplete="email"></div><div class="form-field"><label>Full Name *</label><input type="text" id="c-name" placeholder="Your full name" value="' + esc(c.name || '') + '" autocomplete="name"></div><div class="form-field"><label>Phone *</label><input type="tel" id="c-phone" placeholder="+65 9123 4567" value="' + esc(c.phone || '') + '" autocomplete="tel"></div></div></div>';
+  // ── Contact card (unchanged structure, contact only) ──
+  var contactHtml = '<div class="sidebar-card">' +
+    '<div class="collapsible-header" onclick="toggleSection(\'contact\')">' +
+      '<h3><i class="fa-regular fa-user"></i> Contact Details</h3>' +
+      '<span class="toggle-icon' + (cOk ? ' collapsed' : '') + '" id="contact-toggle"><i class="fa-solid fa-chevron-down"></i></span>' +
+    '</div>' +
+    '<div class="collapsible-summary' + (cOk ? ' visible' : '') + '" id="contact-summary">' +
+      '<i class="fa-solid fa-circle-check"></i> ' +
+      esc(c.name || '\u2014') + ' \u00b7 ' + esc(c.email || '\u2014') + ' \u00b7 ' + esc(c.phone || '\u2014') +
+    '</div>' +
+    '<div class="collapsible-body' + (cOk ? ' collapsed' : '') + '" id="contact-body">' +
+      '<div class="form-field"><label>Email *</label><input type="email" id="c-email" placeholder="you@example.com" value="' + esc(c.email || '') + '" autocomplete="email"></div>' +
+      '<div class="form-field"><label>Full Name *</label><input type="text" id="c-name" placeholder="Your full name" value="' + esc(c.name || '') + '" autocomplete="name"></div>' +
+      '<div class="form-field"><label>Phone *</label><input type="tel" id="c-phone" placeholder="+65 9123 4567" value="' + esc(c.phone || '') + '" autocomplete="tel"></div>' +
+    '</div>' +
+  '</div>';
 
-  var shipHtml = '<div class="sidebar-card"><div class="collapsible-header" onclick="toggleSection(\'shipping\')"><h3><i class="fa-solid fa-truck-fast"></i> Shipping Address</h3><span class="toggle-icon' + (sOk ? ' collapsed' : '') + '" id="shipping-toggle"><i class="fa-solid fa-chevron-down"></i></span></div><div class="collapsible-summary' + (sOk ? ' visible' : '') + '" id="shipping-summary"><i class="fa-solid fa-circle-check"></i> ' + esc(c.address1 || '') + (c.city ? ', ' + esc(c.city) : '') + (c.postal ? ' ' + esc(c.postal) : '') + (cn ? ' \u00b7 ' + cn : '') + '</div><div class="collapsible-body' + (sOk ? ' collapsed' : '') + '" id="shipping-body"><div class="form-field"><label>Address Line 1 *</label><input type="text" id="c-addr1" placeholder="Block, street, unit" value="' + esc(c.address1 || '') + '" autocomplete="address-line1"></div><div class="form-field"><label>Address Line 2</label><input type="text" id="c-addr2" placeholder="Apartment, floor (optional)" value="' + esc(c.address2 || '') + '" autocomplete="address-line2"></div><div class="form-row"><div class="form-field"><label>City *</label><input type="text" id="c-city" placeholder="Singapore" value="' + esc(c.city || '') + '" autocomplete="address-level2"></div><div class="form-field"><label>Postal Code *</label><input type="text" id="c-postal" placeholder="123456" value="' + esc(c.postal || '') + '" autocomplete="postal-code"></div></div><div class="form-field"><label>Country *</label><select id="c-country" autocomplete="country"><option value="">Select country</option>' + co + '</select></div></div></div>';
+  // ── Shipping card — now delegates to the address book renderer ──
+  var shipHtml = '<div class="sidebar-card">' +
+    '<div class="collapsible-header" onclick="toggleSection(\'shipping\')">' +
+      '<h3><i class="fa-solid fa-truck-fast"></i> Shipping Address</h3>' +
+      '<span class="toggle-icon' + (sOk && !isAddingAddr && !editingAddrId ? ' collapsed' : '') + '" id="shipping-toggle"><i class="fa-solid fa-chevron-down"></i></span>' +
+    '</div>' +
+    '<div class="collapsible-summary' + (sOk && !isAddingAddr && !editingAddrId ? ' visible' : '') + '" id="shipping-summary">' +
+      buildShippingSummaryHtml() +
+    '</div>' +
+    '<div class="collapsible-body' + (sOk && !isAddingAddr && !editingAddrId ? ' collapsed' : '') + '" id="shipping-body">' +
+      renderAddressBook() +
+    '</div>' +
+  '</div>';
 
   var sumHtml = '<div class="sidebar-card"><h3>Order Summary</h3>' +
     '<div class="summary-row"><span>Subtotal (' + items.reduce(function(s, i) { return s + i.qty; }, 0) + ' items)</span><span>S$' + sub.toFixed(2) + '</span></div>' +
@@ -415,44 +567,258 @@ function renderCart() {
     '<div class="summary-row total"><span>Total</span><span class="summary-val">S$' + total.toFixed(2) + '</span></div>' +
     '<button class="checkout-btn" id="checkout-btn" onclick="handleCheckout()">Checkout \u2014 S$' + total.toFixed(2) + '</button>' +
     '<div class="checkout-note">Secure checkout powered by Stripe.</div>' +
-    '<button class="clear-cart-link" onclick="if(confirm(\'Clear all items?\'))clearCartAll()">Clear cart</button></div>';
+    '<button class="clear-cart-link" onclick="if(confirm(\'Clear all items?\'))clearCartAll()">Clear cart</button>' +
+  '</div>';
 
-  el.innerHTML = '<div class="cart-layout"><div class="cart-items">' + cartHtml + '</div><div class="cart-sidebar">' + contactHtml + shipHtml + sumHtml + '</div></div>';
+  // ── Privacy: forget everything ──
+  var forgetHtml = '<div class="forget-details-row">' +
+    '<button class="forget-details-link" onclick="forgetEverything()">' +
+      '<i class="fa-regular fa-trash-can"></i> Forget my details on this browser' +
+    '</button>' +
+  '</div>';
+
+  el.innerHTML = '<div class="cart-layout">' +
+    '<div class="cart-items">' + cartHtml + '</div>' +
+    '<div class="cart-sidebar">' + contactHtml + shipHtml + sumHtml + forgetHtml + '</div>' +
+  '</div>';
+
   document.querySelectorAll('[id^="c-"]').forEach(function(inp) {
     inp.addEventListener('blur', saveCustFields);
     inp.addEventListener('change', saveCustFields);
   });
 }
 
+/* ===== ADDRESS BOOK RENDERING ===== */
+// Builds the contents of the shipping card body. Three possible states:
+//   1. Empty book (first-time user) → show an inline form
+//   2. Adding a new address → show the form at the bottom of the list
+//   3. Editing an address → the list shows with the edited row replaced by the form
+//   4. Normal → a list of saved addresses with radio selection + actions
+function renderAddressBook() {
+  var addrs = loadAddrs();
+
+  // First-time flow: no saved addresses → show empty form immediately
+  if (!addrs.length && !isAddingAddr) {
+    return renderAddressForm(null, { firstTime: true });
+  }
+
+  // Build the list of saved addresses
+  var selected = getSelectedAddr();
+  var selectedId = selected ? selected.id : null;
+
+  var rows = addrs.map(function(a) {
+    if (editingAddrId === a.id) {
+      // Replace this row with the edit form
+      return renderAddressForm(a, { editing: true });
+    }
+    var isSelected = (a.id === selectedId);
+    var isDefault = !!a.isDefault;
+    var canDelete = addrs.length > 1;
+
+    var addrLines = esc(a.address1 || '') +
+      (a.address2 ? ', ' + esc(a.address2) : '') +
+      '<br>' +
+      (a.city ? esc(a.city) : '') +
+      (a.postal ? ' ' + esc(a.postal) : '') +
+      (COUNTRIES[a.country] ? ' \u00b7 ' + COUNTRIES[a.country] : '');
+
+    return '<div class="addr-row' + (isSelected ? ' selected' : '') + '" onclick="selectAddr(\'' + a.id + '\')">' +
+      '<div class="addr-row-radio">' +
+        '<div class="addr-radio-dot' + (isSelected ? ' active' : '') + '"></div>' +
+      '</div>' +
+      '<div class="addr-row-body">' +
+        '<div class="addr-row-header">' +
+          '<span class="addr-label">' + esc(a.label || 'Address') + '</span>' +
+          (isDefault ? '<span class="addr-default-tag">Default</span>' : '') +
+        '</div>' +
+        '<div class="addr-row-lines">' + addrLines + '</div>' +
+        '<div class="addr-row-actions">' +
+          '<button class="addr-action-link" onclick="event.stopPropagation();editAddr(\'' + a.id + '\')">Edit</button>' +
+          (!isDefault ? '<button class="addr-action-link" onclick="event.stopPropagation();makeDefaultAddr(\'' + a.id + '\')">Make default</button>' : '') +
+          (canDelete ? '<button class="addr-action-link danger" onclick="event.stopPropagation();deleteAddrConfirm(\'' + a.id + '\')">Delete</button>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  // Add-new form appears at the end of the list when isAddingAddr is true
+  var addForm = '';
+  if (isAddingAddr) {
+    addForm = renderAddressForm(null, { adding: true });
+  }
+
+  // "+ Add new address" button (hidden while adding)
+  var addButton = isAddingAddr ? '' :
+    '<button class="addr-add-btn" onclick="startAddAddr()"><i class="fa-solid fa-plus"></i> Add new address</button>';
+
+  return '<div class="addr-book">' + rows + addForm + addButton + '</div>';
+}
+
+// Renders the inline add/edit form. `mode.firstTime` hides the cancel button
+// (since there's nothing to cancel back to). `mode.editing` passes the addr to edit.
+// `mode.adding` means new address; no prefill.
+function renderAddressForm(addr, mode) {
+  mode = mode || {};
+  addr = addr || {};
+  var formId = mode.editing ? 'addr-form-' + addr.id : 'addr-form-new';
+  var co = Object.keys(COUNTRIES).map(function(k) {
+    return '<option value="' + k + '"' + (addr.country === k ? ' selected' : '') + '>' + COUNTRIES[k] + '</option>';
+  }).join('');
+
+  var cancelBtn = mode.firstTime ? '' :
+    '<button class="btn btn-play btn-sm" onclick="cancelEditAddr()">Cancel</button>';
+  var saveAction = mode.editing ?
+    'saveEditAddr(\'' + addr.id + '\')' :
+    'saveNewAddr()';
+
+  return '<div class="addr-form" id="' + formId + '">' +
+    (mode.editing || mode.adding ?
+      '<div class="addr-form-header">' + (mode.editing ? 'Edit address' : 'New address') + '</div>' : '') +
+    '<div class="form-field"><label>Label <span class="field-hint">(e.g. Home, Office)</span></label><input type="text" id="af-label" placeholder="Home" value="' + esc(addr.label || '') + '"></div>' +
+    '<div class="form-field"><label>Address Line 1 *</label><input type="text" id="af-addr1" placeholder="Block, street, unit" value="' + esc(addr.address1 || '') + '" autocomplete="address-line1"></div>' +
+    '<div class="form-field"><label>Address Line 2</label><input type="text" id="af-addr2" placeholder="Apartment, floor (optional)" value="' + esc(addr.address2 || '') + '" autocomplete="address-line2"></div>' +
+    '<div class="form-row">' +
+      '<div class="form-field"><label>City *</label><input type="text" id="af-city" placeholder="Singapore" value="' + esc(addr.city || '') + '" autocomplete="address-level2"></div>' +
+      '<div class="form-field"><label>Postal Code *</label><input type="text" id="af-postal" placeholder="123456" value="' + esc(addr.postal || '') + '" autocomplete="postal-code"></div>' +
+    '</div>' +
+    '<div class="form-field"><label>Country *</label><select id="af-country" autocomplete="country"><option value="">Select country</option>' + co + '</select></div>' +
+    '<div class="addr-form-actions">' +
+      '<button class="btn btn-buy btn-sm" onclick="' + saveAction + '">' + (mode.editing ? 'Save changes' : 'Save address') + '</button>' +
+      cancelBtn +
+    '</div>' +
+  '</div>';
+}
+
+// Builds the collapsed shipping summary line (used when card is collapsed)
+function buildShippingSummaryHtml() {
+  var a = getSelectedAddr();
+  if (!a) return '<i class="fa-solid fa-circle-check"></i> No address selected';
+  var line = '<i class="fa-solid fa-circle-check"></i> ';
+  if (a.label) line += '<strong>' + esc(a.label) + '</strong> \u00b7 ';
+  line += esc(a.address1 || '');
+  if (a.city) line += ', ' + esc(a.city);
+  if (a.postal) line += ' ' + esc(a.postal);
+  if (COUNTRIES[a.country]) line += ' \u00b7 ' + COUNTRIES[a.country];
+  return line;
+}
+
+/* ===== ADDRESS BOOK ACTIONS ===== */
+function selectAddr(id) {
+  if (editingAddrId || isAddingAddr) return; // ignore clicks while form is open
+  selectedAddrId = id;
+  renderCart();
+}
+
+function editAddr(id) {
+  editingAddrId = id;
+  isAddingAddr = false;
+  renderCart();
+}
+
+function cancelEditAddr() {
+  editingAddrId = null;
+  isAddingAddr = false;
+  renderCart();
+}
+
+function startAddAddr() {
+  isAddingAddr = true;
+  editingAddrId = null;
+  renderCart();
+}
+
+function readAddrForm() {
+  function g(id) { return (document.getElementById(id) || {}).value || ''; }
+  return {
+    label: g('af-label').trim(),
+    address1: g('af-addr1').trim(),
+    address2: g('af-addr2').trim(),
+    city: g('af-city').trim(),
+    postal: g('af-postal').trim(),
+    country: g('af-country')
+  };
+}
+
+function validateAddrForm(data) {
+  var missing = [];
+  if (!data.address1) missing.push('address');
+  if (!data.city) missing.push('city');
+  if (!data.postal) missing.push('postal code');
+  if (!data.country) missing.push('country');
+  return missing;
+}
+
+function saveNewAddr() {
+  var data = readAddrForm();
+  var missing = validateAddrForm(data);
+  if (missing.length) {
+    showToast('Please fill: ' + missing.join(', '));
+    return;
+  }
+  if (!data.label) data.label = 'Address';
+  var saved = upsertAddr(data);
+  selectedAddrId = saved.id;
+  isAddingAddr = false;
+  renderCart();
+  showToast('Address saved');
+}
+
+function saveEditAddr(id) {
+  var data = readAddrForm();
+  var missing = validateAddrForm(data);
+  if (missing.length) {
+    showToast('Please fill: ' + missing.join(', '));
+    return;
+  }
+  if (!data.label) data.label = 'Address';
+  data.id = id;
+  upsertAddr(data);
+  editingAddrId = null;
+  renderCart();
+  showToast('Address updated');
+}
+
+function deleteAddrConfirm(id) {
+  var a = getAddrById(id);
+  if (!a) return;
+  var name = a.label || 'this address';
+  if (!confirm('Delete "' + name + '"?')) return;
+  deleteAddr(id);
+  renderCart();
+  showToast('Address deleted');
+}
+
+function makeDefaultAddr(id) {
+  setDefaultAddr(id);
+  renderCart();
+  showToast('Default address updated');
+}
+
 /* ===== CUSTOMER SAVE / COLLAPSIBLE ===== */
 function saveCustFields() {
   function g(id) { return (document.getElementById(id) || {}).value || ''; }
+  // Contact only — addresses are managed by the address book
   saveCust({
-    email: g('c-email').trim(), name: g('c-name').trim(), phone: g('c-phone').trim(),
-    address1: g('c-addr1').trim(), address2: g('c-addr2').trim(),
-    city: g('c-city').trim(), postal: g('c-postal').trim(), country: g('c-country')
+    email: g('c-email').trim(),
+    name: g('c-name').trim(),
+    phone: g('c-phone').trim()
   });
   var c = loadCust();
   if (c.email && c.name && c.phone) collapseSection('contact');
-  if (c.address1 && c.city && c.postal && c.country) collapseSection('shipping');
 }
 
-// Build the summary HTML for a given section using current customer data.
-// Shared by both toggleSection and collapseSection so they can never drift.
+// Build the summary HTML for the contact section (shipping has its own builder
+// in buildShippingSummaryHtml because it needs address book awareness)
 function buildSummaryHtml(sec) {
-  var c = loadCust();
   if (sec === 'contact') {
+    var c = loadCust();
     return '<i class="fa-solid fa-circle-check"></i> ' +
       esc(c.name || '\u2014') + ' \u00b7 ' +
       esc(c.email || '\u2014') + ' \u00b7 ' +
       esc(c.phone || '\u2014');
   }
   if (sec === 'shipping') {
-    return '<i class="fa-solid fa-circle-check"></i> ' +
-      esc(c.address1 || '\u2014') +
-      (c.city ? ', ' + esc(c.city) : '') +
-      (c.postal ? ' ' + esc(c.postal) : '') +
-      (COUNTRIES[c.country] ? ' \u00b7 ' + COUNTRIES[c.country] : '');
+    return buildShippingSummaryHtml();
   }
   return '';
 }
@@ -496,10 +862,12 @@ function validateCust() {
   if (!c.email || c.email.indexOf('@') < 0) m.push('email');
   if (!c.name) m.push('full name');
   if (!c.phone) m.push('phone');
-  if (!c.address1) m.push('address');
-  if (!c.city) m.push('city');
-  if (!c.postal) m.push('postal code');
-  if (!c.country) m.push('country');
+  var a = getSelectedAddr();
+  if (!a) { m.push('address'); return m; }
+  if (!a.address1) m.push('address');
+  if (!a.city) m.push('city');
+  if (!a.postal) m.push('postal code');
+  if (!a.country) m.push('country');
   return m;
 }
 
@@ -520,7 +888,10 @@ async function handleCheckout() {
     showToast('Please fill: ' + missing.join(', '));
     return;
   }
-  var c = loadCust(), items = loadCart(), btn = document.getElementById('checkout-btn');
+  var c = loadCust();
+  var a = getSelectedAddr();
+  var items = loadCart();
+  var btn = document.getElementById('checkout-btn');
   btn.disabled = true; btn.textContent = 'Creating checkout...';
   try {
     var res = await fetch(STRIPE_EP, {
@@ -529,7 +900,15 @@ async function handleCheckout() {
       body: JSON.stringify({
         email: c.email, customerName: c.name, phone: c.phone,
         items: items.map(function(i) { return { puzzleId: i.puzzleId, name: i.name, layers: i.layers, price: i.price, qty: i.qty }; }),
-        shippingAddress: { name: c.name, address1: c.address1, address2: c.address2 || '', city: c.city, postalCode: c.postal, country: c.country, phone: c.phone }
+        shippingAddress: {
+          name: c.name,
+          address1: a.address1,
+          address2: a.address2 || '',
+          city: a.city,
+          postalCode: a.postal,
+          country: a.country,
+          phone: c.phone
+        }
       })
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -564,8 +943,9 @@ function handleCheckoutResult() {
   window.history.replaceState({}, '', cleanUrl);
 
   if (checkoutStatus === 'success' && orderId) {
-    // Save order reference to localStorage before clearing customer data
+    // Save order reference to localStorage
     var c = loadCust();
+    var shippedTo = getSelectedAddr() || {};
     var cartItems = loadCart();
     addLocalOrder({
       orderId: orderId,
@@ -577,16 +957,17 @@ function handleCheckoutResult() {
       status: 'paid',
       placedAt: new Date().toISOString(),
       shipping: {
-        city: c.city || '',
-        country: c.country || ''
+        city: shippedTo.city || '',
+        country: shippedTo.country || ''
       }
       // Note: card info not available here — Stripe handles payment, we only
       // know it succeeded. Card details appear when the user looks up the order.
     });
 
-    // Clear cart and customer data after successful payment
+    // Clear cart only. Contact details and saved addresses persist so
+    // the next purchase is a one-click affair. Users can wipe everything
+    // with the "Forget my details" button if they want.
     saveCart([]);
-    localStorage.removeItem(CUST_KEY);
     updateBadge();
 
     // Show success message and switch to orders view
