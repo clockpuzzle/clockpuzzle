@@ -9,7 +9,10 @@ var STRIPE_EP = window.location.hostname === 'localhost' || window.location.host
   ? 'http://localhost:3001/api/checkout'
   : 'https://api.stakcos.com/api/checkout';
 var SHIPPING = 5, FREE_SHIP = 80, TAX = 0.09;
-var CART_KEY = 'cp_cart', CUST_KEY = 'cp_customer', THEME_KEY = 'cp_theme';
+var CART_KEY = 'cp_cart', CUST_KEY = 'cp_customer', THEME_KEY = 'cp_theme', ORDERS_KEY = 'cp_orders';
+var API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3001/api'
+  : 'https://api.stakcos.com/api';
 var COUNTRIES = {
   SG:'Singapore',MY:'Malaysia',ID:'Indonesia',TH:'Thailand',PH:'Philippines',
   VN:'Vietnam',IN:'India',LK:'Sri Lanka',AU:'Australia',NZ:'New Zealand',
@@ -319,6 +322,7 @@ function showView(nm) {
   if (el) el.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (nm === 'cart') renderCart();
+  if (nm === 'orders') renderOrders();
 }
 
 /* ===== RENDER FEATURED ===== */
@@ -433,6 +437,26 @@ function saveCustFields() {
   if (c.address1 && c.city && c.postal && c.country) collapseSection('shipping');
 }
 
+// Build the summary HTML for a given section using current customer data.
+// Shared by both toggleSection and collapseSection so they can never drift.
+function buildSummaryHtml(sec) {
+  var c = loadCust();
+  if (sec === 'contact') {
+    return '<i class="fa-solid fa-circle-check"></i> ' +
+      esc(c.name || '\u2014') + ' \u00b7 ' +
+      esc(c.email || '\u2014') + ' \u00b7 ' +
+      esc(c.phone || '\u2014');
+  }
+  if (sec === 'shipping') {
+    return '<i class="fa-solid fa-circle-check"></i> ' +
+      esc(c.address1 || '\u2014') +
+      (c.city ? ', ' + esc(c.city) : '') +
+      (c.postal ? ' ' + esc(c.postal) : '') +
+      (COUNTRIES[c.country] ? ' \u00b7 ' + COUNTRIES[c.country] : '');
+  }
+  return '';
+}
+
 function toggleSection(sec) {
   var body = document.getElementById(sec + '-body');
   var tog = document.getElementById(sec + '-toggle');
@@ -444,13 +468,8 @@ function toggleSection(sec) {
   } else {
     saveCustFields();
     body.classList.add('collapsed'); tog.classList.add('collapsed');
-    var c = loadCust();
-    if (sec === 'contact' && sum) {
-      sum.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + esc(c.name || '\u2014') + ' \u00b7 ' + esc(c.email || '\u2014') + ' \u00b7 ' + esc(c.phone || '\u2014');
-      sum.classList.add('visible');
-    }
-    if (sec === 'shipping' && sum) {
-      sum.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + esc(c.address1 || '\u2014') + (c.city ? ', ' + esc(c.city) : '') + (c.postal ? ' ' + esc(c.postal) : '') + (COUNTRIES[c.country] ? ' \u00b7 ' + COUNTRIES[c.country] : '');
+    if (sum) {
+      sum.innerHTML = buildSummaryHtml(sec);
       sum.classList.add('visible');
     }
   }
@@ -463,7 +482,13 @@ function collapseSection(sec) {
   if (!body || body.classList.contains('collapsed')) return;
   body.classList.add('collapsed');
   if (tog) tog.classList.add('collapsed');
-  if (sum) sum.classList.add('visible');
+  if (sum) {
+    // Rebuild the summary content from current data — otherwise it
+    // would show whatever was rendered when the cart page first loaded
+    // (which is empty placeholders, producing "· ·").
+    sum.innerHTML = buildSummaryHtml(sec);
+    sum.classList.add('visible');
+  }
 }
 
 function validateCust() {
@@ -539,20 +564,233 @@ function handleCheckoutResult() {
   window.history.replaceState({}, '', cleanUrl);
 
   if (checkoutStatus === 'success' && orderId) {
+    // Save order reference to localStorage before clearing customer data
+    var c = loadCust();
+    var cartItems = loadCart();
+    addLocalOrder({
+      orderId: orderId,
+      email: c.email || '',
+      customerName: c.name || '',
+      items: cartItems.map(function(i) { return { puzzleId: i.puzzleId, name: i.name, qty: i.qty }; }),
+      amount: null, // We don't know the final Stripe amount here
+      currency: 'SGD',
+      status: 'paid',
+      placedAt: new Date().toISOString(),
+      shipping: {
+        city: c.city || '',
+        country: c.country || ''
+      }
+      // Note: card info not available here — Stripe handles payment, we only
+      // know it succeeded. Card details appear when the user looks up the order.
+    });
+
     // Clear cart and customer data after successful payment
     saveCart([]);
     localStorage.removeItem(CUST_KEY);
     updateBadge();
 
-    // Show success message
+    // Show success message and switch to orders view
     setTimeout(function() {
       showToast('Order ' + orderId + ' confirmed! Thank you!');
+      showView('orders');
     }, 500);
   } else if (checkoutStatus === 'cancelled') {
     setTimeout(function() {
       showToast('Checkout cancelled — your cart is still saved.');
     }, 500);
   }
+}
+
+/* ===== LOCAL ORDERS (localStorage convenience layer) ===== */
+function loadLocalOrders() { try { return JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; } catch (e) { return []; } }
+function saveLocalOrders(orders) { localStorage.setItem(ORDERS_KEY, JSON.stringify(orders)); }
+function addLocalOrder(order) {
+  var orders = loadLocalOrders();
+  // Avoid duplicates
+  var exists = orders.find(function(o) { return o.orderId === order.orderId; });
+  if (!exists) {
+    orders.unshift(order); // newest first
+    if (orders.length > 50) orders = orders.slice(0, 50); // cap at 50
+    saveLocalOrders(orders);
+  }
+}
+function clearLocalOrders() {
+  localStorage.removeItem(ORDERS_KEY);
+  showToast('Saved order history cleared');
+  renderOrders();
+}
+
+/* ===== ORDER LOOKUP (Stripe via backend) ===== */
+async function lookupOrders(email, orderId) {
+  var params = 'email=' + encodeURIComponent(email) + '&orderId=' + encodeURIComponent(orderId);
+  var res = await fetch(API_BASE + '/orders?' + params);
+  if (!res.ok) {
+    var err = await res.json().catch(function() { return { error: 'Request failed' }; });
+    throw new Error(err.error || 'HTTP ' + res.status);
+  }
+  return res.json();
+}
+
+/* ===== RENDER ORDERS VIEW ===== */
+function renderOrders() {
+  var el = document.getElementById('orders-content');
+  if (!el) return;
+  var localOrders = loadLocalOrders();
+  var cust = loadCust();
+
+  // Lookup form — both fields REQUIRED
+  var formHtml = '<div class="orders-lookup">' +
+    '<div class="sidebar-card">' +
+      '<h3><i class="fa-solid fa-magnifying-glass"></i> Look Up an Order</h3>' +
+      '<p class="orders-lookup-desc">Enter your email and order ID to retrieve a specific order. Both fields are required to protect your privacy.</p>' +
+      '<div class="form-field"><label>Email *</label><input type="email" id="ol-email" placeholder="you@example.com" value="' + esc(cust.email || '') + '" autocomplete="email"></div>' +
+      '<div class="form-field"><label>Order ID *</label><input type="text" id="ol-orderid" placeholder="CP-20260403-A7X"></div>' +
+      '<button class="btn btn-buy" id="ol-btn" style="width:100%" onclick="handleOrderLookup()">Find Order</button>' +
+      '<div id="ol-error" class="orders-error"></div>' +
+    '</div>' +
+    '<div class="orders-info-note">' +
+      '<i class="fa-solid fa-envelope-open-text"></i>' +
+      '<div><strong>Coming soon:</strong> full order history by email. We\u2019re building a secure email-based lookup so you can access all your orders from any device. For now, please keep your order confirmation emails handy.</div>' +
+    '</div>' +
+  '</div>';
+
+  // Local orders section with explanatory notice
+  var localHtml = '';
+  if (localOrders.length) {
+    var rows = localOrders.map(function(o) {
+      return renderOrderCard(o);
+    }).join('');
+    localHtml = '<div class="orders-local">' +
+      '<div class="orders-section-header">' +
+        '<h3><i class="fa-solid fa-clock-rotate-left"></i> Your Recent Orders <span class="orders-source-tag">this browser</span></h3>' +
+        '<button class="clear-cart-link" onclick="if(confirm(\'Clear saved order history from this browser?\'))clearLocalOrders()">Clear history</button>' +
+      '</div>' +
+      '<div class="orders-notice">' +
+        '<i class="fa-solid fa-circle-info"></i>' +
+        '<span>These orders are remembered only on this device. If you clear your browser data or switch computers, you\u2019ll need your order ID and email to look them up again.</span>' +
+      '</div>' +
+      rows +
+    '</div>';
+  } else {
+    // Empty state — explain how it works
+    localHtml = '<div class="orders-empty-state">' +
+      '<i class="fa-regular fa-folder-open"></i>' +
+      '<h3>No orders on this device yet</h3>' +
+      '<p>After you complete a purchase, your order will appear here for quick access \u2014 but only on this browser. To look up an order from another device, use the form on the left with your email and order ID (from your confirmation email).</p>' +
+    '</div>';
+  }
+
+  // Results container (populated by lookup)
+  var resultsHtml = '<div id="ol-results"></div>';
+
+  el.innerHTML = '<div class="orders-layout">' + formHtml + '<div class="orders-main">' + localHtml + resultsHtml + '</div></div>';
+}
+
+function renderOrderCard(o) {
+  var statusClass = o.status === 'paid' ? 'status-paid' : 'status-pending';
+  var statusLabel = o.status === 'paid' ? 'Paid' : (o.status || 'Unknown');
+
+  // Support both the new `placedAt` field (from updated API) and legacy `paidAt`
+  // (from previously cached localStorage orders). Either way, show date + time.
+  var ts = o.placedAt || o.paidAt;
+  var dateStr = '', timeStr = '';
+  if (ts) {
+    var d = new Date(ts);
+    dateStr = d.toLocaleDateString('en-SG', { day: 'numeric', month: 'short', year: 'numeric' });
+    timeStr = d.toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  var itemsStr = '';
+  if (o.items && o.items.length) {
+    itemsStr = o.items.map(function(i) {
+      var name = i.name || i.puzzleId || 'Puzzle';
+      return name + (i.qty > 1 ? ' \u00d7' + i.qty : '');
+    }).join(', ');
+  }
+
+  // Build ship-to string — city + country only, regardless of source
+  var shipStr = '';
+  if (o.shipping && (o.shipping.city || o.shipping.country)) {
+    shipStr = [o.shipping.city, o.shipping.country].filter(Boolean).join(', ');
+  }
+
+  // Payment method — brand icon + last 4
+  var cardHtml = '';
+  if (o.card && o.card.last4) {
+    var brand = (o.card.brand || '').toLowerCase();
+    var brandIcon = 'fa-credit-card'; // generic fallback
+    var brandMap = {
+      visa: 'fa-cc-visa',
+      mastercard: 'fa-cc-mastercard',
+      amex: 'fa-cc-amex',
+      discover: 'fa-cc-discover',
+      diners: 'fa-cc-diners-club',
+      jcb: 'fa-cc-jcb'
+    };
+    if (brandMap[brand]) brandIcon = brandMap[brand];
+    cardHtml = '<div class="order-detail"><span class="order-detail-label">Paid with</span>' +
+      '<span class="order-detail-value order-card-info">' +
+        '<i class="fa-brands ' + brandIcon + '"></i>' +
+        '<span class="order-card-dots">\u2022\u2022\u2022\u2022 ' + esc(o.card.last4) + '</span>' +
+      '</span></div>';
+  }
+
+  return '<div class="order-card">' +
+    '<div class="order-card-header">' +
+      '<div class="order-id-row">' +
+        '<span class="order-id-label">' + esc(o.orderId || 'N/A') + '</span>' +
+        '<span class="order-status ' + statusClass + '">' + esc(statusLabel) + '</span>' +
+      '</div>' +
+      (dateStr ? '<div class="order-date"><i class="fa-regular fa-clock"></i> ' + dateStr + ' \u00b7 ' + timeStr + '</div>' : '') +
+    '</div>' +
+    '<div class="order-card-body">' +
+      (o.amount && o.amount !== '0.00' ? '<div class="order-detail"><span class="order-detail-label">Total</span><span class="order-detail-value order-amount">' + o.currency + ' ' + o.amount + '</span></div>' : '') +
+      cardHtml +
+      (o.email ? '<div class="order-detail"><span class="order-detail-label">Email</span><span class="order-detail-value">' + esc(o.email) + '</span></div>' : '') +
+      (o.customerName ? '<div class="order-detail"><span class="order-detail-label">Name</span><span class="order-detail-value">' + esc(o.customerName) + '</span></div>' : '') +
+      (itemsStr ? '<div class="order-detail"><span class="order-detail-label">Items</span><span class="order-detail-value">' + esc(itemsStr) + '</span></div>' : '') +
+      (shipStr ? '<div class="order-detail"><span class="order-detail-label">Ship to</span><span class="order-detail-value">' + esc(shipStr) + '</span></div>' : '') +
+    '</div>' +
+  '</div>';
+}
+
+async function handleOrderLookup() {
+  var email = (document.getElementById('ol-email').value || '').trim();
+  var orderId = (document.getElementById('ol-orderid').value || '').trim();
+  var errEl = document.getElementById('ol-error');
+  var resEl = document.getElementById('ol-results');
+  var btn = document.getElementById('ol-btn');
+
+  errEl.textContent = '';
+
+  // Tier 1: both fields required on the client too
+  if (!email || email.indexOf('@') < 0) {
+    errEl.textContent = 'Please enter a valid email address.';
+    return;
+  }
+  if (!orderId) {
+    errEl.textContent = 'Please enter your order ID (from the confirmation email).';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Searching...';
+  resEl.innerHTML = '<div class="orders-loading"><div class="loader"></div></div>';
+
+  try {
+    var data = await lookupOrders(email, orderId);
+    if (data.order) {
+      resEl.innerHTML = '<div class="orders-section-header"><h3><i class="fa-solid fa-receipt"></i> Order Found</h3></div>' + renderOrderCard(data.order);
+    } else {
+      resEl.innerHTML = '<div class="orders-empty"><i class="fa-regular fa-face-meh"></i><p>No matching order found.</p></div>';
+    }
+  } catch (e) {
+    errEl.textContent = e.message || 'Failed to look up order.';
+    resEl.innerHTML = '';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Find Order';
 }
 
 /* ===== INIT ===== */

@@ -1,0 +1,54 @@
+{
+  // Clock Puzzles Frontend — launch configs
+  //
+  // Launch options:
+  //   • "Frontend: Serve"          — starts a static file server on port 5500
+  //                                  using Python's built-in http.server
+  //                                  (no Node deps required)
+  //   • "Frontend: Open in Chrome" — opens Chrome pointed at localhost:5500
+  //                                  with DevTools attached for debugging
+  //   • "Frontend: Serve + Chrome" — compound: starts the server AND opens
+  //                                  Chrome in one click
+  //
+  // Prerequisites:
+  //   • Python 3 installed (for the static server — ships with macOS/Linux)
+  //   • Chrome/Chromium (for the browser debug target)
+  //
+  // The serve task lives in .vscode/tasks.json
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Frontend: Open in Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5500",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "preLaunchTask": "frontend:serve",
+      "postDebugTask": "frontend:stop"
+    },
+    {
+      // Alternative: use Edge instead of Chrome
+      "name": "Frontend: Open in Edge",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:5500",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "preLaunchTask": "frontend:serve",
+      "postDebugTask": "frontend:stop"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Frontend: Serve + Chrome",
+      "configurations": ["Frontend: Open in Chrome"],
+      "stopAll": true,
+      "presentation": {
+        "hidden": false,
+        "group": "compound",
+        "order": 1
+      }
+    }
+  ]
+}

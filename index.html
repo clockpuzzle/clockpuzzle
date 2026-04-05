@@ -23,6 +23,7 @@
       </a>
       <div class="header-links">
         <a href="#collections" class="hide-mobile" onclick="showView('shop')">Browse</a>
+        <a href="#" class="hide-mobile" onclick="showView('orders');return false">Orders</a>
         <button class="icon-btn theme-btn" onclick="toggleTheme()" title="Toggle theme">
           <i class="fa-solid fa-moon"></i><i class="fa-solid fa-sun"></i>
         </button>
@@ -69,6 +70,16 @@
       <div class="container">
         <h2>Your Cart</h2>
         <div id="cart-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orders View -->
+  <div class="page-view" id="view-orders">
+    <div class="orders-page">
+      <div class="container">
+        <h2>My Orders</h2>
+        <div id="orders-content"></div>
       </div>
     </div>
   </div>

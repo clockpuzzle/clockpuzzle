@@ -1,0 +1,77 @@
+{
+  // Clock Puzzles Frontend — VSCode tasks
+  //
+  // Task catalog:
+  //   • "frontend:serve" (background)   — starts Python's http.server on :5500.
+  //                                        Used by the Chrome/Edge launch configs.
+  //   • "frontend:stop"                 — no-op cleanup hook (terminal is killed
+  //                                        automatically on debug session end).
+  //   • "Frontend: Serve (manual)"      — same static server, runnable directly
+  //                                        from Terminal → Run Task menu.
+  //                                        Use this when you just want a server
+  //                                        without opening the browser debugger.
+  //
+  // Port 5500 is used to match the frontend's checkout endpoint detection
+  // (app.js auto-switches to localhost:3001 API when served from localhost).
+  //
+  // If Python isn't available, swap the command for `npx serve -p 5500` or
+  // any other static file server of your choice.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "frontend:serve",
+      "type": "shell",
+      "command": "python3",
+      "args": ["-m", "http.server", "5500"],
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true,
+        "group": "frontend"
+      },
+      // Python's http.server prints "Serving HTTP on 0.0.0.0 port 5500" once ready.
+      // VSCode watches for that pattern to know the background task has started.
+      "problemMatcher": {
+        "owner": "http-server",
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*Serving HTTP.*",
+          "endsPattern": ".*port 5500.*"
+        }
+      }
+    },
+    {
+      "label": "frontend:stop",
+      "type": "shell",
+      "command": "echo",
+      "args": ["Frontend server stopped."],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Frontend: Serve (manual)",
+      "type": "shell",
+      "command": "python3",
+      "args": ["-m", "http.server", "5500"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true,
+        "group": "frontend"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
