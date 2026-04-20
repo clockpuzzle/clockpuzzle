@@ -1116,6 +1116,18 @@ function renderOrderCard(o) {
       '</span></div>';
   }
 
+  // ── Order timeline ──
+  // Four stages: Paid → Being prepared → Shipped → Delivered
+  // For now we only know "Paid" (from Stripe) and infer "Being prepared" as active.
+  // Shipped/Delivered are always pending until we build real fulfillment tracking.
+  // This timeline only renders for orders looked up via the API (which have card info
+  // or come from Stripe). Local cache orders get a simpler note instead.
+  var timelineHtml = '';
+  var hasStripeData = !!(o.card || o.amount);  // proxy for "this came from the API"
+  if (hasStripeData) {
+    timelineHtml = buildOrderTimeline(o);
+  }
+
   return '<div class="order-card">' +
     '<div class="order-card-header">' +
       '<div class="order-id-row">' +
@@ -1124,6 +1136,7 @@ function renderOrderCard(o) {
       '</div>' +
       (dateStr ? '<div class="order-date"><i class="fa-regular fa-clock"></i> ' + dateStr + ' \u00b7 ' + timeStr + '</div>' : '') +
     '</div>' +
+    timelineHtml +
     '<div class="order-card-body">' +
       (o.amount && o.amount !== '0.00' ? '<div class="order-detail"><span class="order-detail-label">Total</span><span class="order-detail-value order-amount">' + o.currency + ' ' + o.amount + '</span></div>' : '') +
       cardHtml +
@@ -1132,6 +1145,38 @@ function renderOrderCard(o) {
       (itemsStr ? '<div class="order-detail"><span class="order-detail-label">Items</span><span class="order-detail-value">' + esc(itemsStr) + '</span></div>' : '') +
       (shipStr ? '<div class="order-detail"><span class="order-detail-label">Ship to</span><span class="order-detail-value">' + esc(shipStr) + '</span></div>' : '') +
     '</div>' +
+  '</div>';
+}
+
+// Builds the horizontal timeline shown on each order card.
+// Stages: Paid (always done) → Being prepared (active for paid orders) → Shipped → Delivered
+function buildOrderTimeline(o) {
+  var isPaid = o.status === 'paid';
+  // Until we have real fulfillment tracking, any paid order is "being prepared"
+  // and the remaining stages are pending.
+  var stages = [
+    { key: 'paid',     label: 'Paid',          state: isPaid ? 'done' : 'pending', icon: 'fa-circle-check' },
+    { key: 'prepared', label: 'Being prepared', state: isPaid ? 'active' : 'pending', icon: 'fa-box-open' },
+    { key: 'shipped',  label: 'Shipped',       state: 'pending', icon: 'fa-truck-fast' },
+    { key: 'delivered',label: 'Delivered',     state: 'pending', icon: 'fa-house-chimney' }
+  ];
+
+  var nodes = stages.map(function(s, i) {
+    var isLast = i === stages.length - 1;
+    return '<div class="timeline-node ' + s.state + '">' +
+      '<div class="timeline-dot"><i class="fa-solid ' + s.icon + '"></i></div>' +
+      '<div class="timeline-label">' + s.label + '</div>' +
+      (isLast ? '' : '<div class="timeline-connector"></div>') +
+    '</div>';
+  }).join('');
+
+  var note = isPaid ?
+    '<div class="timeline-note">Your puzzle is being prepared. You\u2019ll be notified by email once it ships. Questions? Contact <a href="mailto:hello@stakcos.com">hello@stakcos.com</a>.</div>' :
+    '<div class="timeline-note">Payment has not been confirmed yet. If this persists, please contact us.</div>';
+
+  return '<div class="order-timeline">' +
+    '<div class="timeline-track">' + nodes + '</div>' +
+    note +
   '</div>';
 }
 
